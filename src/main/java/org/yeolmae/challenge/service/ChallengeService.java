@@ -39,7 +39,7 @@ public class ChallengeService {
         Challenge foundPost = challengeRepository.findById(challenge_id)
                 .orElseThrow(() -> new EntityNotFoundException("해당 challenge_id로 조회된 게시글이 없습니다."));
 
-        return new ReadChallengeResponse(foundPost.getChallenge_id(), foundPost.getTitle(), foundPost.getContent()
-                ,foundPost.getWriter(), foundPost.getRegister_date(), foundPost.getStart_date(), foundPost.getEnd_date());
+        return new ReadChallengeResponse(foundPost.getChallenge_id(), foundPost.getTitle(), foundPost.getWriter(),
+                foundPost.getContent(), foundPost.getRegister_date(), foundPost.getStart_date(), foundPost.getEnd_date());
     }
 }
