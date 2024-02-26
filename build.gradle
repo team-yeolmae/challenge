@@ -38,3 +38,11 @@ tasks.named('bootBuildImage') {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+tasks.register('copyPrivate') {
+    copy {
+        from './yeolmae_application'
+        include "application.yml"
+        into 'src/main/resources'
+    }
+}

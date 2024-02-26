@@ -1,0 +1,3 @@
+[submodule "yeolmae_application"]
+	path = yeolmae_application
+	url = https://github.com/team-yeolmae/yeolmae_application.git
