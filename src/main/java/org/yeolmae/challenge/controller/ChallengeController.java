@@ -2,10 +2,15 @@ package org.yeolmae.challenge.controller;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.yeolmae.challenge.domain.dto.ReadChallengeResponse;
 import org.yeolmae.challenge.domain.dto.UpdateChallengeRequest;
 import org.yeolmae.challenge.domain.dto.UpdateChallengeResponse;
 import org.yeolmae.challenge.domain.dto.CreateChallengeRequest;
@@ -32,6 +37,15 @@ public class ChallengeController {
                                                               @RequestBody UpdateChallengeRequest request){
 
         UpdateChallengeResponse response = challengeService.updateChallenge(challenge_id, request);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+  
+    @GetMapping
+    public ResponseEntity<Page<ReadChallengeResponse>> challengeReadAll(@PageableDefault(
+            size = 5, sort = "title", direction = Sort.Direction.DESC) Pageable pageable) {
+
+        Page<ReadChallengeResponse> response = challengeService.readAllChallenge(pageable);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

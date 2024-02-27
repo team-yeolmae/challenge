@@ -2,9 +2,12 @@ package org.yeolmae.challenge.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.yeolmae.challenge.domain.Challenge;
+import org.yeolmae.challenge.domain.dto.ReadChallengeResponse;
 import org.yeolmae.challenge.domain.dto.UpdateChallengeRequest;
 import org.yeolmae.challenge.domain.dto.UpdateChallengeResponse;
 import org.yeolmae.challenge.domain.dto.CreateChallengeRequest;
@@ -54,7 +57,15 @@ public class ChallengeService {
         return new UpdateChallengeResponse(foundChallenge.getChallenge_id(), foundChallenge.getTitle(), foundChallenge.getWriter(),
                 foundChallenge.getContent(), foundChallenge.getRegister_date(), foundChallenge.getStart_date(),
                 foundChallenge.getEnd_date());
+    }
 
+    public Page<ReadChallengeResponse> readAllChallenge(Pageable pageable) {
+
+        Page<Challenge> challengePage = challengeRepository.findAll(pageable);
+
+        return challengePage.map(challenge -> new ReadChallengeResponse(challenge.getChallenge_id(), challenge.getTitle(),
+                challenge.getWriter(), challenge.getContent(), challenge.getRegister_date(), challenge.getStart_date(),
+                challenge.getEnd_date()));
     }
   
 }
