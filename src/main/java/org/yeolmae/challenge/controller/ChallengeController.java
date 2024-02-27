@@ -21,9 +21,9 @@ public class ChallengeController {
     private final ChallengeService challengeService;
 
     @DeleteMapping("/{challenge_id}")
-    public ResponseEntity<DeleteChallengeResponse> Delete(@PathVariable Integer challenge_id) {
+    public ResponseEntity<DeleteChallengeResponse> challengeDelete(@PathVariable Integer challenge_id) {
 
-        DeleteChallengeResponse response = challengeService.delete(challenge_id);
+        DeleteChallengeResponse response = challengeService.deleteChallenge(challenge_id);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
 

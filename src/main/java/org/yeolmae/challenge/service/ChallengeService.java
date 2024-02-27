@@ -16,7 +16,7 @@ public class ChallengeService {
 
 
     @Transactional
-    public DeleteChallengeResponse delete(Integer challenge_id) {
+    public DeleteChallengeResponse deleteChallenge(Integer challenge_id) {
 
         Challenge challenge = challengeRepository.findById(challenge_id)
                 .orElseThrow(() -> new EntityNotFoundException("해당 challenge_id로 조회된 게시글이 없습니다."));
