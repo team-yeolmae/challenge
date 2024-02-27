@@ -17,7 +17,7 @@ public class ChallengeService {
     private final ChallengeRepository challengeRepository;
 
     @Transactional
-    public UpdateChallengeResponse ChallengeUpdate(Integer challenge_id, UpdateChallengeRequest request) {
+    public UpdateChallengeResponse updateChallenge(Integer challenge_id, UpdateChallengeRequest request) {
 
         Challenge foundPost = challengeRepository.findById(challenge_id)
                 .orElseThrow(() -> new EntityNotFoundException("해당 challenge_id로 조회된 게시글이 없습니다."));

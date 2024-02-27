@@ -17,10 +17,10 @@ public class ChallengeController {
     private final ChallengeService challengeService;
 
     @PutMapping("/{challenge_id}")
-    public ResponseEntity<UpdateChallengeResponse> UpdateChallenge(@PathVariable Integer challenge_id,
+    public ResponseEntity<UpdateChallengeResponse> challengeUpdate(@PathVariable Integer challenge_id,
                                                               @RequestBody UpdateChallengeRequest request){
 
-        UpdateChallengeResponse response = challengeService.ChallengeUpdate(challenge_id, request);
+        UpdateChallengeResponse response = challengeService.updateChallenge(challenge_id, request);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
