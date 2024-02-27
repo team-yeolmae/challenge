@@ -22,7 +22,8 @@ public class ChallengeService {
         Challenge foundPost = challengeRepository.findById(challenge_id)
                 .orElseThrow(() -> new EntityNotFoundException("해당 challenge_id로 조회된 게시글이 없습니다."));
         //Dirty Checking
-        foundPost.update(request.getTitle(), request.getWriter(), request.getContent());
+        foundPost.update(request.getTitle(), request.getWriter(), request.getContent(),
+                request.getStart_date(), request.getEnd_date());
 
         return new UpdateChallengeResponse(foundPost.getChallenge_id(), foundPost.getTitle(), foundPost.getWriter(),
                 foundPost.getContent(), foundPost.getRegister_date(), foundPost.getStart_date(), foundPost.getEnd_date());
