@@ -2,8 +2,6 @@ package org.yeolmae.challenge.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 
@@ -35,5 +33,11 @@ public class Challenge {
 
     @Column(nullable = false)
     private LocalDate end_date;
+
+    public void update(String title, String writer, String content) {
+        this.title = title;
+        this.writer = writer;
+        this.content = content;
+    }
 
 }

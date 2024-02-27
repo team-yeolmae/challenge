@@ -4,19 +4,18 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.yeolmae.challenge.domain.dto.UpdateChallengeRequest;
 import org.yeolmae.challenge.domain.dto.UpdateChallengeResponse;
-import org.yeolmae.challenge.service.ChallengeService;
+import org.yeolmae.challenge.service.UpdateChallengeService;
 
 @Controller
 @ResponseBody
 @RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
-public class ChallengeController {
+public class UpdateChallengeController {
 
-    private final ChallengeService challengeService;
+    private final UpdateChallengeService challengeService;
 
     @PutMapping("/{challenge_id}")
     public ResponseEntity<UpdateChallengeResponse> postUpdate(@PathVariable Integer challenge_id,
