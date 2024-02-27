@@ -7,6 +7,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.yeolmae.challenge.domain.Challenge;
+import org.yeolmae.challenge.domain.dto.DeleteChallengeResponse;
 import org.yeolmae.challenge.domain.dto.ReadChallengeResponse;
 import org.yeolmae.challenge.domain.dto.UpdateChallengeRequest;
 import org.yeolmae.challenge.domain.dto.UpdateChallengeResponse;
@@ -44,7 +45,7 @@ public class ChallengeService {
                 savedChallenge.getEnd_date()
         );
     }
-
+  
     @Transactional
     public UpdateChallengeResponse updateChallenge(Integer challenge_id, UpdateChallengeRequest request) {
 
@@ -66,6 +67,18 @@ public class ChallengeService {
         return challengePage.map(challenge -> new ReadChallengeResponse(challenge.getChallenge_id(), challenge.getTitle(),
                 challenge.getWriter(), challenge.getContent(), challenge.getRegister_date(), challenge.getStart_date(),
                 challenge.getEnd_date()));
+    }
+  
+    @Transactional
+    public DeleteChallengeResponse deleteChallenge(Integer challenge_id) {
+
+        Challenge challenge = challengeRepository.findById(challenge_id)
+                .orElseThrow(() -> new EntityNotFoundException("해당 challenge_id로 조회된 게시글이 없습니다."));
+
+        challengeRepository.delete(challenge);
+
+        return new DeleteChallengeResponse(challenge.getChallenge_id(), challenge.getTitle(), challenge.getWriter(),
+                challenge.getContent(), challenge.getRegister_date(), challenge.getStart_date(), challenge.getEnd_date());
     }
   
 }

@@ -10,6 +10,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
+import org.yeolmae.challenge.domain.dto.DeleteChallengeResponse;
 import org.yeolmae.challenge.domain.dto.ReadChallengeResponse;
 import org.yeolmae.challenge.domain.dto.UpdateChallengeRequest;
 import org.yeolmae.challenge.domain.dto.UpdateChallengeResponse;
@@ -46,6 +47,14 @@ public class ChallengeController {
             size = 5, sort = "title", direction = Sort.Direction.DESC) Pageable pageable) {
 
         Page<ReadChallengeResponse> response = challengeService.readAllChallenge(pageable);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
+  
+    @DeleteMapping("/{challenge_id}")
+    public ResponseEntity<DeleteChallengeResponse> challengeDelete(@PathVariable Integer challenge_id) {
+
+        DeleteChallengeResponse response = challengeService.deleteChallenge(challenge_id);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

@@ -9,14 +9,19 @@ import java.time.LocalDate;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateChallengeResponse {
+public class DeleteChallengeResponse {
 
     private int challenge_id;
+
     private String title;
+
     private String writer;
+
     private String content;
+
     private LocalDate register_date;
+
     private LocalDate start_date;
+
     private LocalDate end_date;
-  
 }
