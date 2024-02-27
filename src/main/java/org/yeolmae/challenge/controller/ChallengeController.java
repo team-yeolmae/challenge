@@ -12,7 +12,7 @@ import org.yeolmae.challenge.domain.dto.ReadChallengeResponse;
 import org.yeolmae.challenge.service.ChallengeService;
 
 @RestController
-@RequestMapping("/api/v1/posts")
+@RequestMapping("/challenge")
 @RequiredArgsConstructor
 public class ChallengeController {
 
