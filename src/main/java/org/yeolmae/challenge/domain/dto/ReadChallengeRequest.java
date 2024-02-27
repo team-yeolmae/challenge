@@ -9,7 +9,7 @@ import java.time.LocalDate;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateChallengeRequest {
+public class ReadChallengeRequest {
 
     private String title;
 
