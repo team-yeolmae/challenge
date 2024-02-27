@@ -25,6 +25,14 @@ public class ChallengeController {
 
     private final ChallengeService challengeService;
 
+    @GetMapping("/{challenge_id}")
+    public ResponseEntity<ReadChallengeResponse> challengeRead(@PathVariable Integer challenge_id) {
+
+        ReadChallengeResponse response = challengeService.readChallengeById(challenge_id);
+
+        return  new ResponseEntity<>(response, HttpStatus.OK);
+    }
+
     @PostMapping("/register")
     public ResponseEntity<CreateChallengeResponse> challengeCreate(@RequestBody CreateChallengeRequest request) {
 
@@ -32,16 +40,16 @@ public class ChallengeController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-  
+
     @PutMapping("/{challenge_id}")
     public ResponseEntity<UpdateChallengeResponse> challengeUpdate(@PathVariable Integer challenge_id,
-                                                              @RequestBody UpdateChallengeRequest request){
+                                                                   @RequestBody UpdateChallengeRequest request){
 
         UpdateChallengeResponse response = challengeService.updateChallenge(challenge_id, request);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-  
+
     @GetMapping
     public ResponseEntity<Page<ReadChallengeResponse>> challengeReadAll(@PageableDefault(
             size = 5, sort = "title", direction = Sort.Direction.DESC) Pageable pageable) {
@@ -50,7 +58,7 @@ public class ChallengeController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-  
+
     @DeleteMapping("/{challenge_id}")
     public ResponseEntity<DeleteChallengeResponse> challengeDelete(@PathVariable Integer challenge_id) {
 
@@ -58,5 +66,6 @@ public class ChallengeController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
 }

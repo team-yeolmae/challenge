@@ -14,7 +14,6 @@ import org.yeolmae.challenge.domain.dto.UpdateChallengeResponse;
 import org.yeolmae.challenge.domain.dto.CreateChallengeRequest;
 import org.yeolmae.challenge.domain.dto.CreateChallengeResponse;
 import org.yeolmae.challenge.repository.ChallengeRepository;
-
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -45,7 +44,7 @@ public class ChallengeService {
                 savedChallenge.getEnd_date()
         );
     }
-  
+
     @Transactional
     public UpdateChallengeResponse updateChallenge(Integer challenge_id, UpdateChallengeRequest request) {
 
@@ -68,7 +67,7 @@ public class ChallengeService {
                 challenge.getWriter(), challenge.getContent(), challenge.getRegister_date(), challenge.getStart_date(),
                 challenge.getEnd_date()));
     }
-  
+
     @Transactional
     public DeleteChallengeResponse deleteChallenge(Integer challenge_id) {
 
@@ -80,5 +79,15 @@ public class ChallengeService {
         return new DeleteChallengeResponse(challenge.getChallenge_id(), challenge.getTitle(), challenge.getWriter(),
                 challenge.getContent(), challenge.getRegister_date(), challenge.getStart_date(), challenge.getEnd_date());
     }
-  
+
+    public ReadChallengeResponse readChallengeById(Integer challenge_id) {
+
+        Challenge foundChallenge = challengeRepository.findById(challenge_id)
+                .orElseThrow(() -> new EntityNotFoundException("해당 challenge_id로 조회된 게시글이 없습니다."));
+
+        return new ReadChallengeResponse(foundChallenge.getChallenge_id(), foundChallenge.getTitle(), foundChallenge.getWriter(),
+                foundChallenge.getContent(), foundChallenge.getRegister_date(), foundChallenge.getStart_date(),
+                foundChallenge.getEnd_date());
+    }
+
 }

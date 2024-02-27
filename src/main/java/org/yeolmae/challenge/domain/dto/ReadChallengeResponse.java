@@ -24,4 +24,5 @@ public class ReadChallengeResponse {
     private LocalDate start_date;
 
     private LocalDate end_date;
+    //
 }
