@@ -12,7 +12,7 @@ import org.yeolmae.challenge.repository.ChallengeRepository;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class UpdateChallengeService {
+public class ChallengeService {
 
     private final ChallengeRepository challengeRepository;
 
