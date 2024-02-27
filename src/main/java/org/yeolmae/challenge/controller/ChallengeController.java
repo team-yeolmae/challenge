@@ -7,13 +7,11 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 import org.yeolmae.challenge.domain.dto.ReadChallengeResponse;
 import org.yeolmae.challenge.service.ChallengeService;
 
-@Controller
-@ResponseBody
+@RestController
 @RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
 public class ChallengeController {
@@ -21,10 +19,10 @@ public class ChallengeController {
     private final ChallengeService challengeService;
 
     @GetMapping
-    public ResponseEntity<Page<ReadChallengeResponse>> ReadAll(@PageableDefault(
+    public ResponseEntity<Page<ReadChallengeResponse>> challengeReadAll(@PageableDefault(
             size = 5, sort = "title", direction = Sort.Direction.DESC) Pageable pageable) {
 
-        Page<ReadChallengeResponse> response = challengeService.readAll(pageable);
+        Page<ReadChallengeResponse> response = challengeService.readAllChallenge(pageable);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

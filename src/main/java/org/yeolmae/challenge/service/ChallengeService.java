@@ -1,6 +1,5 @@
 package org.yeolmae.challenge.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -17,7 +16,7 @@ public class ChallengeService {
     private final ChallengeRepository challengeRepository;
 
 
-    public Page<ReadChallengeResponse> readAll(Pageable pageable) {
+    public Page<ReadChallengeResponse> readAllChallenge(Pageable pageable) {
 
         Page<Challenge> challengePage = challengeRepository.findAll(pageable);
 
