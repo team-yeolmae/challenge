@@ -8,8 +8,7 @@ import org.springframework.web.bind.annotation.*;
 import org.yeolmae.challenge.domain.dto.ReadChallengeResponse;
 import org.yeolmae.challenge.service.ChallengeService;
 
-@Controller
-@ResponseBody
+@RestController
 @RequestMapping("/api/v1/posts")
 @RequiredArgsConstructor
 public class ChallengeController {
