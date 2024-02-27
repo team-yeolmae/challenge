@@ -1,6 +1,5 @@
 package org.yeolmae.challenge.config;
 
-import lombok.Builder;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
@@ -13,7 +12,6 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.yeolmae.challenge.service.security.MemberDetailService;
 
 @Configuration
 // @EnableWebSecurity : SpringSecurity FilterChain이 자동으로 포함
@@ -25,22 +23,20 @@ public class WebSecurityConfig {
 
     //특정 HTTP 요청에 대한 웹 기반 보안 구성
     @Bean
-    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception{
+    public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
-//        //스프링 시큐리티 버전으로 인해 람다식으로 작성.
-//        httpSecurity.formLogin((formLogin) -> formLogin.loginPage("/challenge/join"));
         // 권한에 따른 허용하는 url
         http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
-                        .requestMatchers("/login","/join").permitAll()
-                        .anyRequest().authenticated());
+                .requestMatchers("/login", "/join").permitAll()
+                .anyRequest().authenticated());
         // login 설정
         http.formLogin((formLogin) -> formLogin
-                        .loginPage("/login")
-                        .defaultSuccessUrl("/main"));
+                .loginPage("/login")
+                .defaultSuccessUrl("/main"));
         // logout 설정
         http.logout((logout) -> logout
-                        .logoutSuccessUrl("/login")
-                        .invalidateHttpSession(true));
+                .logoutSuccessUrl("/login")
+                .invalidateHttpSession(true));
         //토큰 비활성화
         http.csrf((csrf) -> csrf.disable());
 
