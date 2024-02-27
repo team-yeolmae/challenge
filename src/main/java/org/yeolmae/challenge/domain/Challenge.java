@@ -34,4 +34,12 @@ public class Challenge {
     @Column(nullable = false)
     private LocalDate end_date;
 
+    public void update(String title, String writer, String content, LocalDate start_date, LocalDate end_date) {
+        this.title = title;
+        this.writer = writer;
+        this.content = content;
+        this.start_date = start_date;
+        this.end_date = end_date;
+    }
+
 }
