@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.yeolmae.challenge.domain.Challenge;
 import org.yeolmae.challenge.domain.dto.UpdateChallengeRequest;
 import org.yeolmae.challenge.domain.dto.UpdateChallengeResponse;
+import org.yeolmae.challenge.domain.dto.CreateChallengeRequest;
+import org.yeolmae.challenge.domain.dto.CreateChallengeResponse;
 import org.yeolmae.challenge.repository.ChallengeRepository;
 
 @Service
@@ -15,6 +17,30 @@ import org.yeolmae.challenge.repository.ChallengeRepository;
 public class ChallengeService {
 
     private final ChallengeRepository challengeRepository;
+
+    public CreateChallengeResponse createChallenge(CreateChallengeRequest request) {
+
+        Challenge challenge = Challenge.builder()
+                .title(request.getTitle())
+                .writer(request.getWriter())
+                .content(request.getContent())
+                .register_date(request.getRegister_date())
+                .start_date(request.getStart_date())
+                .end_date(request.getEnd_date())
+                .build();
+
+        Challenge savedChallenge = challengeRepository.save(challenge);
+
+        return new CreateChallengeResponse(
+                savedChallenge.getChallenge_id(),
+                savedChallenge.getTitle(),
+                savedChallenge.getWriter(),
+                savedChallenge.getContent(),
+                savedChallenge.getRegister_date(),
+                savedChallenge.getStart_date(),
+                savedChallenge.getEnd_date()
+        );
+    }
 
     @Transactional
     public UpdateChallengeResponse updateChallenge(Integer challenge_id, UpdateChallengeRequest request) {
@@ -30,7 +56,5 @@ public class ChallengeService {
                 foundChallenge.getEnd_date());
 
     }
-
-
-
+  
 }
