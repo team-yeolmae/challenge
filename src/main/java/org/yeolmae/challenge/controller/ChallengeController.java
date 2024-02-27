@@ -17,9 +17,9 @@ public class ChallengeController {
     private final ChallengeService challengeService;
 
     @GetMapping("/{challenge_id}")
-    public ResponseEntity<ReadChallengeResponse> postRead(@PathVariable Integer challenge_id) {
+    public ResponseEntity<ReadChallengeResponse> challengeRead(@PathVariable Integer challenge_id) {
 
-        ReadChallengeResponse response = challengeService.readPostById(challenge_id);
+        ReadChallengeResponse response = challengeService.readChallengeById(challenge_id);
 
         return  new ResponseEntity<>(response, HttpStatus.OK);
     }
