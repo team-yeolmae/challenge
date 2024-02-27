@@ -23,4 +23,5 @@ public class ChallengeService {
                 foundChallenge.getContent(), foundChallenge.getRegister_date(), foundChallenge.getStart_date(),
                 foundChallenge.getEnd_date());
     }
+
 }
