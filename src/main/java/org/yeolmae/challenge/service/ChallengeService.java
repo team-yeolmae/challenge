@@ -19,14 +19,15 @@ public class ChallengeService {
     @Transactional
     public UpdateChallengeResponse updateChallenge(Integer challenge_id, UpdateChallengeRequest request) {
 
-        Challenge foundPost = challengeRepository.findById(challenge_id)
+        Challenge foundChallenge = challengeRepository.findById(challenge_id)
                 .orElseThrow(() -> new EntityNotFoundException("해당 challenge_id로 조회된 게시글이 없습니다."));
         //Dirty Checking
-        foundPost.update(request.getTitle(), request.getWriter(), request.getContent(),
+        foundChallenge.update(request.getTitle(), request.getWriter(), request.getContent(),
                 request.getStart_date(), request.getEnd_date());
 
-        return new UpdateChallengeResponse(foundPost.getChallenge_id(), foundPost.getTitle(), foundPost.getWriter(),
-                foundPost.getContent(), foundPost.getRegister_date(), foundPost.getStart_date(), foundPost.getEnd_date());
+        return new UpdateChallengeResponse(foundChallenge.getChallenge_id(), foundChallenge.getTitle(), foundChallenge.getWriter(),
+                foundChallenge.getContent(), foundChallenge.getRegister_date(), foundChallenge.getStart_date(),
+                foundChallenge.getEnd_date());
 
     }
 
