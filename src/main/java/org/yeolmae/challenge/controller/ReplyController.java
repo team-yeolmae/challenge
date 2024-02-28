@@ -15,9 +15,9 @@ public class ReplyController {
     private final ReplyService replyService;
 
     @GetMapping("/{rno}")
-    public ResponseEntity<ReadReplyResponse> challengeRead(@PathVariable Integer rno) {
+    public ResponseEntity<ReadReplyResponse> replyRead(@PathVariable Integer rno) {
 
-        ReadReplyResponse response = replyService.readChallengeById(rno);
+        ReadReplyResponse response = replyService.readReplyById(rno);
 
         return  new ResponseEntity<>(response, HttpStatus.OK);
     }

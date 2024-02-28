@@ -14,7 +14,7 @@ public class ReplyService {
 
     private final ChallengeRepository challengeRepository;
 
-    public ReadReplyResponse readChallengeById(Integer rno) {
+    public ReadReplyResponse readReplyById(Integer rno) {
 
         Reply foundReply= challengeRepository.findById(rno)
                 .orElseThrow(() -> new EntityNotFoundException("해당 rno로 조회된 게시글이 없습니다."));
