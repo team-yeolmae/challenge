@@ -22,7 +22,7 @@ public class ReplyController {
     private final ReplyService replyService;
 
     @PostMapping("/register")
-    public ResponseEntity<CreateReplyResponse> challengeCreate(@RequestBody CreateReplyRequest request) {
+    public ResponseEntity<CreateReplyResponse> replyCreate(@RequestBody CreateReplyRequest request) {
 
         CreateReplyResponse response = replyService.createReply(request);
 
