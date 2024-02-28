@@ -1,5 +1,5 @@
 package org.yeolmae.challenge.domain;
 
-public enum Level {
+public enum Badge {
     BRONZE, SILVER, GOLD, DIAMOND
 }

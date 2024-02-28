@@ -28,21 +28,21 @@ public class ChallengeService {
                 .title(request.getTitle())
                 .writer(request.getWriter())
                 .content(request.getContent())
-                .register_date(request.getRegister_date())
-                .start_date(request.getStart_date())
-                .end_date(request.getEnd_date())
+                .registerDate(request.getRegister_date())
+                .startDate(request.getStart_date())
+                .endDate(request.getEnd_date())
                 .build();
 
         Challenge savedChallenge = challengeRepository.save(challenge);
 
         return new CreateChallengeResponse(
-                savedChallenge.getChallenge_id(),
+                savedChallenge.getId(),
                 savedChallenge.getTitle(),
                 savedChallenge.getWriter(),
                 savedChallenge.getContent(),
-                savedChallenge.getRegister_date(),
-                savedChallenge.getStart_date(),
-                savedChallenge.getEnd_date()
+                savedChallenge.getRegisterDate(),
+                savedChallenge.getStartDate(),
+                savedChallenge.getEndDate()
         );
     }
 
@@ -55,18 +55,18 @@ public class ChallengeService {
         foundChallenge.update(request.getTitle(), request.getWriter(), request.getContent(),
                 request.getStart_date(), request.getEnd_date());
 
-        return new UpdateChallengeResponse(foundChallenge.getChallenge_id(), foundChallenge.getTitle(), foundChallenge.getWriter(),
-                foundChallenge.getContent(), foundChallenge.getRegister_date(), foundChallenge.getStart_date(),
-                foundChallenge.getEnd_date());
+        return new UpdateChallengeResponse(foundChallenge.getId(), foundChallenge.getTitle(), foundChallenge.getWriter(),
+                foundChallenge.getContent(), foundChallenge.getRegisterDate(), foundChallenge.getStartDate(),
+                foundChallenge.getEndDate());
     }
 
     public Page<ReadChallengeResponse> readAllChallenge(Pageable pageable) {
 
         Page<Challenge> challengePage = challengeRepository.findAll(pageable);
 
-        return challengePage.map(challenge -> new ReadChallengeResponse(challenge.getChallenge_id(), challenge.getTitle(),
-                challenge.getWriter(), challenge.getContent(), challenge.getRegister_date(), challenge.getStart_date(),
-                challenge.getEnd_date()));
+        return challengePage.map(challenge -> new ReadChallengeResponse(challenge.getId(), challenge.getTitle(),
+                challenge.getWriter(), challenge.getContent(), challenge.getRegisterDate(), challenge.getStartDate(),
+                challenge.getEndDate()));
     }
 
     @Transactional
@@ -77,8 +77,8 @@ public class ChallengeService {
 
         challengeRepository.delete(challenge);
 
-        return new DeleteChallengeResponse(challenge.getChallenge_id(), challenge.getTitle(), challenge.getWriter(),
-                challenge.getContent(), challenge.getRegister_date(), challenge.getStart_date(), challenge.getEnd_date());
+        return new DeleteChallengeResponse(challenge.getId(), challenge.getTitle(), challenge.getWriter(),
+                challenge.getContent(), challenge.getRegisterDate(), challenge.getStartDate(), challenge.getEndDate());
     }
 
     public ReadChallengeResponse readChallengeById(Integer challenge_id) {
@@ -86,9 +86,9 @@ public class ChallengeService {
         Challenge foundChallenge = challengeRepository.findById(challenge_id)
                 .orElseThrow(() -> new EntityNotFoundException("해당 challenge_id로 조회된 게시글이 없습니다."));
 
-        return new ReadChallengeResponse(foundChallenge.getChallenge_id(), foundChallenge.getTitle(), foundChallenge.getWriter(),
-                foundChallenge.getContent(), foundChallenge.getRegister_date(), foundChallenge.getStart_date(),
-                foundChallenge.getEnd_date());
+        return new ReadChallengeResponse(foundChallenge.getId(), foundChallenge.getTitle(), foundChallenge.getWriter(),
+                foundChallenge.getContent(), foundChallenge.getRegisterDate(), foundChallenge.getStartDate(),
+                foundChallenge.getEndDate());
     }
 
 }
