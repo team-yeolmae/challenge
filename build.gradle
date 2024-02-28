@@ -35,6 +35,8 @@ dependencies {
     implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
     testImplementation 'org.springframework.security:spring-security-test'
 
+    //assertJ (Assertions)
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.21.0'
 
 }
 
