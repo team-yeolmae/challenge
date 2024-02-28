@@ -11,10 +11,10 @@ import java.util.List;
 
 @Entity
 @Getter
-@Builder
+@Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@ToString(exclude = "roleSet")
+//@ToString(exclude = "roleSet")
 public class Member implements UserDetails {
 
     @Id
@@ -28,6 +28,7 @@ public class Member implements UserDetails {
 
     private String nickname;
 
+    @Builder
     public Member(String email, String pw, String nickname, String auth) {
         this.email = email;
         this.pw = pw;
@@ -46,13 +47,11 @@ public class Member implements UserDetails {
     public String getUsername() {
         return email;
     }
-
     //사용자 패스워드 반환
     @Override
     public String getPassword() {
         return pw;
     }
-
     //계정 만료 여부 반환 - 만료 하지 않음.
     @Override
     public boolean isAccountNonExpired() {

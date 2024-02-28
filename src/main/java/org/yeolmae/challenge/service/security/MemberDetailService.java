@@ -15,9 +15,9 @@ public class MemberDetailService implements UserDetailsService {
 
     //사용자 정보(email) 가져옴
     @Override
-    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
+    public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException{
         return memberRepository.findMemberByEmail(email)
-                .orElseThrow(() -> new IllegalArgumentException(email));
+                .orElseThrow(() -> new IllegalArgumentException("Member not found with email: " + email));
     }
 
 }
