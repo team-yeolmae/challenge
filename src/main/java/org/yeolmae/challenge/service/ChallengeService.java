@@ -21,6 +21,7 @@ public class ChallengeService {
 
     private final ChallengeRepository challengeRepository;
 
+    @Transactional
     public CreateChallengeResponse createChallenge(CreateChallengeRequest request) {
 
         Challenge challenge = Challenge.builder()
