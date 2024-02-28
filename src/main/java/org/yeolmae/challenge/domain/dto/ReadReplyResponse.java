@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class ReadReplyResponse {
 
-    private Integer bno;
+    private Integer rno;
 
     private String replyer;
 
