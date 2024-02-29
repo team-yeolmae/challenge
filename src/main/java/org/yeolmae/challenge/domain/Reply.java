@@ -23,8 +23,4 @@ public class Reply {
     @Column(nullable = false)
     private String replyer;
 
-    public void changeText(String text){
-        this.replyText = text;
-    }
-
 }
