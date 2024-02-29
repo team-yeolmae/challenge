@@ -23,7 +23,7 @@ public class Reply {
     @Column(nullable = false)
     private String replyText;
 
-    public void changeText(String replyer, String text) {
+    public void changeReply(String replyer, String text) {
         this.replyer = replyer;
         this.replyText = text;
     }

@@ -22,7 +22,7 @@ public class ReplyService {
         Reply foundReply = replyRepository.findById(rno)
                 .orElseThrow(() -> new EntityNotFoundException("해당 rno로 조회된 게시글이 없습니다."));
         //Dirty Checking
-        foundReply.changeText(request.getReplyer(), request.getReplyText());
+        foundReply.changeReply(request.getReplyer(), request.getReplyText());
 
         return new UpdateReplyResponse(foundReply.getRno(), foundReply.getReplyer(), foundReply.getReplyText());
 
