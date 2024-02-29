@@ -3,6 +3,9 @@ package org.yeolmae.challenge.domain;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Getter
 @Builder
@@ -15,20 +18,25 @@ public class Member {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(updatable = false)
+    @Column(updatable = false, nullable = false)
     private String email;
 
+    @Column(nullable = false)
     private String pw;
 
+    @Column(nullable = false)
     private String nickname;
 
-//    @ElementCollection(fetch = FetchType.LAZY)
-//    @Builder.Default
-//    private Set<Level> level = new HashSet<>();
-//
-//    @ElementCollection(fetch = FetchType.LAZY)
-//    @Builder.Default
-//    private Set<MemberRole> roleSet = new HashSet<>();
+    @Column(nullable = false)
+    private int level;
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @Builder.Default
+    private Set<Badge> badge = new HashSet<>();
+
+    @ElementCollection(fetch = FetchType.LAZY)
+    @Builder.Default
+    private Set<MemberRole> roleSet = new HashSet<>();
 
     public void changePassword(String pw) {
         this.pw = pw;
