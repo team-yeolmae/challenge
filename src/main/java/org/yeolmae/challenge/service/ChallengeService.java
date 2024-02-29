@@ -28,9 +28,9 @@ public class ChallengeService {
                 .title(request.getTitle())
                 .writer(request.getWriter())
                 .content(request.getContent())
-                .registerDate(request.getRegister_date())
-                .startDate(request.getStart_date())
-                .endDate(request.getEnd_date())
+                .registerDate(request.getRegisterDate())
+                .startDate(request.getStartDate())
+                .endDate(request.getEndDate())
                 .build();
 
         Challenge savedChallenge = challengeRepository.save(challenge);
@@ -53,7 +53,7 @@ public class ChallengeService {
                 .orElseThrow(() -> new EntityNotFoundException("해당 challenge_id로 조회된 게시글이 없습니다."));
         //Dirty Checking
         foundChallenge.update(request.getTitle(), request.getWriter(), request.getContent(),
-                request.getStart_date(), request.getEnd_date());
+                request.getStartDate(), request.getEndDate());
 
         return new UpdateChallengeResponse(foundChallenge.getId(), foundChallenge.getTitle(), foundChallenge.getWriter(),
                 foundChallenge.getContent(), foundChallenge.getRegisterDate(), foundChallenge.getStartDate(),

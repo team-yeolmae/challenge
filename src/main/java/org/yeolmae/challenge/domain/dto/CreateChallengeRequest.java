@@ -15,8 +15,8 @@ public class CreateChallengeRequest {
     private String title;
     private String writer;
     private String content;
-    private LocalDate register_date;
-    private LocalDate start_date;
-    private LocalDate end_date;
+    private LocalDate registerDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
   
 }
