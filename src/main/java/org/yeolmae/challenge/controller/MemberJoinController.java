@@ -1,39 +1,49 @@
 package org.yeolmae.challenge.controller;
 
-import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
-import lombok.RequiredArgsConstructor;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.yeolmae.challenge.domain.Member;
+import org.yeolmae.challenge.domain.MemberRole;
+import org.yeolmae.challenge.repository.MemberRepository;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
-import org.yeolmae.challenge.domain.dto.MemberJoinDTO;
-import org.yeolmae.challenge.service.MemberService;
 
 @Controller
-@RequiredArgsConstructor
 public class MemberJoinController {
 
-    private final MemberService memberService;
+    @Autowired
+    private MemberRepository memberRepository;
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @PostMapping("/user")
-    public String signup(MemberJoinDTO dto) {
-
-        memberService.save(dto);
-
-        return "redirect:/login";
+    @GetMapping("/loginForm")
+    public String loginForm() {
+        return "loginForm";
     }
 
-    @GetMapping("/logout")
-    public String logout(HttpServletRequest request, HttpServletResponse response) {
-
-        new SecurityContextLogoutHandler()
-                .logout(request, response, SecurityContextHolder.getContext().getAuthentication());
-
-        return "redirect:/login";
-
+    // 회원 가입창
+    @GetMapping("/joinForm")
+    public String joinForm() {
+        return "joinForm";
     }
 
+    // 실제로 회원 가입 이뤄짐
+    @PostMapping("/join")
+    public String join(Member member, @RequestParam(name = "adminRole", defaultValue = "false") boolean adminRole) {
+
+        String rawPw = member.getPw();
+        String encPw = bCryptPasswordEncoder.encode(rawPw);
+        member.setPw(encPw);
+        member.setMemberRole(adminRole ? MemberRole.ADMIN : MemberRole.USER);
+
+        // 회원 정보 저장
+        memberRepository.save(member);
+
+        return "redirect:/loginForm";
+
+    }
 
 }
