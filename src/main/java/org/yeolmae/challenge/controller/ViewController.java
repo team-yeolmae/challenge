@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.yeolmae.challenge.repository.MemberRepository;
 
 @Controller // View를 리턴
-public class MemberViewController {
+public class ViewController {
 
     @Autowired
     private MemberRepository memberRepository;

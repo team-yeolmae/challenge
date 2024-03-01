@@ -1,4 +1,4 @@
-package org.yeolmae.challenge.controller;
+package org.yeolmae.challenge.controller.restcontroller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -11,7 +11,7 @@ import org.yeolmae.challenge.repository.MemberRepository;
 import org.springframework.stereotype.Controller;
 
 @Controller
-public class MemberJoinController {
+public class LoginJoinController {
 
     @Autowired
     private MemberRepository memberRepository;
