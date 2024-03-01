@@ -32,10 +32,6 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
 
-    //    @ElementCollection(fetch = FetchType.LAZY)
-//    @Builder.Default
-//    private Set<Level> level = new HashSet<>();
-
     public void changePassword(String pw) {
         this.pw = pw;
     }

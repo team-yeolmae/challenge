@@ -21,3 +21,4 @@ public class ChallengeImage {
     private String image_thumb;
 
 }
+
