@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <title>Challenge List</title>
+</head>
+<body>
+
+<h2>Challenge List</h2>
+
+<table>
+    <thead>
+    <tr>
+        <th>Title</th>
+        <th>Writer</th>
+        <th>Content</th>
+        <th>Start Date</th>
+        <th>End Date</th>
+        <!-- Add other column headers as needed -->
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="dto : ${challengeDTO.challengeList}">
+        <td th:text="${dto.title}"></td>
+        <td th:text="${dto.writer}"></td>
+        <td th:text="${dto.content}"></td>
+        <td th:text="${#temporals.format(dto.startDate, 'yyyy-MM-dd')}"></td>
+        <td th:text="${#temporals.format(dto.endDate, 'yyyy-MM-dd')}"></td>
+        <!-- Add other columns as needed -->
+    </tr>
+    </tbody>
+</table>
+
+<!-- Add pagination controls if needed -->
+<div class="float-end">
+    <ul class="pagination flex-wrap">
+
+        <li class="page-item" th:if="${challengeDTO.prev}">
+            <a class="page-link" th:data-num="${challengeDTO.start -1}">Previous</a>
+        </li>
+
+        <th:block th:each="i: ${#numbers.sequence(challengeDTO.start, challengeDTO.end)}">
+            <li th:class="${challengeDTO.page == i}?'page-item active':'page-item'" >
+                <a class="page-link"  th:data-num="${i}">[[${i}]]</a>
+            </li>
+        </th:block>
+
+        <li class="page-item" th:if="${challengeDTO.next}">
+            <a class="page-link"  th:data-num="${challengeDTO.end + 1}">Next</a>
+        </li>
+    </ul>
+</div>
+
+</body>
+</html>

@@ -3,17 +3,18 @@ package org.yeolmae.challenge.service;
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.yeolmae.challenge.domain.Challenge;
-import org.yeolmae.challenge.domain.dto.DeleteChallengeResponse;
-import org.yeolmae.challenge.domain.dto.ReadChallengeResponse;
-import org.yeolmae.challenge.domain.dto.UpdateChallengeRequest;
-import org.yeolmae.challenge.domain.dto.UpdateChallengeResponse;
-import org.yeolmae.challenge.domain.dto.CreateChallengeRequest;
-import org.yeolmae.challenge.domain.dto.CreateChallengeResponse;
+import org.yeolmae.challenge.domain.dto.*;
 import org.yeolmae.challenge.repository.ChallengeRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -60,14 +61,14 @@ public class ChallengeService {
                 foundChallenge.getEndDate());
     }
 
-    public Page<ReadChallengeResponse> readAllChallenge(Pageable pageable) {
-
-        Page<Challenge> challengePage = challengeRepository.findAll(pageable);
-
-        return challengePage.map(challenge -> new ReadChallengeResponse(challenge.getId(), challenge.getTitle(),
-                challenge.getWriter(), challenge.getContent(), challenge.getRegisterDate(), challenge.getStartDate(),
-                challenge.getEndDate()));
-    }
+//    public Page<ReadChallengeResponse> readAllChallenge(Pageable pageable) {
+//
+//        Page<Challenge> challengePage = challengeRepository.findAll(pageable);
+//
+//        return challengePage.map(challenge -> new ReadChallengeResponse(challenge.getId(), challenge.getTitle(),
+//                challenge.getWriter(), challenge.getContent(), challenge.getRegisterDate(), challenge.getStartDate(),
+//                challenge.getEndDate()));
+//    }
 
     @Transactional
     public DeleteChallengeResponse deleteChallenge(Integer challenge_id) {
@@ -89,6 +90,35 @@ public class ChallengeService {
         return new ReadChallengeResponse(foundChallenge.getId(), foundChallenge.getTitle(), foundChallenge.getWriter(),
                 foundChallenge.getContent(), foundChallenge.getRegisterDate(), foundChallenge.getStartDate(),
                 foundChallenge.getEndDate());
+    }
+
+    public PageResponseDTO<ReadChallengeResponse> readAllChallenge(PageRequestDTO pageRequestDTO) {
+        String[] types = pageRequestDTO.getTypes();
+        String keyword = pageRequestDTO.getKeyword();
+        Pageable pageable = pageRequestDTO.getPageable("id");
+
+        Page<Challenge> result = challengeRepository.findAll(pageable);
+
+        List<ReadChallengeResponse> challengeList = new ArrayList<>();
+        for (Challenge challenge : result.getContent()) {
+            ReadChallengeResponse response = new ReadChallengeResponse();
+            response.setId(challenge.getId());
+            response.setTitle(challenge.getTitle());
+            response.setWriter(challenge.getWriter());
+            response.setContent(challenge.getContent());
+            response.setRegisterDate(challenge.getRegisterDate());
+            response.setStartDate(challenge.getStartDate());
+            response.setEndDate(challenge.getEndDate());
+
+            challengeList.add(response);
+        }
+
+        return PageResponseDTO.<ReadChallengeResponse>withAll()
+                .pageRequestDTO(pageRequestDTO)
+                .challengeList(challengeList)
+                .total((int)result.getTotalElements())
+                .build();
+
     }
 
 }
