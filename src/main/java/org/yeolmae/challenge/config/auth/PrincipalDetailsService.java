@@ -15,8 +15,12 @@ import org.yeolmae.challenge.repository.MemberRepository;
 public class PrincipalDetailsService implements UserDetailsService {
 
 
+    private final MemberRepository memberRepository;
+
     @Autowired
-    private MemberRepository memberRepository;
+    public PrincipalDetailsService(MemberRepository memberRepository) {
+        this.memberRepository = memberRepository;
+    }
 
     // 로그인 구현 // email로 사용자 정보 조회
     // 시큐리티 session(내부 Authentication(내부 UserDetails))

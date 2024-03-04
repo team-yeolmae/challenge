@@ -9,12 +9,25 @@ import org.springframework.security.config.annotation.web.configuration.EnableWe
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
+import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.yeolmae.challenge.config.auth.PrincipalDetailsService;
+import org.yeolmae.challenge.repository.MemberRepository;
+
+import javax.sql.DataSource;
 
 @Configuration
 // @EnableWebSecurity : SpringSecurity FilterChain이 자동으로 포함
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, prePostEnabled = true)// secured, PreAuthorize/postAuthorize 어노테이션 활성화 //특정 경로에 접근할 수 있는 권한
 public class WebSecurityConfig {
+
+    @Autowired
+    private DataSource dataSource;
+
+    @Autowired
+    private MemberRepository memberRepository;
 
     @Autowired
     private UserDetailsService userDetailsService;
@@ -36,10 +49,44 @@ public class WebSecurityConfig {
                 .loginProcessingUrl("/login")// /login 주소가 호출되면 시큐리티가 낚아채서 대신 로그인 진행 // 로그인을 Spring Security가 대신 위임해서 처리해주는 기능(사용자 아이디(이메일), 비번 인증하는 것 대신 해줌.)
                 .defaultSuccessUrl("/"));// "/" -> main 혹은 home 화면
 
+        // 자동로그인 설정
+        http.rememberMe((rememberMe) -> rememberMe
+                        .key("rememberMeKey")//인증받은 사용자 정보로 토큰 생성에 필요한 값
+                        .rememberMeParameter("remember-me")//html에서의 name 값
+                        .tokenValiditySeconds(24*60*60)//remember-me 토큰 유효시간 : 1일
+                .rememberMeServices(rememberMeServices(persistentTokenRepository()))
+                .userDetailsService(new PrincipalDetailsService(memberRepository)));
+
+        // logout 설정
+        http.logout((logout) -> logout
+                .deleteCookies("JSESSIONID", "remember-me")
+                .logoutSuccessUrl("/loginForm"));
+
         //csrf 비활성화
         http.csrf((csrf) -> csrf.disable());
 
         return http.build();
+    }
+
+    @Bean
+    public PersistentTokenRepository persistentTokenRepository() {
+
+        JdbcTokenRepositoryImpl tokenRepository = new JdbcTokenRepositoryImpl();
+        tokenRepository.setDataSource(dataSource);
+
+        tokenRepository.setCreateTableOnStartup(false);
+
+        return tokenRepository;
+    }
+
+    @Bean
+    public PersistentTokenBasedRememberMeServices rememberMeServices(PersistentTokenRepository tokenRepository){
+        PersistentTokenBasedRememberMeServices rememberMeServices
+                = new PersistentTokenBasedRememberMeServices("rememberMeKey", new PrincipalDetailsService(memberRepository), tokenRepository);
+        rememberMeServices.setParameter("remember-me");
+        rememberMeServices.setAlwaysRemember(false);
+
+        return rememberMeServices;
     }
 
     // 비밀번호 암호화 - BCryptPasswordEncoder() 해시 함수 이용하여 암호화 처리
