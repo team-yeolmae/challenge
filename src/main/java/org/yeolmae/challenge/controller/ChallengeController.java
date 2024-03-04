@@ -1,56 +1,76 @@
 package org.yeolmae.challenge.controller;
 
-import lombok.Getter;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.yeolmae.challenge.domain.dto.*;
 import org.yeolmae.challenge.service.ChallengeService;
 
 @Controller
 @RequestMapping("/challenge")
 @RequiredArgsConstructor
+@Log4j2
 public class ChallengeController {
 
     private final ChallengeService challengeService;
 
-    @GetMapping("/{challenge_id}")
-    public ResponseEntity<ReadChallengeResponse> challengeRead(@PathVariable Integer challenge_id) {
-
-        ReadChallengeResponse response = challengeService.readChallengeById(challenge_id);
-
-        return  new ResponseEntity<>(response, HttpStatus.OK);
+    @GetMapping("/register")
+    public void registerGET(){
     }
-
     @PostMapping("/register")
-    public ResponseEntity<CreateChallengeResponse> challengeCreate(@RequestBody CreateChallengeRequest request) {
+    public String registerChallenge(@Valid CreateChallengeRequest createChallengeRequest, BindingResult bindingResult, Model model) {
+        log.info("challenge POST register.......");
 
-        CreateChallengeResponse response = challengeService.createChallenge(request);
+        if (bindingResult.hasErrors()) {
+            log.info("has errors.......");
+            log.info("Errors: {}", bindingResult.getAllErrors());
+            model.addAttribute("errors", bindingResult.getAllErrors());
+            return "redirect:/challenge/register";
+        }
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
+        log.info(createChallengeRequest);
+
+        CreateChallengeResponse id = challengeService.createChallenge(createChallengeRequest);
+
+        model.addAttribute("result", id);
+
+        return "redirect:/challenge/list";
     }
 
-    @PutMapping("/{challenge_id}")
-    public ResponseEntity<UpdateChallengeResponse> challengeUpdate(@PathVariable Integer challenge_id,
-                                                                   @RequestBody UpdateChallengeRequest request){
+    //    @GetMapping("/{challenge_id}")
+//    public ResponseEntity<ReadChallengeResponse> challengeRead(@PathVariable Integer challenge_id) {
+//
+//        ReadChallengeResponse response = challengeService.readChallengeById(challenge_id);
+//
+//        return  new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 
-        UpdateChallengeResponse response = challengeService.updateChallenge(challenge_id, request);
 
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+//    @PutMapping("/{challenge_id}")
+//    public ResponseEntity<UpdateChallengeResponse> challengeUpdate(@PathVariable Integer challenge_id,
+//                                                                   @RequestBody UpdateChallengeRequest request){
+//
+//        UpdateChallengeResponse response = challengeService.updateChallenge(challenge_id, request);
+//
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
+
+//
+//    @DeleteMapping("/{challenge_id}")
+//    public ResponseEntity<DeleteChallengeResponse> challengeDelete(@PathVariable Integer challenge_id) {
+//
+//        DeleteChallengeResponse response = challengeService.deleteChallenge(challenge_id);
+//
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 
     @GetMapping("/list")
     public void list(PageRequestDTO pageRequestDTO, Model model){
-
-        //PageResponseDTO<BoardDTO> responseDTO = boardService.list(pageRequestDTO);
 
         PageResponseDTO<ReadChallengeResponse> challengeDTO =
                 challengeService.readAllChallenge(pageRequestDTO);
@@ -59,14 +79,6 @@ public class ChallengeController {
         model.addAttribute("challengeDTO", challengeDTO);
 
 
-    }
-
-    @DeleteMapping("/{challenge_id}")
-    public ResponseEntity<DeleteChallengeResponse> challengeDelete(@PathVariable Integer challenge_id) {
-
-        DeleteChallengeResponse response = challengeService.deleteChallenge(challenge_id);
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
 

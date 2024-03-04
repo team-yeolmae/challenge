@@ -46,7 +46,6 @@ public class PageRequestDTO {
 
             builder.append("&size=" + this.size);
 
-
             if (type != null && type.length() > 0) {
                 builder.append("&type=" + type);
             }
@@ -55,6 +54,7 @@ public class PageRequestDTO {
                 try {
                     builder.append("&keyword=" + URLEncoder.encode(keyword, "UTF-8"));
                 } catch (UnsupportedEncodingException e) {
+                    // 예외 처리 필요
                 }
             }
             link = builder.toString();
