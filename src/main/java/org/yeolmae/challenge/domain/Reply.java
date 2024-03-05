@@ -27,6 +27,5 @@ public class Reply {
         this.replyer = replyer;
         this.replyText = text;
     }
-  
-}
 
+}

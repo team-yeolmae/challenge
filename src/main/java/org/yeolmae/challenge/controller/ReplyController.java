@@ -4,8 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.yeolmae.challenge.domain.dto.UpdateReplyRequest;
-import org.yeolmae.challenge.domain.dto.UpdateReplyResponse;
+import org.yeolmae.challenge.domain.dto.*;
 import org.yeolmae.challenge.service.ReplyService;
 
 @RestController
@@ -15,11 +14,10 @@ public class ReplyController {
 
     private final ReplyService replyService;
 
-    @PutMapping("/{rno}")
-    public ResponseEntity<UpdateReplyResponse> updateReply(@PathVariable Integer rno,
-                                                               @RequestBody UpdateReplyRequest request){
+    @DeleteMapping("/{rno}")
+    public ResponseEntity<DeleteReplyResponse> replyDelete(@PathVariable Integer rno) {
 
-        UpdateReplyResponse response = replyService.replyUpdate(rno, request);
+        DeleteReplyResponse response = replyService.deleteReply(rno);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
