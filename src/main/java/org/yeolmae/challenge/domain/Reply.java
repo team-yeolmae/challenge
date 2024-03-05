@@ -1,13 +1,7 @@
 package org.yeolmae.challenge.domain;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.NotEmpty;
-import jakarta.validation.constraints.NotNull;
 import lombok.*;
-
-import java.time.LocalDate;
-import jakarta.persistence.*;
 
 @Entity
 @Builder
@@ -20,22 +14,17 @@ public class Reply {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer rno;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
     private Challenge challenge;
 
-    @NotEmpty
-    @Column(nullable = false)
-    private String replyText;
-
-    @NotEmpty
     @Column(nullable = false)
     private String replyer;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate registerDate;
+    @Column(nullable = false)
+    private String replyText;
 
-    public void changeReply(String text) {
+    public void changeReply(String replyer, String text) {
+        this.replyer = replyer;
         this.replyText = text;
     }
 

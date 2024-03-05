@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UpdateReplyRequest {
 
-    private String replyText;
+    private String replyer;
 
+    private String replyText;
 }

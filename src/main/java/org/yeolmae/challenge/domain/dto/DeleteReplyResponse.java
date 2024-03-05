@@ -9,9 +9,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class DeleteReplyResponse {
 
-    // challenge_id 추가
-    private int challengeId;
-  
     private Integer rno;
 
     private String replyer;
