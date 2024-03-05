@@ -8,6 +8,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.yeolmae.challenge.domain.Reply;
 import org.yeolmae.challenge.domain.dto.ReadReplyResponse;
 import org.yeolmae.challenge.repository.ReplyRepository;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -20,6 +21,5 @@ public class ReplyService {
         Page<Reply> replyPage = replyRepository.findAll(pageable);
 
         return replyPage.map(reply -> new ReadReplyResponse(reply.getRno(), reply.getReplyer(), reply.getReplyText()));
-    }
 
 }

@@ -14,4 +14,5 @@ public class ReadReplyResponse {
     private String replyer;
 
     private String replyText;
+
 }
