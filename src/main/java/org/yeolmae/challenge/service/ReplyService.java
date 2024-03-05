@@ -6,7 +6,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.yeolmae.challenge.domain.Reply;
-import org.yeolmae.challenge.domain.dto.ReadReplyResponse;
+import org.yeolmae.challenge.domain.dto.*;
 import org.yeolmae.challenge.repository.ReplyRepository;
 
 @Service
@@ -22,4 +22,5 @@ public class ReplyService {
 
         return replyPage.map(reply -> new ReadReplyResponse(reply.getRno(), reply.getReplyer(), reply.getReplyText()));
 
+    }
 }
