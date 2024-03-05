@@ -18,9 +18,15 @@ public class Reply {
     private Challenge challenge;
 
     @Column(nullable = false)
-    private String replyText;
-
-    @Column(nullable = false)
     private String replyer;
 
+    @Column(nullable = false)
+    private String replyText;
+
+    public void changeReply(String replyer, String text) {
+        this.replyer = replyer;
+        this.replyText = text;
+    }
+  
 }
+

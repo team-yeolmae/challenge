@@ -2,17 +2,11 @@ package org.yeolmae.challenge.controller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.validation.BindException;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.yeolmae.challenge.domain.dto.CreateReplyRequest;
-import org.yeolmae.challenge.domain.dto.CreateReplyResponse;
+import org.yeolmae.challenge.domain.dto.UpdateReplyRequest;
+import org.yeolmae.challenge.domain.dto.UpdateReplyResponse;
 import org.yeolmae.challenge.service.ReplyService;
-
-import java.util.HashMap;
-import java.util.Map;
 
 @RestController
 @RequestMapping("/reply")
@@ -21,10 +15,11 @@ public class ReplyController {
 
     private final ReplyService replyService;
 
-    @PostMapping("/register")
-    public ResponseEntity<CreateReplyResponse> replyCreate(@RequestBody CreateReplyRequest request) {
+    @PutMapping("/{rno}")
+    public ResponseEntity<UpdateReplyResponse> updateReply(@PathVariable Integer rno,
+                                                               @RequestBody UpdateReplyRequest request){
 
-        CreateReplyResponse response = replyService.createReply(request);
+        UpdateReplyResponse response = replyService.replyUpdate(rno, request);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
