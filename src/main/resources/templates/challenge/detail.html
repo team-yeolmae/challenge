@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+
+
+<div layout:fragment="content">
+    <section class="py-5">
+        <div class="container px-4 px-lg-5 my-5">
+            <!-- Thymeleaf iteration to display product details -->
+            <div class="row gx-4 gx-lg-5 align-items-center" th:each="dto : ${challengeDTO}">
+                <div class="col-md-6">
+                    <img class="card-img-top mb-5 mb-md-0" src="https://dummyimage.com/600x600/dee2e6/6c757d.jpg" alt="..." />
+                </div>
+                <div class="col-md-6">
+                    <div class="small mb-1" th:text="${'SKU: ' + dto.id}"></div>
+                    <h1 class="display-5 fw-bolder mb-5" th:text="${dto.title}"></h1>
+
+                    <div class="fs-5 mb-5">
+                        <div class="small mb-1">
+                            <h6>챌린지를 소개합니다</h6>
+                        </div>
+                        <span class="fw-bolder" th:text="${(dto.content)}"></span>
+                    </div>
+
+
+                    <!-- Product price -->
+                    <div class="fs-5 mb-5">
+                    <div class="small mb-1">
+                        <h6>참여기간</h6>
+                    </div>
+                    <span class="fw-bolder" th:text="${#temporals.format(dto.startDate, 'yyyy-MM-dd')
+                                 + ' ~ ' + #temporals.format(dto.endDate, 'yyyy-MM-dd')}"></span>
+                    </div>
+
+
+                    <div class="fs-5 mb-5">
+                    <div class="small mb-1">
+                        <h6>주의사항</h6>
+                    </div>
+
+                    <span class="fw-bolder">꼭 화면으로 인증해주세요</span>
+                    </div>
+
+                    <div class="d-flex">
+
+                        <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                            참가하기
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+
+</div>
+
+
+<script layout:fragment="script" th:inline="javascript">
+</script>
+</html>

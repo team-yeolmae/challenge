@@ -12,6 +12,7 @@
     <!-- Section -->
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
+            <h2 class="fw-bolder mb-4">진행중인 챌린지</h2>
             <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
                 <!-- 여기에 데이터베이스에서 가져온 내용을 반복적으로 채워넣을 것입니다. -->
                 <div class="col mb-5" th:each="dto : ${challengeDTO.challengeList}">
@@ -31,7 +32,7 @@
                         <!-- Product actions -->
                         <div class="card-footer p-4 pt-0 border-top-0 bg-transparent">
                             <div class="text-center">
-                                <a class="btn btn-outline-dark mt-auto" href="#" th:href="@{'/challenge/' + ${dto.id}}">View options</a>
+                                <a class="btn btn-outline-dark mt-auto" href="#" th:href="@{'/challenge/detail' + ${dto.id}}">View options</a>
                             </div>
                         </div>
                     </div>
