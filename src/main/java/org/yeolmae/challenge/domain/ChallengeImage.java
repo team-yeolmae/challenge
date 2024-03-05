@@ -1,8 +1,10 @@
 package org.yeolmae.challenge.domain;
 
 import jakarta.persistence.*;
+import lombok.Setter;
 
 @Entity
+@Setter
 public class ChallengeImage {
 
     @Id

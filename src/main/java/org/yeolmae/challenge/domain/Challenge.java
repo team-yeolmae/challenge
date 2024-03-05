@@ -2,8 +2,11 @@ package org.yeolmae.challenge.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.yeolmae.challenge.domain.dto.upload.UploadFileResponse;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Builder
@@ -34,6 +37,19 @@ public class Challenge {
 
     @Column(name = "endDate", nullable = false)
     private LocalDate endDate;
+
+    @OneToMany(mappedBy = "challenge", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY) // 어떤 Entity의 속성으로 매핑하는지 // ChallengeImage의 challenge 변수
+    @Builder.Default
+    private Set<ChallengeImage> imageSet = new HashSet<>();
+
+    public void addChallengeImage(ChallengeImage challengeImage) {
+
+        this.imageSet.add(challengeImage);
+        challengeImage.setChallenge(this);
+
+    }
+
+    public void
 
     public void update(String title, String writer, String content, LocalDate startDate, LocalDate endDate) {
         this.title = title;
