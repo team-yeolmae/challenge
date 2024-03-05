@@ -11,6 +11,7 @@ import org.yeolmae.challenge.domain.Reply;
 import org.yeolmae.challenge.domain.dto.*;
 import org.yeolmae.challenge.repository.ChallengeRepository;
 import org.yeolmae.challenge.repository.ReplyRepository;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -104,6 +105,5 @@ public class ReplyService {
                 )
         );
     }
-
 
 }
