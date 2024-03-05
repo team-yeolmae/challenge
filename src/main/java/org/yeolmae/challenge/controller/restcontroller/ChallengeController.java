@@ -1,4 +1,4 @@
-package org.yeolmae.challenge.controller;
+package org.yeolmae.challenge.controller.restcontroller;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
