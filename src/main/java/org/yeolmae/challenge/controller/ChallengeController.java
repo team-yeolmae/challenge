@@ -1,6 +1,5 @@
 package org.yeolmae.challenge.controller;
 
-import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -8,15 +7,10 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
-import org.yeolmae.challenge.domain.dto.DeleteChallengeResponse;
-import org.yeolmae.challenge.domain.dto.ReadChallengeResponse;
-import org.yeolmae.challenge.domain.dto.UpdateChallengeRequest;
-import org.yeolmae.challenge.domain.dto.UpdateChallengeResponse;
-import org.yeolmae.challenge.domain.dto.CreateChallengeRequest;
-import org.yeolmae.challenge.domain.dto.CreateChallengeResponse;
+import org.yeolmae.challenge.domain.dto.*;
 import org.yeolmae.challenge.service.ChallengeService;
+
 
 @RestController
 @RequestMapping("/challenge")
@@ -66,6 +60,5 @@ public class ChallengeController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
 
 }

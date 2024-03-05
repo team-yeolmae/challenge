@@ -7,13 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.yeolmae.challenge.domain.Challenge;
-import org.yeolmae.challenge.domain.dto.DeleteChallengeResponse;
-import org.yeolmae.challenge.domain.dto.ReadChallengeResponse;
-import org.yeolmae.challenge.domain.dto.UpdateChallengeRequest;
-import org.yeolmae.challenge.domain.dto.UpdateChallengeResponse;
-import org.yeolmae.challenge.domain.dto.CreateChallengeRequest;
-import org.yeolmae.challenge.domain.dto.CreateChallengeResponse;
+import org.yeolmae.challenge.domain.dto.*;
 import org.yeolmae.challenge.repository.ChallengeRepository;
+
+import java.util.ArrayList;
+import java.util.List;
+
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
@@ -91,4 +90,33 @@ public class ChallengeService {
                 foundChallenge.getEndDate());
     }
 
+    //view
+    public PageResponseDTO<ReadChallengeResponse> readAllChallenge(PageRequestDTO pageRequestDTO) {
+        String[] types = pageRequestDTO.getTypes();
+        String keyword = pageRequestDTO.getKeyword();
+        Pageable pageable = pageRequestDTO.getPageable("id");
+
+        Page<Challenge> result = challengeRepository.findAll(pageable);
+
+        List<ReadChallengeResponse> challengeList = new ArrayList<>();
+        for (Challenge challenge : result.getContent()) {
+            ReadChallengeResponse response = new ReadChallengeResponse();
+            response.setId(challenge.getId());
+            response.setTitle(challenge.getTitle());
+            response.setWriter(challenge.getWriter());
+            response.setContent(challenge.getContent());
+            response.setRegisterDate(challenge.getRegisterDate());
+            response.setStartDate(challenge.getStartDate());
+            response.setEndDate(challenge.getEndDate());
+
+            challengeList.add(response);
+        }
+
+        return PageResponseDTO.<ReadChallengeResponse>withAll()
+                .pageRequestDTO(pageRequestDTO)
+                .challengeList(challengeList)
+                .total((int)result.getTotalElements())
+                .build();
+
+    }
 }
