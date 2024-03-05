@@ -8,7 +8,6 @@ import org.yeolmae.challenge.domain.dto.UpdateReplyRequest;
 import org.yeolmae.challenge.domain.dto.UpdateReplyResponse;
 import org.yeolmae.challenge.service.ReplyService;
 
-
 @RestController
 @RequestMapping("/reply")
 @RequiredArgsConstructor
@@ -24,7 +23,5 @@ public class ReplyController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
-
 
 }
