@@ -5,6 +5,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.yeolmae.challenge.domain.Reply;
+
 import org.yeolmae.challenge.domain.dto.DeleteReplyResponse;
 import org.yeolmae.challenge.repository.ReplyRepository;
 
@@ -24,6 +25,5 @@ public class ReplyService {
         replyRepository.delete(reply);
 
         return new DeleteReplyResponse(reply.getRno(), reply.getReplyer(), reply.getReplyText());
-    }
 
 }

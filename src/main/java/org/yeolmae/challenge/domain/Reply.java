@@ -24,3 +24,4 @@ public class Reply {
     private String replyer;
 
 }
+
