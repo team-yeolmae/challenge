@@ -4,7 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.yeolmae.challenge.domain.dto.DeleteReplyResponse;
+import org.yeolmae.challenge.domain.dto.*;
 import org.yeolmae.challenge.service.ReplyService;
 
 @RestController
@@ -21,6 +21,5 @@ public class ReplyController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
-
 
 }

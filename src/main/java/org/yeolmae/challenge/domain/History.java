@@ -29,4 +29,3 @@ public class History {
     private boolean success;
 
 }
-
