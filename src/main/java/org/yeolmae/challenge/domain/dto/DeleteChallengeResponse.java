@@ -11,17 +11,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class DeleteChallengeResponse {
 
-    private int challenge_id;
-
+    private int id;
     private String title;
-
     private String writer;
-
     private String content;
+    private LocalDate registerDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
-    private LocalDate register_date;
-
-    private LocalDate start_date;
-
-    private LocalDate end_date;
 }

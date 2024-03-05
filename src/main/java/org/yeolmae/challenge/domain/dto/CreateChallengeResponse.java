@@ -11,12 +11,12 @@ import java.time.LocalDate;
 @NoArgsConstructor
 public class CreateChallengeResponse {
 
-    private int challenge_id;
+    private int id;
     private String title;
     private String writer;
     private String content;
-    private LocalDate register_date;
-    private LocalDate start_date;
-    private LocalDate end_date;
+    private LocalDate registerDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
   
 }
