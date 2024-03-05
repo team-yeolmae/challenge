@@ -1,4 +1,5 @@
 package org.yeolmae.challenge.domain;
+
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -28,3 +29,4 @@ public class History {
     private boolean success;
 
 }
+

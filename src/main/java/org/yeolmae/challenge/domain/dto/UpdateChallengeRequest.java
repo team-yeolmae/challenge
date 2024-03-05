@@ -11,14 +11,10 @@ import java.time.LocalDate;
 public class UpdateChallengeRequest {
 
     private String title;
-
     private String writer;
-
     private String content;
+    private LocalDate registerDate;
+    private LocalDate startDate;
+    private LocalDate endDate;
 
-    private LocalDate register_date;
-
-    private LocalDate start_date;
-
-    private LocalDate end_date;
 }

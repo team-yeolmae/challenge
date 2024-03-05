@@ -1,4 +1,4 @@
-package org.yeolmae.challenge.controller;
+package org.yeolmae.challenge.controller.restcontroller;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
