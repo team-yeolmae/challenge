@@ -11,7 +11,6 @@ import org.springframework.web.bind.annotation.*;
 import org.yeolmae.challenge.domain.dto.*;
 import org.yeolmae.challenge.service.ChallengeService;
 
-
 @RestController
 @RequestMapping("/challenge")
 @RequiredArgsConstructor
