@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.yeolmae.challenge.domain.dto.*;
 import org.yeolmae.challenge.service.ChallengeService;
 
@@ -22,13 +23,14 @@ public class ChallengeController {
     public void registerGET(){
     }
     @PostMapping("/register")
-    public String registerChallenge(@Valid CreateChallengeRequest createChallengeRequest, BindingResult bindingResult, Model model) {
+    public String registerChallenge(@Valid CreateChallengeRequest createChallengeRequest, BindingResult bindingResult,
+                                    RedirectAttributes redirectAttributes) {
         log.info("challenge POST register.......");
 
         if (bindingResult.hasErrors()) {
             log.info("has errors.......");
             log.info("Errors: {}", bindingResult.getAllErrors());
-            model.addAttribute("errors", bindingResult.getAllErrors());
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
             return "redirect:/challenge/register";
         }
 
@@ -36,7 +38,7 @@ public class ChallengeController {
 
         CreateChallengeResponse id = challengeService.createChallenge(createChallengeRequest);
 
-        model.addAttribute("result", id);
+        redirectAttributes.addFlashAttribute("result", id);
 
         return "redirect:/challenge/list";
     }
