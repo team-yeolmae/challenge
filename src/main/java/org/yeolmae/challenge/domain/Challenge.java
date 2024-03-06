@@ -2,7 +2,6 @@ package org.yeolmae.challenge.domain;
 
 import jakarta.persistence.*;
 import lombok.*;
-import org.yeolmae.challenge.domain.dto.upload.UploadFileResponse;
 
 import java.time.LocalDate;
 import java.util.HashSet;
