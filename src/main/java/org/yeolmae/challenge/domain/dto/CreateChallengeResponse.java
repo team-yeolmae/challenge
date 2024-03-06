@@ -23,4 +23,6 @@ public class CreateChallengeResponse {
     private LocalDate startDate;
     private LocalDate endDate;
 
+    private ChallengeImage[] challengeImages;
+
 }

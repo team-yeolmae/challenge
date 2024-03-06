@@ -7,6 +7,7 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 
 import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.core.io.FileSystemResource;
@@ -16,8 +17,12 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.yeolmae.challenge.domain.Challenge;
+import org.yeolmae.challenge.domain.dto.CreateChallengeRequest;
+import org.yeolmae.challenge.domain.dto.CreateChallengeResponse;
 import org.yeolmae.challenge.domain.dto.upload.UploadFileResponse;
 import net.coobird.thumbnailator.Thumbnailator;
+import org.yeolmae.challenge.service.ChallengeService;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,6 +34,9 @@ import java.util.*;
 @RestController
 @Log4j2
 public class UpDownController {
+
+    @Autowired
+    private ChallengeService challengeService;
 
     @Value("${org.yeolmae.upload.path}")
     private String uploadPath;

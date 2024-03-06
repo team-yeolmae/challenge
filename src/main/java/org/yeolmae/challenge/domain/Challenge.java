@@ -6,6 +6,7 @@ import lombok.*;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Entity
 @Builder
@@ -58,6 +59,22 @@ public class Challenge {
         imageSet.forEach(challengeImage -> challengeImage.changeChallenge(null));
         this.imageSet.clear();
 
+    }
+
+    public Set<ChallengeImageInfo> getImageInfoSet() {
+        return this.imageSet.stream()
+                .map(ChallengeImageInfo::new) // ChallengeImageInfo로 변환
+                .collect(Collectors.toSet());
+    }
+
+    public static class ChallengeImageInfo {
+        private String image_detail;
+        private String image_thumb;
+
+        public ChallengeImageInfo(ChallengeImage challengeImage) {
+            this.image_detail = challengeImage.getImage_detail();
+            this.image_thumb = challengeImage.getImage_thumb();
+        }
     }
 
     public void update(String title, String writer, String content, LocalDate startDate, LocalDate endDate) {
