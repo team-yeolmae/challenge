@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -14,7 +17,7 @@ import jakarta.persistence.*;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@ToString(exclude = "challenge")
+@ToString(exclude = "imageSet")
 public class Reply {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,6 +40,31 @@ public class Reply {
 
     public void changeReply(String text) {
         this.replyText = text;
+    }
+
+    @OneToMany(mappedBy = "reply", // ReplyImage의 reply 변수
+            cascade = {CascadeType.ALL},
+            fetch = FetchType.EAGER,
+            orphanRemoval = true
+    )
+    @Builder.Default
+    private Set<ReplyImage> imageSet = new HashSet<>();
+
+    public void addImage(String uuid, String fileName) {
+
+        ReplyImage replyImage = ReplyImage.builder()
+                .uuid(uuid)
+                .fileName(fileName)
+                .reply(this)
+                .ord(imageSet.size())
+                .build();
+        imageSet.add(replyImage);
+    }
+
+    public void clearImage() {
+
+        imageSet.forEach(replyImage -> replyImage.changeReply(null));
+        this.imageSet.clear();
     }
 
 }
