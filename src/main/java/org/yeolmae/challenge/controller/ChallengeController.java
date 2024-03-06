@@ -7,7 +7,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.yeolmae.challenge.domain.dto.*;
 import org.yeolmae.challenge.service.ChallengeService;
 
@@ -41,33 +40,6 @@ public class ChallengeController {
 
         return "redirect:/challenge/list";
     }
-
-    //    @GetMapping("/{challenge_id}")
-//    public ResponseEntity<ReadChallengeResponse> challengeRead(@PathVariable Integer challenge_id) {
-//
-//        ReadChallengeResponse response = challengeService.readChallengeById(challenge_id);
-//
-//        return  new ResponseEntity<>(response, HttpStatus.OK);
-//    }
-
-
-//    @PutMapping("/{challenge_id}")
-//    public ResponseEntity<UpdateChallengeResponse> challengeUpdate(@PathVariable Integer challenge_id,
-//                                                                   @RequestBody UpdateChallengeRequest request){
-//
-//        UpdateChallengeResponse response = challengeService.updateChallenge(challenge_id, request);
-//
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
-
-//
-//    @DeleteMapping("/{challenge_id}")
-//    public ResponseEntity<DeleteChallengeResponse> challengeDelete(@PathVariable Integer challenge_id) {
-//
-//        DeleteChallengeResponse response = challengeService.deleteChallenge(challenge_id);
-//
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
 
     @GetMapping("/list")
     public void list(PageRequestDTO pageRequestDTO, Model model){

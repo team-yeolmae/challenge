@@ -1,6 +1,5 @@
 package org.yeolmae.challenge.service;
 
-import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -45,51 +44,6 @@ public class ChallengeService {
                 savedChallenge.getEndDate()
         );
     }
-
-//    @Transactional
-//    public UpdateChallengeResponse updateChallenge(Integer challenge_id, UpdateChallengeRequest request) {
-//
-//        Challenge foundChallenge = challengeRepository.findById(challenge_id)
-//                .orElseThrow(() -> new EntityNotFoundException("해당 challenge_id로 조회된 게시글이 없습니다."));
-//        //Dirty Checking
-//        foundChallenge.update(request.getTitle(), request.getWriter(), request.getContent(),
-//                request.getStartDate(), request.getEndDate());
-//
-//        return new UpdateChallengeResponse(foundChallenge.getId(), foundChallenge.getTitle(), foundChallenge.getWriter(),
-//                foundChallenge.getContent(), foundChallenge.getRegisterDate(), foundChallenge.getStartDate(),
-//                foundChallenge.getEndDate());
-//    }
-
-//    public Page<ReadChallengeResponse> readAllChallenge(Pageable pageable) {
-//
-//        Page<Challenge> challengePage = challengeRepository.findAll(pageable);
-//
-//        return challengePage.map(challenge -> new ReadChallengeResponse(challenge.getId(), challenge.getTitle(),
-//                challenge.getWriter(), challenge.getContent(), challenge.getRegisterDate(), challenge.getStartDate(),
-//                challenge.getEndDate()));
-//    }
-
-//    @Transactional
-//    public DeleteChallengeResponse deleteChallenge(Integer challenge_id) {
-//
-//        Challenge challenge = challengeRepository.findById(challenge_id)
-//                .orElseThrow(() -> new EntityNotFoundException("해당 challenge_id로 조회된 게시글이 없습니다."));
-//
-//        challengeRepository.delete(challenge);
-//
-//        return new DeleteChallengeResponse(challenge.getId(), challenge.getTitle(), challenge.getWriter(),
-//                challenge.getContent(), challenge.getRegisterDate(), challenge.getStartDate(), challenge.getEndDate());
-//    }
-//
-//    public ReadChallengeResponse readChallengeById(Integer challenge_id) {
-//
-//        Challenge foundChallenge = challengeRepository.findById(challenge_id)
-//                .orElseThrow(() -> new EntityNotFoundException("해당 challenge_id로 조회된 게시글이 없습니다."));
-//
-//        return new ReadChallengeResponse(foundChallenge.getId(), foundChallenge.getTitle(), foundChallenge.getWriter(),
-//                foundChallenge.getContent(), foundChallenge.getRegisterDate(), foundChallenge.getStartDate(),
-//                foundChallenge.getEndDate());
-//    }
 
     public PageResponseDTO<ReadChallengeResponse> readAllChallenge(PageRequestDTO pageRequestDTO) {
         String[] types = pageRequestDTO.getTypes();
