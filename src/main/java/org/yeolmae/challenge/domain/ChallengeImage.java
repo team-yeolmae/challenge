@@ -1,10 +1,17 @@
 package org.yeolmae.challenge.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
 @Entity
 @Setter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class ChallengeImage {
 
     @Id
@@ -22,5 +29,8 @@ public class ChallengeImage {
     @Column(name = "image_thumb", nullable = false, length = 500)
     private String image_thumb;
 
+    public void changeChallenge(Challenge challenge) {
+        this.challenge = challenge;
+    }
 
 }
