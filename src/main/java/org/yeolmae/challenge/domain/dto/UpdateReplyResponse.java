@@ -3,6 +3,7 @@ package org.yeolmae.challenge.domain.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.yeolmae.challenge.domain.ReplyImage;
 
 import java.time.LocalDate;
 
@@ -22,5 +23,7 @@ public class UpdateReplyResponse {
 
     // registerDate 추가
     private LocalDate registerDate;
+
+    private ReplyImage[] replyImages;
 
 }

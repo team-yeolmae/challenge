@@ -8,9 +8,15 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.yeolmae.challenge.domain.Challenge;
 import org.yeolmae.challenge.domain.Reply;
+import org.yeolmae.challenge.domain.ReplyImage;
 import org.yeolmae.challenge.domain.dto.*;
 import org.yeolmae.challenge.repository.ChallengeRepository;
 import org.yeolmae.challenge.repository.ReplyRepository;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -19,6 +25,7 @@ public class ReplyService {
 
     private final ReplyRepository replyRepository;
     private final ChallengeRepository challengeRepository;
+
 
     @Transactional
     public CreateReplyResponse createReply(CreateReplyRequest request) {
@@ -35,29 +42,44 @@ public class ReplyService {
                 .registerDate(request.getRegisterDate())
                 .build();
 
+        // 요청에서 전달된 이미지들을 댓글에 추가
+        for (ReplyImage replyImage : request.getReplyImages()) {
+            reply.addImage(replyImage.getUuid(), replyImage.getFileName());
+        }
+
         Reply savedReply = replyRepository.save(reply);
+
+        // 댓글에 첨부된 이미지들을 배열로 변환
+        ReplyImage[] replyImages = savedReply.getImageSet().toArray(new ReplyImage[0]);
 
         return new CreateReplyResponse(
                 request.getChallengeId(),
                 savedReply.getRno(),
                 savedReply.getReplyText(),
                 savedReply.getReplyer(),
-                savedReply.getRegisterDate()
+                savedReply.getRegisterDate(),
+                replyImages
         );
     }
 
+
     public ReadReplyResponse readReplyById(Integer rno) {
 
-        Reply foundReply= replyRepository.findById(rno)
+        Reply foundReply= replyRepository.findByIdWithImage(rno)
                 .orElseThrow(() -> new EntityNotFoundException("해당 rno로 조회된 게시글이 없습니다."));
+
+        // 댓글에 첨부된 이미지들을 배열로 변환
+        ReplyImage[] replyImages = foundReply.getImageSet().toArray(new ReplyImage[0]);
 
         return new ReadReplyResponse(
                 foundReply.getRno(),
                 foundReply.getReplyer(),
                 foundReply.getReplyText(),
-                foundReply.getRegisterDate()
+                foundReply.getRegisterDate(),
+                replyImages
         );
     }
+
 
     @Transactional
     public UpdateReplyResponse updateReply(Integer rno, UpdateReplyRequest request) {
@@ -67,15 +89,28 @@ public class ReplyService {
         //Dirty Checking
         foundReply.changeReply(request.getReplyText());   // 댓글 내용만 수정
 
+        // 기존 첨부된 이미지 삭제
+        foundReply.clearImage();
+
+        // 새로운 이미지 추가
+        for (ReplyImage replyImage : request.getReplyImages()) {
+            foundReply.addImage(replyImage.getUuid(), replyImage.getFileName());
+        }
+
+        // 댓글에 첨부된 이미지들을 배열로 변환
+        ReplyImage[] replyImages = foundReply.getImageSet().toArray(new ReplyImage[0]);
+
         return new UpdateReplyResponse(
                 foundReply.getChallenge().getId(),
                 foundReply.getRno(),
                 foundReply.getReplyer(),
                 foundReply.getReplyText(),
-                foundReply.getRegisterDate()
+                foundReply.getRegisterDate(),
+                replyImages
         );
 
     }
+
 
     @Transactional
     public DeleteReplyResponse deleteReply(Integer rno) {
@@ -93,17 +128,43 @@ public class ReplyService {
         );
     }
 
+
     public Page<ReadReplyResponse> readAllReplies(int challengeId, Pageable pageable) {
 
         Page<Reply> replyPage = replyRepository.listOfReplies(challengeId, pageable);
 
-        return replyPage.map(reply -> new ReadReplyResponse(
-                reply.getRno(),
-                reply.getReplyText(),
-                reply.getReplyer(),
-                reply.getRegisterDate()
-                )
-        );
+        // 각 댓글과 댓글의 첫번째 이미지 객체 가져오기
+        return replyPage.map(reply -> {
+
+            Set<ReplyImage> imageSet = reply.getImageSet();
+
+            ReplyImage firstImage = null;
+            String firstImageName = "";
+
+            if(imageSet != null && !imageSet.isEmpty()) {
+                firstImage = imageSet.iterator().next();
+                firstImageName = firstImage.getUuid() + "_" + firstImage.getFileName();
+
+            } else {
+                return null;
+            }
+
+            // 첫 번째 이미지를 배열로 감싸기
+            ReplyImage[] firstImageArray = (firstImage != null) ? new ReplyImage[]{firstImage} : new ReplyImage[0];
+
+
+            return new ReadReplyResponse(
+                    reply.getRno(),
+                    reply.getReplyText(),
+                    reply.getReplyer(),
+                    reply.getRegisterDate(),
+                    firstImageArray
+            );
+
+        });
+
+
     }
+
 
 }
