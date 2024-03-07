@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.yeolmae.challenge.domain.dto.profile.MemberUpdateRequest;
 
 @Entity
 @Getter
@@ -38,5 +39,6 @@ public class Member {
     public void changeNickname(String nickname) {
         this.nickname = nickname;
     }
+
 
 }

@@ -8,9 +8,9 @@ let index = {
     update: function(){
         //alert('user의 save함수 호출됨');
         let data = {
-            username: $("#email").val(),
+            // username: $("#email").val(),
             password: $("#password").val(),
-            nickname: $("#nickname").val(),
+            nickname: $("#nickname").val()
         };
 
         $.ajax({

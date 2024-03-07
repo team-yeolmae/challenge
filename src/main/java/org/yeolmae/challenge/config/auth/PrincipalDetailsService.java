@@ -11,6 +11,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.yeolmae.challenge.domain.Member;
 import org.yeolmae.challenge.repository.MemberRepository;
 
+import java.util.ArrayList;
+
 // 시큐리티 설정에서 loginProcessionUrl("/login");
 // /login 요청이 오면 자동으로 UserDetailsService 타입으로 IoC되어 있는 loadUserByUsername 함수가 실행
 @Service
