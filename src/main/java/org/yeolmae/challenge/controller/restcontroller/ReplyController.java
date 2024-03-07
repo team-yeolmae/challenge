@@ -8,6 +8,9 @@ import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.yeolmae.challenge.domain.dto.*;
 import org.yeolmae.challenge.service.ReplyService;
@@ -22,6 +25,17 @@ public class ReplyController {
     @PostMapping("/register")
     @Operation(summary = "댓글을 등록하는 메소드", description = "text를 입력하세요.")
     public ResponseEntity<CreateReplyResponse> replyCreate(@RequestBody CreateReplyRequest request) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails){
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String username = userDetails.getUsername();
+
+            System.out.println(username);
+        } else {
+            System.out.println("No authenticated user");
+        }
 
         CreateReplyResponse response = replyService.createReply(request);
 

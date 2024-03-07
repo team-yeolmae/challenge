@@ -23,10 +23,10 @@ public class ViewController {
         return "index";
     }
 
-//    @GetMapping("/user")
-//    public @ResponseBody String user() {
-//        return "user";
-//    }
+    @GetMapping("/user")
+    public String user() {
+        return "user";
+    }
 
     @GetMapping("/admin")
     public @ResponseBody String admin() {
