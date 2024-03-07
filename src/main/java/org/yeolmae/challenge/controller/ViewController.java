@@ -45,4 +45,9 @@ public class ViewController {
         return "챌린지 등록 페이지";
     }
 
+    @GetMapping("/user/mypage")
+    public String getMypage() {
+        return "mypage";
+    }
+
 }

@@ -16,6 +16,9 @@ import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
+import org.springframework.security.web.context.DelegatingSecurityContextRepository;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.yeolmae.challenge.config.auth.PrincipalDetailsService;
 import org.yeolmae.challenge.repository.MemberRepository;
 
@@ -68,6 +71,12 @@ public class WebSecurityConfig {
 
         //csrf 비활성화
         http.csrf((csrf) -> csrf.disable());
+
+        http.securityContext((securityContext) -> securityContext
+                .securityContextRepository(new DelegatingSecurityContextRepository(
+                        new RequestAttributeSecurityContextRepository(),
+                        new HttpSessionSecurityContextRepository()
+                )));
 
         return http.build();
     }

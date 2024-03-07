@@ -6,6 +6,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.web.context.SecurityContextRepository;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.yeolmae.challenge.domain.Member;
@@ -17,9 +18,11 @@ import org.yeolmae.challenge.repository.MemberRepository;
 @Log4j2
 public class PrincipalDetailsService implements UserDetailsService {
 
-
     @Autowired
     private MemberRepository memberRepository;
+
+    private SecurityContextRepository securityContextRepository;
+
 
     // 로그인 구현 // email로 사용자 정보 조회
     // 시큐리티 session(내부 Authentication(내부 UserDetails))
