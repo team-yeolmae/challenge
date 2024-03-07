@@ -61,22 +61,6 @@ public class Challenge {
 
     }
 
-    public Set<ChallengeImageInfo> getImageInfoSet() {
-        return this.imageSet.stream()
-                .map(ChallengeImageInfo::new) // ChallengeImageInfo로 변환
-                .collect(Collectors.toSet());
-    }
-
-    public static class ChallengeImageInfo {
-        private String image_detail;
-        private String image_thumb;
-
-        public ChallengeImageInfo(ChallengeImage challengeImage) {
-            this.image_detail = challengeImage.getImage_detail();
-            this.image_thumb = challengeImage.getImage_thumb();
-        }
-    }
-
     public void update(String title, String writer, String content, LocalDate startDate, LocalDate endDate) {
         this.title = title;
         this.writer = writer;

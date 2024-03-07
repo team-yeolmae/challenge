@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import org.yeolmae.challenge.controller.restcontroller.UpDownController;
 import org.yeolmae.challenge.domain.Challenge;
+import org.yeolmae.challenge.domain.ChallengeImage;
 import org.yeolmae.challenge.domain.dto.DeleteChallengeResponse;
 import org.yeolmae.challenge.domain.dto.ReadChallengeResponse;
 import org.yeolmae.challenge.domain.dto.UpdateChallengeRequest;
@@ -19,6 +20,8 @@ import org.yeolmae.challenge.domain.dto.CreateChallengeResponse;
 import org.yeolmae.challenge.domain.dto.upload.UploadFileResponse;
 import org.yeolmae.challenge.repository.ChallengeRepository;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 
 @Service
@@ -27,6 +30,7 @@ import java.util.List;
 public class ChallengeService {
 
     private final ChallengeRepository challengeRepository;
+
 
     @Transactional
     public CreateChallengeResponse createChallenge(CreateChallengeRequest request) {
