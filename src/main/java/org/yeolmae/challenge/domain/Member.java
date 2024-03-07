@@ -5,7 +5,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.yeolmae.challenge.domain.dto.profile.MemberUpdateRequest;
 
 @Entity
 @Getter
