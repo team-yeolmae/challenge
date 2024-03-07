@@ -8,8 +8,11 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.yeolmae.challenge.domain.Challenge;
 import org.yeolmae.challenge.domain.dto.*;
 import org.yeolmae.challenge.service.ChallengeService;
+
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/challenge")
@@ -41,6 +44,17 @@ public class ChallengeController {
         redirectAttributes.addFlashAttribute("result", id);
 
         return "redirect:/challenge/list";
+    }
+
+    @GetMapping({"/read", "/modify"})
+    public void readOneChallenge(Integer id, PageRequestDTO pageRequestDTO, Model model){
+
+        ReadChallengeResponse response = challengeService.challengeReadOne(id);
+
+        log.info(response);
+
+        model.addAttribute("dto", response);
+
     }
 
     @GetMapping("/list")

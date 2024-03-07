@@ -1,5 +1,6 @@
 package org.yeolmae.challenge.service;
 
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -43,6 +44,18 @@ public class ChallengeService {
                 savedChallenge.getStartDate(),
                 savedChallenge.getEndDate()
         );
+    }
+
+    public ReadChallengeResponse challengeReadOne(Integer id) {
+
+        //challenge_image 까지 조인 처리되는 findByWithImages()를 이용
+        //Optional<Challenge> result = challengeRepository.findByIdWithImages(id);
+
+        Challenge challenge = challengeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("해당 postId로 조회된 게시글이 없습니다."));
+
+        return new ReadChallengeResponse(challenge.getId(), challenge.getTitle(), challenge.getWriter(), challenge.getContent(),
+                challenge.getRegisterDate(), challenge.getStartDate(), challenge.getEndDate());
     }
 
     public PageResponseDTO<ReadChallengeResponse> readAllChallenge(PageRequestDTO pageRequestDTO) {

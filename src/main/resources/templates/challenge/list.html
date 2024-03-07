@@ -104,6 +104,7 @@
     </div>
 
 <table>
+
     <thead>
     <tr>
         <th>번호</th>
@@ -115,17 +116,21 @@
         <!-- Add other column headers as needed -->
     </tr>
     </thead>
+
     <tbody th:with="link = ${pageRequestDTO.getLink()}">
-    <tr th:each="dto : ${challengeDTO.challengeList}">
-        <td th:text="${dto.id}"></td>
-        <td th:text="${dto.title}"></td>
-        <td th:text="${dto.writer}"></td>
-        <td th:text="${#temporals.format(dto.registerDate, 'yyyy-MM-dd')}"></td>
-        <td th:text="${#temporals.format(dto.startDate, 'yyyy-MM-dd')}"></td>
-        <td th:text="${#temporals.format(dto.endDate, 'yyyy-MM-dd')}"></td>
-        <!-- Add other columns as needed -->
+
+    <tr th:each="dto:${challengeDTO.challengeList}"  >
+        <td>[[${dto.id}]]</td>
+        <td>
+            <a th:href="|@{/challenge/read(id =${dto.id})}&${link}|" class="text-decoration-none"> [[${dto.title}]] </a>
+        </td>
+        <td>[[${dto.writer}]]</td>
+        <td>[[${#temporals.format(dto.registerDate, 'yyyy-MM-dd')}]]</td>
+        <td>[[${#temporals.format(dto.startDate, 'yyyy-MM-dd')}]]</td>
+        <td>[[${#temporals.format(dto.endDate, 'yyyy-MM-dd')}]]</td>
     </tr>
     </tbody>
+
 </table>
 
     <div class="float-end">
