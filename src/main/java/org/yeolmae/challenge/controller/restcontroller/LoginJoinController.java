@@ -1,10 +1,11 @@
 package org.yeolmae.challenge.controller.restcontroller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+import org.yeolmae.challenge.config.auth.PrincipalDetails;
+import org.yeolmae.challenge.config.auth.PrincipalDetailsService;
 import org.yeolmae.challenge.domain.Member;
 import org.yeolmae.challenge.domain.MemberRole;
 import org.yeolmae.challenge.repository.MemberRepository;
@@ -18,6 +19,9 @@ public class LoginJoinController {
 
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+
+    @Autowired
+    private PrincipalDetailsService principalDetailsService;
 
     @GetMapping("/loginForm")
     public String loginForm() {

@@ -18,6 +18,10 @@ public class PrincipalDetails implements UserDetails {
         this.member = member;
     }
 
+    public String getNickname() {
+        return member.getNickname();
+    }
+
     @Override // 해당 member의 권한 리턴하는 곳
     public Collection<? extends GrantedAuthority> getAuthorities() {
 
