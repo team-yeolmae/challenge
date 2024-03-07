@@ -24,7 +24,7 @@ public class ViewController {
     }
 
     @GetMapping("/user")
-    public @ResponseBody String user() {
+    public String user() {
         return "user";
     }
 
@@ -34,9 +34,9 @@ public class ViewController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")// 여러 권한 주고 싶을 때 사용
-    @GetMapping("/info")
-    public @ResponseBody String info() {
-        return "개인 정보 프로필";
+    @GetMapping("/profileForm")
+    public String profile() {
+        return "profileForm";
     }
 
     @Secured("ROLE_ADMIN") //특정경로 권한
