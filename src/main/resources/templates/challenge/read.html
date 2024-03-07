@@ -30,12 +30,12 @@
 
                     <div class="input-group mb-3">
                         <span class="input-group-text">챌린지 시작일자</span>
-                        <input type="text" class="form-control" th:value="${#temporals.format(dto.startDate, 'yyyy-MM-dd')}" readonly>
+                        <input type="date" class="form-control" th:value="${#temporals.format(dto.startDate, 'yyyy-MM-dd')}" readonly>
                     </div>
 
                     <div class="input-group mb-3">
                         <span class="input-group-text">챌린지 종료일자</span>
-                        <input type="text" class="form-control" th:value="${#temporals.format(dto.endDate, 'yyyy-MM-dd')}" readonly>
+                        <input type="date" class="form-control" th:value="${#temporals.format(dto.endDate, 'yyyy-MM-dd')}" readonly>
                     </div>
 
 

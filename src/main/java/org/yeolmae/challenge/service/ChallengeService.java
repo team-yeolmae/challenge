@@ -2,6 +2,7 @@ package org.yeolmae.challenge.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -12,10 +13,12 @@ import org.yeolmae.challenge.repository.ChallengeRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Log4j2
 public class ChallengeService {
 
     private final ChallengeRepository challengeRepository;
@@ -46,16 +49,38 @@ public class ChallengeService {
         );
     }
 
-    public ReadChallengeResponse challengeReadOne(Integer id) {
+    public ReadChallengeResponse readOneChallenge(Integer id) {
 
         //challenge_image 까지 조인 처리되는 findByWithImages()를 이용
         //Optional<Challenge> result = challengeRepository.findByIdWithImages(id);
 
         Challenge challenge = challengeRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("해당 postId로 조회된 게시글이 없습니다."));
+                .orElseThrow(() -> new EntityNotFoundException("해당 challengeId로 조회된 게시글이 없습니다."));
 
         return new ReadChallengeResponse(challenge.getId(), challenge.getTitle(), challenge.getWriter(), challenge.getContent(),
                 challenge.getRegisterDate(), challenge.getStartDate(), challenge.getEndDate());
+    }
+
+    @Transactional
+    public void updateChallenge(Integer id, UpdateChallengeRequest request) {
+
+        Challenge foundChallenge = challengeRepository.findById(id)
+                .orElseThrow(() -> new EntityNotFoundException("해당 id로 조회된 게시물이 없습니다."));
+
+//        Challenge challenge = foundChallenge.orElseThrow(() -> new EntityNotFoundException("해당 id로 조회된 게시글이 없습니다."));
+
+        //Dirty Checking
+        foundChallenge.update(request.getTitle(),
+                request.getContent(),
+                request.getWriter(),
+                request.getStartDate(),
+                request.getEndDate()
+        );
+
+        log.info("Request received: {}", request);
+
+        challengeRepository.save(foundChallenge);
+
     }
 
     public PageResponseDTO<ReadChallengeResponse> readAllChallenge(PageRequestDTO pageRequestDTO) {

@@ -49,12 +49,44 @@ public class ChallengeController {
     @GetMapping({"/read", "/modify"})
     public void readOneChallenge(Integer id, PageRequestDTO pageRequestDTO, Model model){
 
-        ReadChallengeResponse response = challengeService.challengeReadOne(id);
+        ReadChallengeResponse response = challengeService.readOneChallenge(id);
 
         log.info(response);
 
         model.addAttribute("dto", response);
 
+    }
+
+    @PostMapping("/modify")
+    public String modifyChallenge(@Valid Integer id, @Valid UpdateChallengeRequest request,
+                          BindingResult bindingResult,
+                          PageRequestDTO pageRequestDTO,
+                          RedirectAttributes redirectAttributes){
+
+
+        if(bindingResult.hasErrors()) {
+            log.info("has errors.......");
+
+            String link = pageRequestDTO.getLink();
+
+            redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors() );
+
+            redirectAttributes.addAttribute("id", id);
+
+            return "redirect:/challenge/modify?"+link;
+        }
+
+        challengeService.updateChallenge(id, request);
+
+        log.info("challenge modify post......." + id);
+//        log.info("Request received: {}", request);
+
+
+        redirectAttributes.addFlashAttribute("result", "modified");
+
+        redirectAttributes.addAttribute("id", id);
+
+        return "redirect:/challenge/read";
     }
 
     @GetMapping("/list")
