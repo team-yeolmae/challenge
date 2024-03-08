@@ -30,7 +30,6 @@ public class ViewChallengeController {
             model.addAttribute("challengeDTO", challengeDTO);
             model.addAttribute("popularChallengesDTO", popularChallengesDTO);
 
-
         }
 
     @GetMapping("/detail{id}")

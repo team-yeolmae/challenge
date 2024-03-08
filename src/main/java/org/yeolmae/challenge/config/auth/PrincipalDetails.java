@@ -2,6 +2,7 @@ package org.yeolmae.challenge.config.auth;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.yeolmae.challenge.domain.Member;
 
@@ -16,6 +17,14 @@ public class PrincipalDetails implements UserDetails {
 
     public PrincipalDetails(Member member) {
         this.member = member;
+    }
+
+    public String getNickname() {
+        return member.getNickname();
+    }
+
+    public int getLevel() {
+        return member.getLevel();
     }
 
     @Override // 해당 member의 권한 리턴하는 곳

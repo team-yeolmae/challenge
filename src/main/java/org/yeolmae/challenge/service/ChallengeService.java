@@ -120,4 +120,59 @@ public class ChallengeService {
 
     }
 
+    public PageResponse1DTO<ReadChallengeResponse> readAllChallenge1(PageRequest1DTO pageRequest1DTO) {
+        String[] types = pageRequest1DTO.getTypes();
+        String keyword = pageRequest1DTO.getKeyword();
+        Pageable pageable = pageRequest1DTO.getPageable("id");  // 수정
+
+        Page<Challenge> result = challengeRepository.findAll(pageable);
+
+        List<ReadChallengeResponse> challengeList = new ArrayList<>();
+        for (Challenge challenge : result.getContent()) {
+            ReadChallengeResponse response = new ReadChallengeResponse();
+            response.setId(challenge.getId());
+            response.setTitle(challenge.getTitle());
+            response.setWriter(challenge.getWriter());
+            response.setContent(challenge.getContent());
+            response.setRegisterDate(challenge.getRegisterDate());
+            response.setStartDate(challenge.getStartDate());
+            response.setEndDate(challenge.getEndDate());
+
+            challengeList.add(response);
+        }
+
+        return PageResponse1DTO.<ReadChallengeResponse>withAll()  // 수정
+                .pageRequest1DTO(pageRequest1DTO)
+                .challengeList(challengeList)  // 수정
+                .total((int) result.getTotalElements())  // 수정
+                .build();
+    }
+    public PageResponse1DTO<ReadChallengeResponse> readPopularChallenges(PageRequest1DTO pageRequest1DTO) {
+        String[] types = pageRequest1DTO.getTypes();
+        String keyword = pageRequest1DTO.getKeyword();
+        Pageable pageable = pageRequest1DTO.getPageable("id");  // 수정
+
+        Page<Challenge> result = challengeRepository.findAll(pageable);
+
+        List<ReadChallengeResponse> challengeList = new ArrayList<>();
+        for (Challenge challenge : result.getContent()) {
+            ReadChallengeResponse response = new ReadChallengeResponse();
+            response.setId(challenge.getId());
+            response.setTitle(challenge.getTitle());
+            response.setWriter(challenge.getWriter());
+            response.setContent(challenge.getContent());
+            response.setRegisterDate(challenge.getRegisterDate());
+            response.setStartDate(challenge.getStartDate());
+            response.setEndDate(challenge.getEndDate());
+
+            challengeList.add(response);
+        }
+
+        return PageResponse1DTO.<ReadChallengeResponse>withAll()  // 수정
+                .pageRequest1DTO(pageRequest1DTO)
+                .challengeList(challengeList)  // 수정
+                .total((int) result.getTotalElements())  // 수정
+                .build();
+    }
 }
+

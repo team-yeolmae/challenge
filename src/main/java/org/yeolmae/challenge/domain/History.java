@@ -5,6 +5,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.util.List;
+
 @Entity
 @Table(name = "history")
 @Getter
@@ -22,11 +24,9 @@ public class History {
     private Member member;
 
     @OneToOne
-    @JoinColumn(name = "Id")
     private Challenge challenge;
 
     @Column(name = "success")
     private boolean success;
 
 }
-

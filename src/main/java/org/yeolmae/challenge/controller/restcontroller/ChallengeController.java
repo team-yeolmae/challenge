@@ -1,19 +1,30 @@
-package org.yeolmae.challenge.controller;
+package org.yeolmae.challenge.controller.restcontroller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import org.yeolmae.challenge.domain.dto.*;
+import org.yeolmae.challenge.domain.dto.DeleteChallengeResponse;
+import org.yeolmae.challenge.domain.dto.ReadChallengeResponse;
+import org.yeolmae.challenge.domain.dto.UpdateChallengeRequest;
+import org.yeolmae.challenge.domain.dto.UpdateChallengeResponse;
+import org.yeolmae.challenge.domain.dto.CreateChallengeRequest;
+import org.yeolmae.challenge.domain.dto.CreateChallengeResponse;
+import org.yeolmae.challenge.service.AdminChallengeService;
 import org.yeolmae.challenge.service.ChallengeService;
 
 @RestController
 @RequestMapping("/challenge")
 @RequiredArgsConstructor
+@Log4j2
 public class ChallengeController {
 
     private final ChallengeService challengeService;
@@ -28,6 +39,17 @@ public class ChallengeController {
 
     @PostMapping("/register")
     public ResponseEntity<CreateChallengeResponse> challengeCreate(@RequestBody CreateChallengeRequest request) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        if (authentication != null && authentication.getPrincipal() instanceof UserDetails){
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            String username = userDetails.getUsername();
+
+            System.out.println(username);
+        } else {
+            System.out.println("No authenticated user");
+        }
 
         CreateChallengeResponse response = challengeService.createChallenge(request);
 
@@ -59,5 +81,6 @@ public class ChallengeController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
 
 }

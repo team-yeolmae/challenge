@@ -1,4 +1,4 @@
-package org.yeolmae.challenge.controller;
+package org.yeolmae.challenge.controller.restcontroller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -24,7 +24,7 @@ public class ViewController {
     }
 
     @GetMapping("/user")
-    public @ResponseBody String user() {
+    public String user() {
         return "user";
     }
 
@@ -34,15 +34,20 @@ public class ViewController {
     }
 
     @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")// 여러 권한 주고 싶을 때 사용
-    @GetMapping("/info")
-    public @ResponseBody String info() {
-        return "개인 정보 프로필";
+    @GetMapping("/profileForm")
+    public String profile() {
+        return "profileForm";
     }
 
     @Secured("ROLE_ADMIN") //특정경로 권한
     @GetMapping("/challenge/register")
     public @ResponseBody String registerChallenge() {
         return "챌린지 등록 페이지";
+    }
+
+    @GetMapping("/user/mypage")
+    public String getMypage() {
+        return "mypage";
     }
 
 }
