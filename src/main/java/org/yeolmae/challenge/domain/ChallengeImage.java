@@ -20,4 +20,5 @@ public class ChallengeImage {
     @Column(name = "image_thumb", nullable = false, length = 500)
     private String image_thumb;
 
+
 }
