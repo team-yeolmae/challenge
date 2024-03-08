@@ -9,9 +9,9 @@ import java.time.LocalDate;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ReadReplyResponse {
+public class ReadReplyRequest {
 
-    // challenge_id 추가
+//     challenge_id 추가
     private int challengeId;
 
     private Integer rno;

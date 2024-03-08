@@ -3,8 +3,10 @@ package org.yeolmae.challenge.domain.dto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -20,5 +22,7 @@ public class CreateReplyRequest {
 
     // registerDate 추가
     private LocalDate registerDate = LocalDate.now();
+
+    private List<MultipartFile> images;
 
 }

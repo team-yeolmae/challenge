@@ -7,6 +7,9 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.util.HashSet;
+import java.util.Set;
+
 import jakarta.persistence.*;
 
 @Entity
@@ -38,5 +41,27 @@ public class Reply {
     public void changeReply(String text) {
         this.replyText = text;
     }
+
+    @OneToMany(mappedBy = "reply", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+    @Builder.Default
+    private Set<ReplyImage> imageSet = new HashSet<>();
+
+    public void addReplyImage(String uuid, String fileName) {
+
+        ReplyImage replyImage = ReplyImage.builder()
+                .uuid(uuid)
+                .fileName(fileName)
+                .reply(this)
+                .ord(imageSet.size())
+                .build();
+
+        imageSet.add(replyImage);
+    }
+
+    public void clearReplyImages() {
+        imageSet.forEach(replyImage -> replyImage.changeReply(null));
+        this.imageSet.clear();
+    }
+
 
 }

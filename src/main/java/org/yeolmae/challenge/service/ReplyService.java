@@ -8,9 +8,13 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.yeolmae.challenge.domain.Challenge;
 import org.yeolmae.challenge.domain.Reply;
+import org.yeolmae.challenge.domain.ReplyImage;
 import org.yeolmae.challenge.domain.dto.*;
+import org.yeolmae.challenge.domain.dto.CreateReplyResponse;
 import org.yeolmae.challenge.repository.ChallengeRepository;
 import org.yeolmae.challenge.repository.ReplyRepository;
+
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -34,6 +38,9 @@ public class ReplyService {
                 .replyText(request.getReplyText())
                 .registerDate(request.getRegisterDate())
                 .build();
+
+        // 이미지 업로드 및 Reply에 추가
+        List<ReplyImage> replyImages = saveImages
 
         Reply savedReply = replyRepository.save(reply);
 
@@ -104,6 +111,10 @@ public class ReplyService {
                         reply.getRegisterDate()
                 )
         );
+    }
+
+    private List<ReplyImage> saveImages() {
+
     }
 
 }
