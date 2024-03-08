@@ -1,7 +1,10 @@
 package org.yeolmae.challenge.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+import org.yeolmae.challenge.domain.Member;
 import org.yeolmae.challenge.repository.MemberRepository;
 
 @Service
@@ -10,13 +13,9 @@ public class MemberService {
 
     private final MemberRepository memberRepository;
 
-//    public MemberUpdateRequest updateForm(String email) {
-//        Optional<Member> optionalMember = memberRepository.findMemberByEmail(email);
-//        if (optionalMember.isPresent()){
-//            return MemberUpdateRequest.toMemberUpdateRequest(optionalMember.get());
-//        }else {
-//            return null;
-//        }
-//    }
+    @Transactional
+    public void 회원수정(UserDetails userDetails){
+
+    }
 
 }
