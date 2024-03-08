@@ -2,23 +2,28 @@ package org.yeolmae.challenge.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.log4j.Log4j2;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+import org.yeolmae.challenge.controller.restcontroller.UpDownController;
 import org.yeolmae.challenge.domain.Challenge;
-import org.yeolmae.challenge.domain.dto.*;
+import org.yeolmae.challenge.domain.dto.DeleteChallengeResponse;
+import org.yeolmae.challenge.domain.dto.ReadChallengeResponse;
+import org.yeolmae.challenge.domain.dto.UpdateChallengeRequest;
+import org.yeolmae.challenge.domain.dto.UpdateChallengeResponse;
+import org.yeolmae.challenge.domain.dto.CreateChallengeRequest;
+import org.yeolmae.challenge.domain.dto.CreateChallengeResponse;
+import org.yeolmae.challenge.domain.dto.upload.UploadFileResponse;
 import org.yeolmae.challenge.repository.ChallengeRepository;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-@Log4j2
 public class ChallengeService {
 
     private final ChallengeRepository challengeRepository;
@@ -28,8 +33,8 @@ public class ChallengeService {
 
         Challenge challenge = Challenge.builder()
                 .title(request.getTitle())
-                .content(request.getContent())
                 .writer(request.getWriter())
+                .content(request.getContent())
                 .registerDate(request.getRegisterDate())
                 .startDate(request.getStartDate())
                 .endDate(request.getEndDate())
@@ -37,80 +42,60 @@ public class ChallengeService {
 
         Challenge savedChallenge = challengeRepository.save(challenge);
 
-
         return new CreateChallengeResponse(
                 savedChallenge.getId(),
                 savedChallenge.getTitle(),
-                savedChallenge.getContent(),
                 savedChallenge.getWriter(),
+                savedChallenge.getContent(),
                 savedChallenge.getRegisterDate(),
                 savedChallenge.getStartDate(),
                 savedChallenge.getEndDate()
         );
     }
 
-    public ReadChallengeResponse readOneChallenge(Integer id) {
+    @Transactional
+    public UpdateChallengeResponse updateChallenge(Integer challenge_id, UpdateChallengeRequest request) {
 
-        //challenge_image 까지 조인 처리되는 findByWithImages()를 이용
-        //Optional<Challenge> result = challengeRepository.findByIdWithImages(id);
+        Challenge foundChallenge = challengeRepository.findById(challenge_id)
+                .orElseThrow(() -> new EntityNotFoundException("해당 challenge_id로 조회된 게시글이 없습니다."));
+        //Dirty Checking
+        foundChallenge.update(request.getTitle(), request.getWriter(), request.getContent(),
+                request.getStartDate(), request.getEndDate());
 
-        Challenge challenge = challengeRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("해당 challengeId로 조회된 게시글이 없습니다."));
+        return new UpdateChallengeResponse(foundChallenge.getId(), foundChallenge.getTitle(), foundChallenge.getWriter(),
+                foundChallenge.getContent(), foundChallenge.getRegisterDate(), foundChallenge.getStartDate(),
+                foundChallenge.getEndDate());
+    }
 
-        return new ReadChallengeResponse(challenge.getId(), challenge.getTitle(), challenge.getContent(), challenge.getWriter(),
-                challenge.getRegisterDate(), challenge.getStartDate(), challenge.getEndDate());
+    public Page<ReadChallengeResponse> readAllChallenge(Pageable pageable) {
 
+        Page<Challenge> challengePage = challengeRepository.findAll(pageable);
+
+        return challengePage.map(challenge -> new ReadChallengeResponse(challenge.getId(), challenge.getTitle(),
+                challenge.getWriter(), challenge.getContent(), challenge.getRegisterDate(), challenge.getStartDate(),
+                challenge.getEndDate()));
     }
 
     @Transactional
-    public void updateChallenge(Integer id, UpdateChallengeRequest request) {
+    public DeleteChallengeResponse deleteChallenge(Integer challenge_id) {
 
-        Challenge foundChallenge = challengeRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("해당 id로 조회된 게시물이 없습니다."));
+        Challenge challenge = challengeRepository.findById(challenge_id)
+                .orElseThrow(() -> new EntityNotFoundException("해당 challenge_id로 조회된 게시글이 없습니다."));
 
-//        Challenge challenge = foundChallenge.orElseThrow(() -> new EntityNotFoundException("해당 id로 조회된 게시글이 없습니다."));
+        challengeRepository.delete(challenge);
 
-        //Dirty Checking
-        foundChallenge.update(request.getTitle(),
-                request.getContent(),
-                request.getWriter(),
-                request.getStartDate(),
-                request.getEndDate()
-        );
-
-        log.info("Request received: {}", request);
-
-        challengeRepository.save(foundChallenge);
-
+        return new DeleteChallengeResponse(challenge.getId(), challenge.getTitle(), challenge.getWriter(),
+                challenge.getContent(), challenge.getRegisterDate(), challenge.getStartDate(), challenge.getEndDate());
     }
 
-    public PageResponseDTO<ReadChallengeResponse> readAllChallenge(PageRequestDTO pageRequestDTO) {
-        String[] types = pageRequestDTO.getTypes();
-        String keyword = pageRequestDTO.getKeyword();
-        Pageable pageable = pageRequestDTO.getPageable("id");
+    public ReadChallengeResponse readChallengeById(Integer challenge_id) {
 
-        Page<Challenge> result = challengeRepository.findAll(pageable);
+        Challenge foundChallenge = challengeRepository.findById(challenge_id)
+                .orElseThrow(() -> new EntityNotFoundException("해당 challenge_id로 조회된 게시글이 없습니다."));
 
-        List<ReadChallengeResponse> challengeList = new ArrayList<>();
-        for (Challenge challenge : result.getContent()) {
-            ReadChallengeResponse response = new ReadChallengeResponse();
-            response.setId(challenge.getId());
-            response.setTitle(challenge.getTitle());
-            response.setWriter(challenge.getWriter());
-            response.setContent(challenge.getContent());
-            response.setRegisterDate(challenge.getRegisterDate());
-            response.setStartDate(challenge.getStartDate());
-            response.setEndDate(challenge.getEndDate());
-
-            challengeList.add(response);
-        }
-
-        return PageResponseDTO.<ReadChallengeResponse>withAll()
-                .pageRequestDTO(pageRequestDTO)
-                .challengeList(challengeList)
-                .total((int)result.getTotalElements())
-                .build();
-
+        return new ReadChallengeResponse(foundChallenge.getId(), foundChallenge.getTitle(), foundChallenge.getWriter(),
+                foundChallenge.getContent(), foundChallenge.getRegisterDate(), foundChallenge.getStartDate(),
+                foundChallenge.getEndDate());
     }
 
 }

@@ -30,11 +30,34 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
-    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    //security
+    implementation 'org.springframework.boot:spring-boot-starter-security'
+    implementation 'org.thymeleaf.extras:thymeleaf-extras-springsecurity6'
+    testImplementation 'org.springframework.security:spring-security-test'
 
+    // jstl
+    implementation group: 'jstl', name: 'jstl', version: '1.2'
+
+    // swagger - springdoc
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.3.0'
+
+    // assertJ
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.21.0'
+
+    // thumbnailator
+    implementation 'net.coobird:thumbnailator:0.4.17'
+
+    //thymeleaf
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
     implementation 'nz.net.ultraq.thymeleaf:thymeleaf-layout-dialect:3.1.0'
 
+    //valid
     implementation 'org.springframework.boot:spring-boot-starter-validation'
+
+    // Log4j2
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.17.2'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-api', version: '2.17.2'
+    implementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl', version: '2.17.2'
 
 }
 
