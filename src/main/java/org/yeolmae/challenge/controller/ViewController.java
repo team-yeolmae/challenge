@@ -23,8 +23,7 @@ public class ViewController {
         return "index";
     }
 
-//    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")// 여러 권한 주고 싶을 때 사용
-    @GetMapping("/user")// 회원 정보 수정 페이지(Form 있는 페이지)
+    @GetMapping("/user")
     public String user() {
         return "user";
     }
@@ -34,11 +33,21 @@ public class ViewController {
         return "admin";
     }
 
+    @PreAuthorize("hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')")// 여러 권한 주고 싶을 때 사용
+    @GetMapping("/profileForm")
+    public String profile() {
+        return "profileForm";
+    }
+
     @Secured("ROLE_ADMIN") //특정경로 권한
     @GetMapping("/challenge/register")
     public @ResponseBody String registerChallenge() {
         return "챌린지 등록 페이지";
     }
 
+    @GetMapping("/user/mypage")
+    public String getMypage() {
+        return "mypage";
+    }
 
 }
