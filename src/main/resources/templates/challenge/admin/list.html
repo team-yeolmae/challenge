@@ -5,7 +5,6 @@
 <head>
     <meta charset="UTF-8"/>
     <title>Challenge List</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 
     <style>
         body {
@@ -74,12 +73,12 @@
 
         <!-- 챌린지 등록하기 버튼 -->
         <div class="col-auto mt-3">
-            <a href="/challenge/register" class="btn btn-primary">챌린지 등록하기</a>
+            <a href="/challenge/admin/register" class="btn btn-primary">챌린지 등록하기</a>
         </div>
     </div>
 
     <div class="row mt-3">
-        <form action="/challenge/list" method="get">
+        <form action="/challenge/admin/list" method="get">
             <div class="col">
                 <input type="hidden" name="size" th:value="${pageRequestDTO.size}">
                 <div class="input-group">
@@ -122,7 +121,7 @@
     <tr th:each="dto:${challengeDTO.challengeList}"  >
         <td>[[${dto.id}]]</td>
         <td>
-            <a th:href="|@{/challenge/read(id =${dto.id})}&${link}|" class="text-decoration-none"> [[${dto.title}]] </a>
+            <a th:href="|@{/challenge/admin/read(id =${dto.id})}&${link}|" class="text-decoration-none"> [[${dto.title}]] </a>
         </td>
         <td>[[${dto.writer}]]</td>
         <td>[[${#temporals.format(dto.registerDate, 'yyyy-MM-dd')}]]</td>
@@ -208,7 +207,7 @@
         e.preventDefault()
         e.stopPropagation()
 
-        self.location ='/challenge/list'
+        self.location ='/challenge/admin/list'
 
     },false)
 

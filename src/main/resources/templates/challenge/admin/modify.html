@@ -16,7 +16,7 @@
         </div>
         <div class="card-body">
 
-          <form th:action="@{/challenge/modify}" method="post" id="f1">
+          <form th:action="@{/challenge/admin/modify}" method="post" id="f1">
             <input type="hidden" name="_method" value="put">
             <div class="input-group mb-3">
               <span class="input-group-text">Id</span>
@@ -98,7 +98,7 @@
     e.preventDefault()
     e.stopPropagation()
 
-    formObj.action = `/challenge/modify?${link}`
+    formObj.action = `/challenge/admin/modify?${link}`
 
 
     formObj.method ='post'

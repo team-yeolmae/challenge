@@ -12,7 +12,7 @@ import org.yeolmae.challenge.domain.dto.*;
 import org.yeolmae.challenge.service.AdminChallengeService;
 
 @Controller
-@RequestMapping("/challenge")
+@RequestMapping("/challenge/admin")
 @RequiredArgsConstructor
 @Log4j2
 public class AdminChallengeController {
@@ -40,7 +40,7 @@ public class AdminChallengeController {
 
         redirectAttributes.addFlashAttribute("result", id);
 
-        return "redirect:/challenge/list";
+        return "redirect:/challenge/admin/list";
     }
 
     @GetMapping({"/read", "/modify"})
@@ -70,7 +70,7 @@ public class AdminChallengeController {
 
             redirectAttributes.addAttribute("id", id);
 
-            return "redirect:/challenge/modify?"+link;
+            return "redirect:/challenge/admin/modify?"+link;
         }
 
         challengeService.updateChallenge(id, request);
@@ -83,7 +83,7 @@ public class AdminChallengeController {
 
         redirectAttributes.addAttribute("id", id);
 
-        return "redirect:/challenge/read";
+        return "redirect:/challenge/admin/read";
     }
 
     @GetMapping("/list")
