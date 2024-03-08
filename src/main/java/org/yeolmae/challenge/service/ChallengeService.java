@@ -28,8 +28,8 @@ public class ChallengeService {
 
         Challenge challenge = Challenge.builder()
                 .title(request.getTitle())
-                .writer(request.getWriter())
                 .content(request.getContent())
+                .writer(request.getWriter())
                 .registerDate(request.getRegisterDate())
                 .startDate(request.getStartDate())
                 .endDate(request.getEndDate())
@@ -41,8 +41,8 @@ public class ChallengeService {
         return new CreateChallengeResponse(
                 savedChallenge.getId(),
                 savedChallenge.getTitle(),
-                savedChallenge.getWriter(),
                 savedChallenge.getContent(),
+                savedChallenge.getWriter(),
                 savedChallenge.getRegisterDate(),
                 savedChallenge.getStartDate(),
                 savedChallenge.getEndDate()
@@ -57,8 +57,9 @@ public class ChallengeService {
         Challenge challenge = challengeRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("해당 challengeId로 조회된 게시글이 없습니다."));
 
-        return new ReadChallengeResponse(challenge.getId(), challenge.getTitle(), challenge.getWriter(), challenge.getContent(),
+        return new ReadChallengeResponse(challenge.getId(), challenge.getTitle(), challenge.getContent(), challenge.getWriter(),
                 challenge.getRegisterDate(), challenge.getStartDate(), challenge.getEndDate());
+
     }
 
     @Transactional

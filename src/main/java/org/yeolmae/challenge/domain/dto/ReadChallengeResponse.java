@@ -1,5 +1,6 @@
 package org.yeolmae.challenge.domain.dto;
 
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,9 +17,12 @@ import java.time.LocalDateTime;
 public class ReadChallengeResponse {
 
     private int id;
+    @NotEmpty
     private String title;
-    private String writer;
+    @NotEmpty
     private String content;
+    @NotEmpty
+    private String writer;
     private LocalDate registerDate;
 
     @DateTimeFormat(pattern = "yyyy-MM-dd")

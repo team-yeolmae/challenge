@@ -35,10 +35,10 @@ public class Challenge {
     @Column(name = "endDate", nullable = false)
     private LocalDate endDate;
 
-    public void update(String title, String writer, String content, LocalDate startDate, LocalDate endDate) {
+    public void update(String title, String content,String writer, LocalDate startDate, LocalDate endDate) {
         this.title = title;
-        this.writer = writer;
         this.content = content;
+        this.writer = writer;
         this.startDate = startDate;
         this.endDate = endDate;
     }

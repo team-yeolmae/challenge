@@ -18,9 +18,9 @@ public class CreateChallengeRequest {
     @NotEmpty
     private String title;
     @NotEmpty
-    private String writer;
-    @NotEmpty
     private String content;
+    @NotEmpty
+    private String writer;
 
     private LocalDate registerDate;
 
