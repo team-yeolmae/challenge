@@ -9,9 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MemberUpdateRequest {
+public class ProfileUpdateRequest {
 
-    private String email;
     private String pw;
     private String nickname;
 
