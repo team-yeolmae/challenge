@@ -1,4 +1,4 @@
-package org.yeolmae.challenge.controller;
+package org.yeolmae.challenge.controller.restcontroller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;

@@ -2141,11 +2141,6 @@ textarea.form-control-lg {
   height: calc(1.5em + 1rem + 2px);
 }
 
-.form-control:read-only {
-  background-color: #e9ecef;
-  opacity: 1;
-}
-
 .form-select {
   display: block;
   width: 100%;

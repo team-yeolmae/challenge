@@ -2,6 +2,7 @@ package org.yeolmae.challenge.config.auth;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+
 import org.springframework.security.core.userdetails.UserDetails;
 import org.yeolmae.challenge.domain.Member;
 

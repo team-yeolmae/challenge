@@ -11,7 +11,7 @@ import org.yeolmae.challenge.domain.Challenge;
 public class HistoryResponse {
 
     private int id;
-//    private int memberId;
+    //    private int memberId;
     private Challenge challenge;
     private boolean success;
 

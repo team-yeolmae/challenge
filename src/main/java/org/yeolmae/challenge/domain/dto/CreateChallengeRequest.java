@@ -1,27 +1,32 @@
 package org.yeolmae.challenge.domain.dto;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
+import lombok.Data;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.web.multipart.MultipartFile;
-import org.yeolmae.challenge.domain.Challenge;
+import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.xml.stream.events.Comment;
 import java.time.LocalDate;
-import java.util.List;
 
+@Data
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
 public class CreateChallengeRequest {
 
+    @NotEmpty
     private String title;
-    private String writer;
+    @NotEmpty
     private String content;
-    private LocalDate registerDate;
-    private LocalDate startDate;
-    private LocalDate endDate;
+    @NotEmpty
+    private String writer;
 
+    private LocalDate registerDate;
+
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate startDate;
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
+    private LocalDate endDate;
+  
 }

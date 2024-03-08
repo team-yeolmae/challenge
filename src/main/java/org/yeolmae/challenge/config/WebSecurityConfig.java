@@ -109,7 +109,7 @@ public class WebSecurityConfig {
     }
 
 
-//     UserDetailsService 및 PasswordEncoder를 사용하여 사용자 아이디와 암호를 인증하는 AuthenticationProvider 구현
+    //     UserDetailsService 및 PasswordEncoder를 사용하여 사용자 아이디와 암호를 인증하는 AuthenticationProvider 구현
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() throws Exception {
 
@@ -121,7 +121,7 @@ public class WebSecurityConfig {
         return daoAuthenticationProvider;
     }
 
-        // css 나 js 파일 등의 정적 파일은 시큐리티 적용을 받을 필요 없이 무시하도록 함.
+    // css 나 js 파일 등의 정적 파일은 시큐리티 적용을 받을 필요 없이 무시하도록 함.
     @Bean
     public WebSecurityCustomizer webSecurityCustomizer() {
 

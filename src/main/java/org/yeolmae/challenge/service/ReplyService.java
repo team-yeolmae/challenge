@@ -98,10 +98,10 @@ public class ReplyService {
         Page<Reply> replyPage = replyRepository.listOfReplies(challengeId, pageable);
 
         return replyPage.map(reply -> new ReadReplyResponse(
-                reply.getRno(),
-                reply.getReplyText(),
-                reply.getReplyer(),
-                reply.getRegisterDate()
+                        reply.getRno(),
+                        reply.getReplyText(),
+                        reply.getReplyer(),
+                        reply.getRegisterDate()
                 )
         );
     }
