@@ -18,12 +18,6 @@ import org.yeolmae.challenge.service.MemberService;
 @RequiredArgsConstructor
 public class ProfileController { // 회원 정보 수정
 
-    @Autowired
-    private MemberRepository memberRepository;
-
-    @Autowired
-    private BCryptPasswordEncoder bCryptPasswordEncoder;
-
     private final MemberService memberService;
 
     @GetMapping("/mypage/profile")
@@ -40,38 +34,10 @@ public class ProfileController { // 회원 정보 수정
     @PutMapping("/mypage/profile")
     public ResponseEntity<ProfileUpdateResponse> updateProfile(@RequestBody ProfileUpdateRequest request) {
 
-        Member member = memberService.getMember();
-
         ProfileUpdateResponse response = memberService.profileUpdate(request);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-//    @GetMapping("/user")
-//    public String user(HttpSession session, Model model) {
-//
-//        String myEmail = (String) session.getAttribute("loginEmail");
-//        MemberUpdateRequest memberUpdateRequest = memberService.updateForm(myEmail);
-//        model.addAttribute("updateMember", memberUpdateRequest);
-//
-//        return "user";
-//    }
-
-//    @PutMapping("/user")
-//    public ResponseEntity<?> updateMember(@RequestBody MemberUpdateRequest updateRequest) {
-//        Member member = memberRepository.findMemberByEmail(updateRequest.getEmail())
-//                .orElseThrow(() -> new UsernameNotFoundException("사용자를 찾을 수 없습니다."));
-//
-//        if (updateRequest.getPw() != null && !updateRequest.getPw().isEmpty()){
-//            member.setPw(bCryptPasswordEncoder.encode(updateRequest.getPw()));
-//        }
-//
-//        member.setNickname(updateRequest.getNickname());
-//
-//        memberRepository.save(member);
-//
-//        return ResponseEntity.ok().build();
-//
-//    }
 
 }

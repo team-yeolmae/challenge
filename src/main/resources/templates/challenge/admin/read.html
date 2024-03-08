@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+
+
+<head>
+    <title>Challenge Read</title>
+</head>
+
+<div layout:fragment="content">
+
+<div class="row mt-3 col-md-8 mx-auto">
+    <div class="col">
+        <div class="card">
+            <div class="card-header">
+                Challenge
+            </div>
+
+            <div class="card-body">
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">제목</span>
+                        <input type="text" class="form-control" th:value="${dto.title}" readonly>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">챌린지 등록일자</span>
+                        <input type="text" class="form-control" th:value="${#temporals.format(dto.registerDate, 'yyyy-MM-dd')}" readonly>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">챌린지 시작일자</span>
+                        <input type="date" class="form-control" th:value="${#temporals.format(dto.startDate, 'yyyy-MM-dd')}" readonly>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">챌린지 종료일자</span>
+                        <input type="date" class="form-control" th:value="${#temporals.format(dto.endDate, 'yyyy-MM-dd')}" readonly>
+                    </div>
+
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">챌린지 내용</span>
+                        <textarea class="form-control col-sm-5" rows="5" readonly>[[${dto.content}]]</textarea>
+                    </div>
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">작성자</span>
+                        <input type="text" class="form-control" th:value="${dto.writer}" readonly>
+                    </div>
+
+
+                    <div class="input-group mb-3">
+                        <span class="input-group-text">Images</span>
+                        <div class="float-end uploadHidden">
+                            <button type="button" class="btn btn-primary uploadFileBtn">ADD Files</button>
+                        </div>
+                    </div>
+
+                    <div class="my-4">
+                        <div class="float-end" th:with="link = ${pageRequestDTO.getLink()}">
+                            <a th:href="|@{/challenge/admin/list}?${link}|" class="text-decoration-none">
+                                <button type="button" class="btn btn-primary">목록으로</button>
+                            </a>
+                            <a th:href="|@{/challenge/admin/modify(id=${dto.id})}&${link}|" class="text-decoration-none">
+                                <button type="button" class="btn btn-secondary">수정하기</button>
+                            </a>
+                        </div>
+                    </div>
+
+
+            </div><!--end card body-->
+
+        </div><!--end card-->
+    </div><!-- end col-->
+</div><!-- end row-->
+
+
+</div>
+
+<script layout:fragment="script" th:inline="javascript">
+
+</script>
+
+</html>

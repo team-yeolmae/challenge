@@ -34,7 +34,25 @@
 
     </div>
 
-<script src="/js/profile.js"></script>
+    <!-- 모달 창 -->
+    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">수정 확인</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    회원 정보를 수정하시겠습니까?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" id="confirmUpdate">확인</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
 
@@ -45,14 +63,6 @@
             $('#nickname').val(data.nickname);
         });
     });
-
-    // const profileList = document.querySelector(".profileList")
-    //
-    // const emailText = document.querySelector(".emailText")
-    // const pwText = document.querySelector(".pwText")
-    // const nicknameText = document.querySelector(".nicknameText")
-    //
-    // const btnUpdate = document.querySelector(".btnUpdate")
 
     $(document).ready(function () {
 
@@ -68,14 +78,21 @@
                 nickname: nicknameText.val()
             };
 
-            updateProfile(profileObj)
-                .then(data => {
-                    alert("이메일 "+ data.email + " 님의 회원 정보가 수정되었습니다.");
-                })
-                .catch(e => {
+            // AJAX를 이용하여 서버에 데이터 전송
+            $.ajax({
+                type: "PUT",
+                url: "/user/api/mypage/profile",
+                data: JSON.stringify(profileObj),
+                contentType: "application/json; charset=utf-8",
+                dataType: "json",
+                success: function(response) {
+                    alert("이메일 "+ response.email + " 님의 회원 정보가 수정되었습니다.");
+                },
+                error: function(error) {
                     alert("회원 정보 수정에 실패했습니다.");
-                    console.log(e);
-                }, false);
+                    console.error(error);
+                }
+            });
         })
     })
 

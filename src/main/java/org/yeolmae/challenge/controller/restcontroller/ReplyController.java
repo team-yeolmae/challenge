@@ -13,6 +13,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.yeolmae.challenge.domain.dto.*;
+import org.yeolmae.challenge.domain.dto.CreateReplyResponse;
 import org.yeolmae.challenge.service.ReplyService;
 
 @RestController

@@ -6,6 +6,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.yeolmae.challenge.domain.Member;
@@ -21,6 +22,7 @@ import org.yeolmae.challenge.repository.MemberRepository;
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Member getMember() {
 
@@ -37,6 +39,7 @@ public class MemberService {
 
     @Transactional
     public ProfileUpdateResponse profileUpdate(ProfileUpdateRequest request){
+        //, BCryptPasswordEncoder bCryptPasswordEncoder
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
@@ -45,7 +48,10 @@ public class MemberService {
         Member foundMember = memberRepository.findMemberByEmail(username)
                 .orElseThrow(() -> new EntityNotFoundException("사용자 정보를 찾을 수 없습니다."));
 
-        foundMember.changePassword(request.getPw());
+        String encodedPassword = bCryptPasswordEncoder.encode(request.getPw());
+
+//        foundMember.changePassword(bCryptPasswordEncoder.encode(request.getPw()));
+        foundMember.changePassword(encodedPassword);
         foundMember.changeNickname(request.getNickname());
 
         log.info(request.getPw(),request.getNickname());

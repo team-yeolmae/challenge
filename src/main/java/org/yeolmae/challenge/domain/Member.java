@@ -1,5 +1,6 @@
 package org.yeolmae.challenge.domain;
 
+import jakarta.annotation.Resource;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,13 +36,10 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private MemberRole memberRole;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
     public void changePassword(String pw) {
-
         this.pw = pw;
     }
+
     public void changeNickname(String nickname) {
         this.nickname = nickname;
     }
