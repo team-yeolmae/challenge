@@ -82,6 +82,14 @@ public class AdminChallengeService {
         challengeRepository.save(foundChallenge);
 
     }
+    @Transactional
+    public void deleteChallenge(Integer id) {
+
+        challengeRepository.deleteById(id);
+
+        log.info("service id: {}", id);
+
+    }
 
     public PageResponseDTO<ReadChallengeResponse> readAllChallenge(PageRequestDTO pageRequestDTO) {
         String[] types = pageRequestDTO.getTypes();
