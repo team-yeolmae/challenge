@@ -40,7 +40,7 @@ public class ReplyService {
                 .build();
 
         // 이미지 업로드 및 Reply에 추가
-        List<ReplyImage> replyImages = saveImages
+//        List<ReplyImage> replyImages = saveImages
 
         Reply savedReply = replyRepository.save(reply);
 
@@ -53,18 +53,18 @@ public class ReplyService {
         );
     }
 
-    public ReadReplyResponse readReplyById(Integer rno) {
-
-        Reply foundReply= replyRepository.findById(rno)
-                .orElseThrow(() -> new EntityNotFoundException("해당 rno로 조회된 게시글이 없습니다."));
-
-        return new ReadReplyResponse(
-                foundReply.getRno(),
-                foundReply.getReplyer(),
-                foundReply.getReplyText(),
-                foundReply.getRegisterDate()
-        );
-    }
+//    public ReadReplyResponse readReplyById(Integer rno) {
+//
+//        Reply foundReply= replyRepository.findById(rno)
+//                .orElseThrow(() -> new EntityNotFoundException("해당 rno로 조회된 게시글이 없습니다."));
+//
+//        return new ReadReplyResponse(
+//                foundReply.getRno(),
+//                foundReply.getReplyer(),
+//                foundReply.getReplyText(),
+//                foundReply.getRegisterDate()
+//        );
+//    }
 
     @Transactional
     public UpdateReplyResponse updateReply(Integer rno, UpdateReplyRequest request) {
@@ -100,21 +100,21 @@ public class ReplyService {
         );
     }
 
-    public Page<ReadReplyResponse> readAllReplies(int challengeId, Pageable pageable) {
-
-        Page<Reply> replyPage = replyRepository.listOfReplies(challengeId, pageable);
-
-        return replyPage.map(reply -> new ReadReplyResponse(
-                        reply.getRno(),
-                        reply.getReplyText(),
-                        reply.getReplyer(),
-                        reply.getRegisterDate()
-                )
-        );
-    }
-
-    private List<ReplyImage> saveImages() {
-
-    }
+//    public Page<ReadReplyResponse> readAllReplies(int challengeId, Pageable pageable) {
+//
+//        Page<Reply> replyPage = replyRepository.listOfReplies(challengeId, pageable);
+//
+//        return replyPage.map(reply -> new ReadReplyResponse(
+//                        reply.getRno(),
+//                        reply.getReplyText(),
+//                        reply.getReplyer(),
+//                        reply.getRegisterDate()
+//                )
+//        );
+//    }
+//
+//    private List<ReplyImage> saveImages() {
+//
+//    }
 
 }
