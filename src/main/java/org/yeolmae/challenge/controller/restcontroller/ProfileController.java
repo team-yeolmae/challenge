@@ -37,12 +37,12 @@ public class ProfileController { // 회원 정보 수정
 
     }
 
-    @PutMapping("/mypage/updateProfile")
-    public ResponseEntity<ProfileUpdateResponse> updateProfile(ProfileUpdateRequest request) {
+    @PutMapping("/mypage/profile")
+    public ResponseEntity<ProfileUpdateResponse> updateProfile(@RequestBody ProfileUpdateRequest request) {
 
         Member member = memberService.getMember();
 
-        ProfileUpdateResponse response = new ProfileUpdateResponse(member.getEmail(), request.getPw(), request.getNickname());
+        ProfileUpdateResponse response = memberService.profileUpdate(request);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }

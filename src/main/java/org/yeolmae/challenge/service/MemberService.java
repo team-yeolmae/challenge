@@ -2,6 +2,7 @@ package org.yeolmae.challenge.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,6 +17,7 @@ import org.yeolmae.challenge.repository.MemberRepository;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Log4j2
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -45,6 +47,8 @@ public class MemberService {
 
         foundMember.changePassword(request.getPw());
         foundMember.changeNickname(request.getNickname());
+
+        log.info(request.getPw(),request.getNickname());
 
         return new ProfileUpdateResponse(foundMember.getEmail(), foundMember.getPw(), foundMember.getNickname());
     }

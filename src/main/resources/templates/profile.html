@@ -14,53 +14,70 @@
 
     <div class="container">
 
-        <form>
+        <form class="profileList">
 
             <div class="form-group">
                 <label for="email">Email : </label>
-                <input type="text" class="form-control" id="email" readonly>
+                <input type="text" class="form-control emailText" id="email" readonly>
             </div>
             <div class="form-group">
                 <label for="pw">PassWord : </label>
-                <input type="password" class="form-control" id="pw" placeholder="Enter password" readonly>
+                <input type="password" class="form-control pwText" id="pw" placeholder="Enter password">
             </div>
             <div class="form-group">
                 <label for="nickname">Nickname : </label>
-                <input type="text" class="form-control" id="nickname" placeholder="Enter nickname" readonly>
+                <input type="text" class="form-control nicknameText" id="nickname" placeholder="Enter nickname">
             </div>
-            <button id="btn-update" class="btn btn-primary">수정하기</button>
+            <button id="btn-update" class="btn btnUpdate btn-primary">수정하기</button>
 
         </form>
 
     </div>
 
-
+<script src="/js/profile.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
+
     $(document).ready(function () {
         $.get("/user/api/mypage/profile", function(data) {
             $('#email').val(data.email);
-        });
-    });
-
-    $(document).ready(function () {
-        $.get("/user/api/mypage/profile", function(data) {
             $('#pw').val(data.pw);
-        });
-    });
-
-    $(document).ready(function () {
-        $.get("/user/api/mypage/profile", function(data) {
             $('#nickname').val(data.nickname);
         });
     });
 
+    // const profileList = document.querySelector(".profileList")
+    //
+    // const emailText = document.querySelector(".emailText")
+    // const pwText = document.querySelector(".pwText")
+    // const nicknameText = document.querySelector(".nicknameText")
+    //
+    // const btnUpdate = document.querySelector(".btnUpdate")
+
     $(document).ready(function () {
-        $.get("/user/mypage/profile")
+
+        const emailText = $(".emailText")
+        const pwText = $(".pwText")
+        const nicknameText = $(".nicknameText")
+        const btnUpdate = $(".btnUpdate")
+
+        btnUpdate.on("click", function (e) {
+            const profileObj ={
+                email:emailText.val(),
+                pw: pwText.val(),
+                nickname: nicknameText.val()
+            };
+
+            updateProfile(profileObj)
+                .then(data => {
+                    alert("이메일 "+ data.email + " 님의 회원 정보가 수정되었습니다.");
+                })
+                .catch(e => {
+                    alert("회원 정보 수정에 실패했습니다.");
+                    console.log(e);
+                }, false);
+        })
     })
-
-
-
 
 </script>
 </body>
