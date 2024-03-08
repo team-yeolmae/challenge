@@ -56,6 +56,7 @@ public class Challenge {
     public void clearChallengeImage() {
 
         imageSet.forEach(challengeImage -> challengeImage.changeChallenge(null));
+
         this.imageSet.clear();
 
     }
