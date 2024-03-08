@@ -18,7 +18,7 @@ public interface ReplyRepository extends JpaRepository<Reply, Integer> {
 
     void deleteByChallenge_Id(int id);
 
-//    @EntityGraph(attributePaths = {"imageSet"})
-//    @Query("select r from Reply r where r.challenge.id = :challengeId")
-//    Optional<Reply> findByIdWithImages()
+    @EntityGraph(attributePaths = {"imageSet"})
+    @Query("select r from Reply r where r.rno = :rno")
+    Optional<Reply> findByIdWithImages();
 }

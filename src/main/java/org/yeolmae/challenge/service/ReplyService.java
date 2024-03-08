@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 import org.yeolmae.challenge.domain.Challenge;
 import org.yeolmae.challenge.domain.Reply;
 import org.yeolmae.challenge.domain.ReplyImage;
@@ -14,7 +15,10 @@ import org.yeolmae.challenge.domain.dto.CreateReplyResponse;
 import org.yeolmae.challenge.repository.ChallengeRepository;
 import org.yeolmae.challenge.repository.ReplyRepository;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
@@ -39,9 +43,27 @@ public class ReplyService {
                 .registerDate(request.getRegisterDate())
                 .build();
 
-        // 이미지 업로드 및 Reply에 추가
-//        List<ReplyImage> replyImages = saveImages
+        // 이미지를 DB에 저장하고 Reply에 추가
+        List<ReplyImage> replyImages = new ArrayList<>();
 
+        for(MultipartFile file : request.getImages()) {
+
+            String uuid = UUID.randomUUID().toString();
+            String fileName = file.getOriginalFilename();
+
+            String savedFileName = saveImage(file, uuid, fileName);
+
+            ReplyImage replyImage = ReplyImage.builder()
+                    .uuid(uuid)
+                    .fileName(fileName)
+                    .build();
+
+            replyImages.add(replyImage);
+        }
+
+        reply.setImageSet(new HashSet<>(replyImages));
+
+        //
         Reply savedReply = replyRepository.save(reply);
 
         return new CreateReplyResponse(
@@ -49,22 +71,31 @@ public class ReplyService {
                 savedReply.getRno(),
                 savedReply.getReplyText(),
                 savedReply.getReplyer(),
-                savedReply.getRegisterDate()
+                savedReply.getRegisterDate(),
+                savedReply.getImageSet()
         );
     }
 
-//    public ReadReplyResponse readReplyById(Integer rno) {
-//
-//        Reply foundReply= replyRepository.findById(rno)
-//                .orElseThrow(() -> new EntityNotFoundException("해당 rno로 조회된 게시글이 없습니다."));
-//
-//        return new ReadReplyResponse(
-//                foundReply.getRno(),
-//                foundReply.getReplyer(),
-//                foundReply.getReplyText(),
-//                foundReply.getRegisterDate()
-//        );
-//    }
+    private String saveImage(MultipartFile file, String uuid, String fileName) {
+
+        return uuid + "_" + fileName;
+    }
+
+
+    public ReadReplyResponse readReplyById(Integer rno) {
+
+        Reply foundReply= replyRepository.findById(rno)
+                .orElseThrow(() -> new EntityNotFoundException("해당 rno로 조회된 게시글이 없습니다."));
+
+        return new ReadReplyResponse(
+                foundReply.getChallenge().getId(),
+                foundReply.getRno(),
+                foundReply.getReplyer(),
+                foundReply.getReplyText(),
+                foundReply.getRegisterDate(),
+                foundReply.getImageSet()
+        );
+    }
 
     @Transactional
     public UpdateReplyResponse updateReply(Integer rno, UpdateReplyRequest request) {
@@ -79,7 +110,8 @@ public class ReplyService {
                 foundReply.getRno(),
                 foundReply.getReplyer(),
                 foundReply.getReplyText(),
-                foundReply.getRegisterDate()
+                foundReply.getRegisterDate(),
+                foundReply.getImageSet()
         );
 
     }
@@ -100,21 +132,21 @@ public class ReplyService {
         );
     }
 
-//    public Page<ReadReplyResponse> readAllReplies(int challengeId, Pageable pageable) {
-//
-//        Page<Reply> replyPage = replyRepository.listOfReplies(challengeId, pageable);
-//
-//        return replyPage.map(reply -> new ReadReplyResponse(
-//                        reply.getRno(),
-//                        reply.getReplyText(),
-//                        reply.getReplyer(),
-//                        reply.getRegisterDate()
-//                )
-//        );
-//    }
-//
-//    private List<ReplyImage> saveImages() {
-//
-//    }
+    public Page<ReadReplyResponse> readAllReplies(int challengeId, Pageable pageable) {
+
+        Page<Reply> replyPage = replyRepository.listOfReplies(challengeId, pageable);
+
+        return replyPage.map(reply -> new ReadReplyResponse(
+                reply.getChallenge().getId(),
+                reply.getRno(),
+                reply.getReplyer(),
+                reply.getReplyText(),
+                reply.getRegisterDate(),
+                reply.getImageSet()
+            )
+        );
+    }
+
+
 
 }
