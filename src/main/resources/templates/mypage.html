@@ -111,6 +111,7 @@
             <div class="d-flex flex-column align-items-center text-center">
                 <img class="rounded-circle" width="150px" src="https://st3.depositphotos.com/15648834/17930/v/600/depositphotos_179308454-stock-illustration-unknown-person-silhouette-glasses-profile.jpg">
                 <h4 id="nickname"></h4>
+                <button class="btn btn-primary" id="btn-toProfile" >회원 정보 수정</button>
             </div>
         </div>
 
@@ -187,6 +188,15 @@
                 $('#challenge-history').append(historyHtml);
             });
 
+        });
+    });
+
+    // 회원 정보 수정 페이지로 이동
+    $(document).ready(function () {
+        $("#btn-toProfile").on("click", function (){
+            // 이동할 페이지 URL
+            var targetPageUrl = "/user/mypage/profile";
+            window.location.href = targetPageUrl;
         });
     });
 

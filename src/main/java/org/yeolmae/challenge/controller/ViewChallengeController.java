@@ -11,7 +11,7 @@ import org.yeolmae.challenge.domain.dto.*;
 import org.yeolmae.challenge.service.ChallengeService;
 
 @Controller
-@RequestMapping("/challenge")
+@RequestMapping
 @RequiredArgsConstructor
 @Log4j2
 public class ViewChallengeController {
@@ -32,7 +32,7 @@ public class ViewChallengeController {
 
         }
 
-    @GetMapping("/detail{id}")
+    @GetMapping("/user/detail{id}")
     public String viewChallengeDetail(@PathVariable Integer id, Model model) {
 
         // id에 해당하는 도전과제 정보를 가져옴
@@ -42,6 +42,6 @@ public class ViewChallengeController {
         model.addAttribute("challengeDTO", challengeDTO);
 
         // 상세 페이지 템플릿의 경로를 반환
-        return "challenge/detail"; // 이 경로는 상황에 따라 변경될 수 있습니다.
+        return "user/detail"; // 이 경로는 상황에 따라 변경될 수 있습니다.
     }
 }
