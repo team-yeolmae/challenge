@@ -39,7 +39,6 @@ public class MemberService {
 
     @Transactional
     public ProfileUpdateResponse profileUpdate(ProfileUpdateRequest request){
-        //, BCryptPasswordEncoder bCryptPasswordEncoder
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
@@ -50,7 +49,6 @@ public class MemberService {
 
         String encodedPassword = bCryptPasswordEncoder.encode(request.getPw());
 
-//        foundMember.changePassword(bCryptPasswordEncoder.encode(request.getPw()));
         foundMember.changePassword(encodedPassword);
         foundMember.changeNickname(request.getNickname());
 

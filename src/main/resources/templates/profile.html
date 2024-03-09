@@ -28,30 +28,36 @@
                 <label for="nickname">Nickname : </label>
                 <input type="text" class="form-control nicknameText" id="nickname" placeholder="Enter nickname">
             </div>
-            <button id="btn-update" class="btn btnUpdate btn-primary">수정하기</button>
+
+            <!-- 수정 버튼 -->
+            <button id="btn-update" type="button" class="btn btnUpdate btn-primary" data-bs-toggle="modal">
+                수정
+            </button>
+
+            <!-- 수정 확인 모달창 -->
+            <div class="modal fade" id="updateConfirmationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="exampleModalLabel">회원 정보 수정</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            회원 정보를 수정하시겠습니까?
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                            <button type="button" class="btn btn-primary" id="confirmUpdate">수정</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </form>
 
     </div>
 
-    <!-- 모달 창 -->
-    <div class="modal fade" id="confirmationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">수정 확인</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    회원 정보를 수정하시겠습니까?
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                    <button type="button" class="btn btn-primary" id="confirmUpdate">확인</button>
-                </div>
-            </div>
-        </div>
-    </div>
+
 
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
@@ -64,21 +70,26 @@
         });
     });
 
-    $(document).ready(function () {
+    $(document).ready(function (){
 
         const emailText = $(".emailText")
         const pwText = $(".pwText")
         const nicknameText = $(".nicknameText")
         const btnUpdate = $(".btnUpdate")
 
-        btnUpdate.on("click", function (e) {
-            const profileObj ={
+        btnUpdate.on("click", function (e){
+            e.preventDefault();
+            $('#updateConfirmationModal').modal('show');
+        });
+
+        $('#confirmUpdate').on("click", function (){
+
+            const profileObj = {
                 email:emailText.val(),
                 pw: pwText.val(),
                 nickname: nicknameText.val()
             };
 
-            // AJAX를 이용하여 서버에 데이터 전송
             $.ajax({
                 type: "PUT",
                 url: "/user/api/mypage/profile",
@@ -86,16 +97,19 @@
                 contentType: "application/json; charset=utf-8",
                 dataType: "json",
                 success: function(response) {
+                    console.log("성공:" , response);
                     alert("이메일 "+ response.email + " 님의 회원 정보가 수정되었습니다.");
+                    window.history.back();
                 },
                 error: function(error) {
                     alert("회원 정보 수정에 실패했습니다.");
                     console.error(error);
                 }
             });
-        })
-    })
+        });
+    });
 
 </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

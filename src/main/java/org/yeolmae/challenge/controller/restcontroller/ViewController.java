@@ -45,9 +45,5 @@ public class ViewController {
         return "profile";
     }
 
-    @PostMapping("/user/mypage/updateProfile")
-    public String updateMypageProfile() {
-        return "updateProfile";
-    }
 
 }
