@@ -11,6 +11,8 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.yeolmae.challenge.domain.dto.*;
 import org.yeolmae.challenge.service.AdminChallengeService;
 
+import java.util.List;
+
 @Controller
 @RequestMapping("/challenge/admin")
 @RequiredArgsConstructor
@@ -56,9 +58,9 @@ public class AdminChallengeController {
 
     @PostMapping("/modify")
     public String modifyChallenge(@Valid Integer id, @Valid UpdateChallengeRequest request,
-                          BindingResult bindingResult,
-                          PageRequestDTO pageRequestDTO,
-                          RedirectAttributes redirectAttributes){
+                                  BindingResult bindingResult,
+                                  PageRequestDTO pageRequestDTO,
+                                  RedirectAttributes redirectAttributes){
 
 
         if(bindingResult.hasErrors()) {
@@ -84,6 +86,22 @@ public class AdminChallengeController {
         redirectAttributes.addAttribute("id", id);
 
         return "redirect:/challenge/admin/read";
+    }
+
+    @PostMapping("/delete")
+    public String delete(Integer id, RedirectAttributes redirectAttributes) {
+
+
+        log.info("delete Post..." + id);
+
+        challengeService.deleteChallenge(id);
+
+
+        redirectAttributes.addFlashAttribute("delete", "deleted");
+
+
+        return "redirect:/challenge/admin/list";
+
     }
 
     @GetMapping("/list")
