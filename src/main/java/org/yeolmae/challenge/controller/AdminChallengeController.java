@@ -14,7 +14,7 @@ import org.yeolmae.challenge.service.AdminChallengeService;
 import java.util.List;
 
 @Controller
-@RequestMapping("/challenge/admin")
+@RequestMapping("/admin")
 @RequiredArgsConstructor
 @Log4j2
 public class AdminChallengeController {

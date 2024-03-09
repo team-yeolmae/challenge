@@ -49,7 +49,7 @@ public class Challenge {
                 .build();
 
         this.imageSet.add(challengeImage);
-        challengeImage.setChallenge(this);
+//        challengeImage.setChallenge(this);
 
     }
 

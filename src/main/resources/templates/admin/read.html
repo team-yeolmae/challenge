@@ -59,10 +59,10 @@
 
                     <div class="my-4">
                         <div class="float-end" th:with="link = ${pageRequestDTO.getLink()}">
-                            <a th:href="|@{/templates/user/admin/list}?${link}|" class="text-decoration-none">
+                            <a th:href="|@{/templates/admin/list}?${link}|" class="text-decoration-none">
                                 <button type="button" class="btn btn-primary">목록으로</button>
                             </a>
-                            <a th:href="|@{/templates/user/admin/modify(id=${dto.id})}&${link}|" class="text-decoration-none">
+                            <a th:href="|@{/templates/admin/modify(id=${dto.id})}&${link}|" class="text-decoration-none">
                                 <button type="button" class="btn btn-secondary">수정하기</button>
                             </a>
                         </div>

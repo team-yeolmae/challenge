@@ -73,12 +73,12 @@
 
         <!-- 챌린지 등록하기 버튼 -->
         <div class="col-auto mt-3">
-            <a href="/challenge/admin/register" class="btn btn-primary">챌린지 등록하기</a>
+            <a href="/admin/register" class="btn btn-primary">챌린지 등록하기</a>
         </div>
     </div>
 
     <div class="row mt-3">
-        <form action="/challenge/admin/list" method="get">
+        <form action="/admin/list" method="get">
             <div class="col">
                 <input type="hidden" name="size" th:value="${pageRequestDTO.size}">
                 <div class="input-group">
@@ -121,7 +121,7 @@
     <tr th:each="dto:${challengeDTO.challengeList}"  >
         <td>[[${dto.id}]]</td>
         <td>
-            <a th:href="|@{/templates/user/admin/read(id =${dto.id})}&${link}|" class="text-decoration-none"> [[${dto.title}]] </a>
+            <a th:href="|@{/templates/admin/read(id =${dto.id})}&${link}|" class="text-decoration-none"> [[${dto.title}]] </a>
         </td>
         <td>[[${dto.writer}]]</td>
         <td>[[${#temporals.format(dto.registerDate, 'yyyy-MM-dd')}]]</td>
@@ -232,7 +232,7 @@
         e.preventDefault()
         e.stopPropagation()
 
-        self.location ='/challenge/admin/list'
+        self.location ='/admin/list'
 
     },false)
 
