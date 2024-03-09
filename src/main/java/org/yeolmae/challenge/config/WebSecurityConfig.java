@@ -54,7 +54,7 @@ public class WebSecurityConfig {
                 .loginPage("/loginForm")
                 .usernameParameter("email")
                 .loginProcessingUrl("/login")// /login 주소가 호출되면 시큐리티가 낚아채서 대신 로그인 진행 // 로그인을 Spring Security가 대신 위임해서 처리해주는 기능(사용자 아이디(이메일), 비번 인증하는 것 대신 해줌.)
-                .defaultSuccessUrl("/"));// "/" -> main 혹은 home 화면
+                .defaultSuccessUrl("/main"));// "/" -> main 혹은 home 화면
 
         // 자동로그인 설정
         http.rememberMe((rememberMe) -> rememberMe

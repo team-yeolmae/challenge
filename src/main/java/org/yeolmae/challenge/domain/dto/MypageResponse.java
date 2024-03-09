@@ -14,6 +14,7 @@ import java.util.List;
 @NoArgsConstructor
 public class MypageResponse {
 
+    private String email;
     private String nickname;
     private int level;
     private List<HistoryResponse> historyResponseList;

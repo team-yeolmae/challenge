@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import org.yeolmae.challenge.domain.Member;
+import org.yeolmae.challenge.domain.dto.profile.ProfileDeleteResponse;
 import org.yeolmae.challenge.domain.dto.profile.ProfileResponse;
 import org.yeolmae.challenge.domain.dto.profile.ProfileUpdateRequest;
 import org.yeolmae.challenge.domain.dto.profile.ProfileUpdateResponse;
@@ -35,6 +36,15 @@ public class ProfileController { // 회원 정보 수정
     public ResponseEntity<ProfileUpdateResponse> updateProfile(@RequestBody ProfileUpdateRequest request) {
 
         ProfileUpdateResponse response = memberService.profileUpdate(request);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+
+    }
+
+    @DeleteMapping("/mypage/{email}")
+    public ResponseEntity<ProfileDeleteResponse> deleteProfile(@PathVariable String email) {
+
+        ProfileDeleteResponse response = memberService.profileDelete(email);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
 
