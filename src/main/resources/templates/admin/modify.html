@@ -16,7 +16,7 @@
         </div>
         <div class="card-body">
 
-          <form th:action="@{/templates/user/admin/modify}" method="post" id="f1">
+          <form th:action="@{/templates/admin/modify}" method="post" id="f1">
             <input type="hidden" name="_method" value="put">
             <div class="input-group mb-3">
               <span class="input-group-text">Id</span>
@@ -62,7 +62,7 @@
 
             <div class="my-4">
               <div class="float-end">
-                <button type="button" class="btn btn-primary listBtn">목록으로</button>
+                <button type="button" class="btn btn-primary listBtn">목록</button>
                 <button type="button" class="btn btn-secondary modBtn" data-bs-toggle="modal" data-bs-target="#confirmModal">수정하기</button>
                 <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal" data-bs-target="#deleteModal">삭제하기</button>
               </div>
@@ -137,7 +137,7 @@
     e.stopPropagation()
 
     formObj.reset()
-    self.location =`/challenge/admin/list?${link}`
+    self.location =`/admin/list?${link}`
 
   }, false)
 
@@ -149,7 +149,7 @@
     e.preventDefault();
     e.stopPropagation();
 
-    formObj.action = `/challenge/admin/modify?${link}`;
+    formObj.action = `/admin/modify?${link}`;
 
     modal.show();
   }, false);
@@ -159,7 +159,7 @@
     e.stopPropagation();
 
     // 여기에 서버로 수정 요청을 보내는 코드를 추가
-    formObj.action = `/challenge/admin/modify?${link}`;
+    formObj.action = `/admin/modify?${link}`;
     formObj.method = 'post';
     formObj.submit();
 
@@ -174,7 +174,7 @@
     e.preventDefault()
     e.stopPropagation()
 
-    formObj.action = `/challenge/admin/delete`
+    formObj.action = `/admin/delete`
     modaldelete.show()
   }, false)
 
@@ -183,7 +183,7 @@
     e.stopPropagation();
 
     // 여기에 서버로 수정 요청을 보내는 코드를 추가
-    formObj.action = `/challenge/admin/delete`;
+    formObj.action = `/admin/delete`;
     formObj.method = 'post';
     formObj.submit();
 

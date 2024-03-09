@@ -27,6 +27,6 @@ public class CreateReplyResponse {
     // registerDate 추가
     private LocalDate registerDate;
 
-    private Set<ReplyImage> images;
+//    private Set<ReplyImage> images;
 
 }

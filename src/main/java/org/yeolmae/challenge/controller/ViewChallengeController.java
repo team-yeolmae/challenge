@@ -32,7 +32,7 @@ public class ViewChallengeController {
 
     }
 
-    @GetMapping("/user/detail{id}")
+    @GetMapping("/user/detail={id}")
     public String viewChallengeDetail(@PathVariable Integer id, Model model) {
 
         // id에 해당하는 도전과제 정보를 가져옴

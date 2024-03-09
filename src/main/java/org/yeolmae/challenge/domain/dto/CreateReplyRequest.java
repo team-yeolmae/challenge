@@ -25,6 +25,6 @@ public class CreateReplyRequest {
     // registerDate 추가
     private LocalDate registerDate = LocalDate.now();
 
-    private List<MultipartFile> images;
+//    private List<MultipartFile> images;
 
 }

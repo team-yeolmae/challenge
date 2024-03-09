@@ -46,21 +46,6 @@ public class ReplyService {
         // 이미지를 DB에 저장하고 Reply에 추가
         List<ReplyImage> replyImages = new ArrayList<>();
 
-        for(MultipartFile file : request.getImages()) {
-
-            String uuid = UUID.randomUUID().toString();
-            String fileName = file.getOriginalFilename();
-
-            String savedFileName = saveImage(file, uuid, fileName);
-
-            ReplyImage replyImage = ReplyImage.builder()
-                    .uuid(uuid)
-                    .fileName(fileName)
-                    .build();
-
-            replyImages.add(replyImage);
-        }
-
         reply.setImageSet(new HashSet<>(replyImages));
 
         //
@@ -71,8 +56,7 @@ public class ReplyService {
                 savedReply.getRno(),
                 savedReply.getReplyText(),
                 savedReply.getReplyer(),
-                savedReply.getRegisterDate(),
-                savedReply.getImageSet()
+                savedReply.getRegisterDate()
         );
     }
 
@@ -100,7 +84,7 @@ public class ReplyService {
     @Transactional
     public UpdateReplyResponse updateReply(Integer rno, UpdateReplyRequest request) {
 
-        Reply foundReply = replyRepository.findById(rno)
+        Reply foundReply = replyRepository.findByIdWithImages(rno)
                 .orElseThrow(() -> new EntityNotFoundException("해당 rno로 조회된 게시글이 없습니다."));
         //Dirty Checking
         foundReply.changeReply(request.getReplyText());   // 댓글 내용만 수정
@@ -110,8 +94,7 @@ public class ReplyService {
                 foundReply.getRno(),
                 foundReply.getReplyer(),
                 foundReply.getReplyText(),
-                foundReply.getRegisterDate(),
-                foundReply.getImageSet()
+                foundReply.getRegisterDate()
         );
 
     }

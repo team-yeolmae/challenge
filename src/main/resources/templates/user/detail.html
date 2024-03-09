@@ -6,6 +6,11 @@
 <head>
     <style>
 
+        .reply-container{
+            margin: 0;
+            padding: 0rem 2rem;
+        }
+
         .btn-primary {
             background-color:#2752E7;
             color:#fff;
@@ -16,11 +21,15 @@
             font-weight: 400;
         }
 
+        h6 {
+            font-weight: 700;
+        }
+
     </style>
 </head>
 
 <div layout:fragment="content">
-<div class="mb-5">
+<div class="container mb-5">
     <section class="mt-3">
         <div class="container px-4 px-lg-5 my-5">
             <!-- Thymeleaf iteration to display product details -->
@@ -58,7 +67,7 @@
                     <span class="fw-bolder">사진과 함께 인증해주세요</span>
                     </div>
 
-                    <div class="d-flex">
+                    <div class="d-flex align-content-end">
 
                         <button class="btn btn-outline-dark flex-shrink-0" type="button">
                             참가하기
@@ -76,30 +85,32 @@
     </div>
 
     <!--댓글 등록 영역-->
-    <section class="mt-3" id="comment-section" style="display: none;">
-        <div class="container px-2 px-lg-5 my-5">
+    <section class="mt-2" id="comment-section" style="display: none; background-color:#FAFBFE">
+        <div class="reply-container my-5">
             <!-- 댓글 등록 폼 -->
-            <form id="" action="#!">
-                <div class="row gy-4 gy-xl-5 p-4 p-xl-5">
+            <form id="post-reply">
+                <div class="row">
 
-                    <div class="col-6 col-md-4">
+                    <div class="col-6 mb-2">
                         <label>작성자</label>
-                        <input type="text" class="form-control" value="" readonly>
+                        <input id="replyer" type="text" class="form-control" readonly>
                     </div>
 
-                    <div class="col-6 col-md-4">
+                    <div  class="col-6 mb-2">
                         <label>작성일</label>
-                        <input type="text" class="form-control" value="" readonly>
+                        <input id="registerDate" type="text" class="form-control" readonly>
                     </div>
 
-                    <div class="col-12">
-                        <label for="comment" class="form-label">Comment <span class="text-danger">*</span></label>
-                        <textarea class="form-control" id="comment" rows="3" required></textarea>
+                    <div class="col-12 mb-2">
+                        <label for="comment" class="form-label">
+                            오늘의 챌린지는 어떠셨나요?
+                        </label>
+                        <textarea class="form-control" id="comment" rows="3" name="comment" required></textarea>
                     </div>
 
-                    <div class="mb-3">
+                    <div class="col-12 mb-3">
                         <label for="formFileMultiple" class="form-label">사진 첨부</label>
-                        <input class="form-control" type="file" id="formFileMultiple" multiple>
+                        <input class="form-control" type="file" id="formFileMultiple" name="images" multiple>
                     </div>
 
                     <div class="col-12">
@@ -129,24 +140,39 @@
 
 
 <script layout:fragment="script" th:inline="javascript">
+
     $(document).ready(function() {
         var challengeId = dto.id;
-        var repliesHtml = "";
+    });
 
-        $.get("/challenge/" + challengeId + "/replies", function(data) {
+
+    $(document).ready(function () {
+        // 작성자, 등록일
+        $("#show-comment-section").click(function () {
+            const replyer = replyer;
+            const registerDate = registerDate;
+
+            $("#replyer").val(replyer);
+            $("#registerDate").val(registerDate);
+        })
+    });
+
+
+    $(document).ready(function() {
+
+        $.get("/api/user/detail?id=" + dto.id + "/reply/list", function(data) {
             var repliesHtml = "";
             data.forEach(function(reply) {
                 repliesHtml += "<div>";
-                repliesHtml += "<p>" + reply.replyer + ": " + reply.replyText + "</p>";
-                repliesHtml += "<p>등록일: " + reply.registerDate + "</p>";
+                repliesHtml += "<span>" + reply.replyer + "</span>";
+                repliesHtml += "<span>" + reply.registerDate + "</span>";
+                repliesHtml += "<p>" + reply.replyText + "</p>";
                 repliesHtml += "</div>";
             });
             $("#repliesContainer").html(repliesHtml);
         });
     });
+
 </script>
 
-
-<script layout:fragment="script" th:inline="javascript">
-</script>
 </html>

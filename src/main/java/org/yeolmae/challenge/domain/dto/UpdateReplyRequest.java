@@ -13,6 +13,6 @@ import java.util.List;
 public class UpdateReplyRequest {
 
     private String replyText;
-    private List<MultipartFile> images;
+//    private List<MultipartFile> images;
 
 }

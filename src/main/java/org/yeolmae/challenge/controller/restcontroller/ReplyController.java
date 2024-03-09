@@ -2,6 +2,8 @@ package org.yeolmae.challenge.controller.restcontroller;
 
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.cglib.core.Local;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
@@ -14,37 +16,60 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.yeolmae.challenge.domain.Challenge;
+import org.yeolmae.challenge.domain.Member;
 import org.yeolmae.challenge.domain.Reply;
 import org.yeolmae.challenge.domain.dto.*;
 import org.yeolmae.challenge.domain.dto.CreateReplyResponse;
 import org.yeolmae.challenge.repository.ChallengeRepository;
 import org.yeolmae.challenge.service.ChallengeService;
+import org.yeolmae.challenge.service.MemberService;
 import org.yeolmae.challenge.service.ReplyService;
 
+import java.time.LocalDate;
 import java.util.Arrays;
 
 @RestController
-@RequestMapping("/reply")
+@RequestMapping("/api/user/reply")
 @RequiredArgsConstructor
+@Log4j2
 public class ReplyController {
 
     private final ReplyService replyService;
-    private final ChallengeService challengeService;
+    private final MemberService memberService;
+
+    @GetMapping("/register")
+    @Operation(summary = "댓글을 등록하는 메소드", description = "text를 입력하세요.")
+    public ResponseEntity<ReplyContextResponse> getReplyContext(ReplyContextRequest request) {
+
+        Member member = memberService.getMember();
+        String replyer = member.getNickname();
+        LocalDate registerDate = LocalDate.now();
+
+        ReplyContextResponse response = new ReplyContextResponse(replyer, registerDate);
+
+        log.info(response);
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 
     @PostMapping("/register")
     @Operation(summary = "댓글을 등록하는 메소드", description = "text를 입력하세요.")
     public ResponseEntity<CreateReplyResponse> createReply(
             @ModelAttribute CreateReplyRequest request, @RequestPart("files") MultipartFile[] files) {
 
-        request.setImages(Arrays.asList(files));
+        Member member = memberService.getMember();
+        request.setReplyer(member.getNickname());
+        request.setRegisterDate(LocalDate.now());
 
         CreateReplyResponse response = replyService.createReply(request);
+
+        log.info(response);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     // 댓글 목록 10개씩 paging 처리
-    @GetMapping("/list/{challengeId}")
+    @GetMapping("/list")
     @Operation(summary = "댓글 목록을 조회하는 메소드", description = "댓글 목록을 조회할 challengeId와 page를 입력하세요.")
     public ResponseEntity<Page<ReadReplyResponse>> readAllReply(
             @PathVariable("challengeId") int challengeId,
@@ -55,7 +80,7 @@ public class ReplyController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @GetMapping("/{rno}")
+    @GetMapping("/read/{rno}")
     @Operation(summary = "특정 댓글을 조회하는 메소드", description = "조회할 댓글의 rno를 입력하세요.")
     public ResponseEntity<ReadReplyResponse> readReply(@PathVariable("rno") Integer rno) {
 
@@ -64,17 +89,18 @@ public class ReplyController {
         return  new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PutMapping("/{rno}")
+    @PutMapping("/modify/{rno}")
     @Operation(summary = "특정 댓글을 수정하는 메소드", description = "수정할 댓글의 rno와 수정 text를 입력하세요.")
     public ResponseEntity<UpdateReplyResponse> updateReply(@PathVariable Integer rno,
-                                                           @RequestBody UpdateReplyRequest request){
+                                                           @RequestBody UpdateReplyRequest request,
+                                                           @RequestPart("files") MultipartFile[] files){
 
         UpdateReplyResponse response = replyService.updateReply(rno, request);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @DeleteMapping("/{rno}")
+    @DeleteMapping("/delete/{rno}")
     @Operation(summary = "특정 댓글을 삭제하는 메소드", description = "삭제할 댓글의 rno를 입력하세요.")
     public ResponseEntity<DeleteReplyResponse> deleteReply(@PathVariable Integer rno) {
 

@@ -20,5 +20,5 @@ public interface ReplyRepository extends JpaRepository<Reply, Integer> {
 
     @EntityGraph(attributePaths = {"imageSet"})
     @Query("select r from Reply r where r.rno = :rno")
-    Optional<Reply> findByIdWithImages();
+    Optional<Reply> findByIdWithImages(Integer rno);
 }
