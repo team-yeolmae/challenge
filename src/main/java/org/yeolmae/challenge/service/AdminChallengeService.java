@@ -13,6 +13,8 @@ import org.yeolmae.challenge.repository.ChallengeRepository;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -34,6 +36,14 @@ public class AdminChallengeService {
                 .endDate(request.getEndDate())
                 .build();
 
+        if(request.getFileNames() != null){
+            request.getFileNames().forEach(fileName -> {
+                String[] arr = fileName.split("_");
+                challenge.addChallengeImage(arr[0], arr[1]);
+            });
+        }
+
+
         Challenge savedChallenge = challengeRepository.save(challenge);
 
 
@@ -44,20 +54,30 @@ public class AdminChallengeService {
                 savedChallenge.getWriter(),
                 savedChallenge.getRegisterDate(),
                 savedChallenge.getStartDate(),
-                savedChallenge.getEndDate()
+                savedChallenge.getEndDate(),
+                savedChallenge.getImageSet()
         );
     }
 
     public ReadChallengeResponse readOneChallenge(Integer id) {
 
         //challenge_image 까지 조인 처리되는 findByWithImages()를 이용
-        //Optional<Challenge> result = challengeRepository.findByIdWithImages(id);
+        Optional<Challenge> result = challengeRepository.findByIdWithImages(id);
 
-        Challenge challenge = challengeRepository.findById(id)
-                .orElseThrow(() -> new EntityNotFoundException("해당 challengeId로 조회된 게시글이 없습니다."));
+        Challenge challenge =result.orElseThrow();
+
+//        Challenge challenge = challengeRepository.findById(id)
+//                .orElseThrow(() -> new EntityNotFoundException("해당 challengeId로 조회된 게시글이 없습니다."));
+//        List<String> fileNames =
+//                challenge.getImageSet().stream().sorted().map(challengeImage ->
+//                        challengeImage.get()+"_"+challengeImage.getFileName()).collect(Collectors.toList());
+//
+//        boardDTO.setFileNames(fileNames);
+
 
         return new ReadChallengeResponse(challenge.getId(), challenge.getTitle(), challenge.getContent(), challenge.getWriter(),
-                challenge.getRegisterDate(), challenge.getStartDate(), challenge.getEndDate());
+                challenge.getRegisterDate(), challenge.getStartDate(), challenge.getEndDate()
+        );
 
     }
 
@@ -80,6 +100,14 @@ public class AdminChallengeService {
         log.info("Request received: {}", request);
 
         challengeRepository.save(foundChallenge);
+
+    }
+    @Transactional
+    public void deleteChallenge(Integer id) {
+
+        challengeRepository.deleteById(id);
+
+        log.info("service id: {}", id);
 
     }
 

@@ -41,7 +41,8 @@ public class ChallengeService {
                 savedChallenge.getContent(),
                 savedChallenge.getRegisterDate(),
                 savedChallenge.getStartDate(),
-                savedChallenge.getEndDate()
+                savedChallenge.getEndDate(),
+                savedChallenge.getImageSet()
         );
     }
 
