@@ -2,22 +2,28 @@ package org.yeolmae.challenge.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.yeolmae.challenge.domain.Member;
+import org.yeolmae.challenge.domain.dto.profile.ProfileDeleteResponse;
+import org.yeolmae.challenge.domain.dto.profile.ProfileResponse;
+import org.yeolmae.challenge.domain.dto.profile.ProfileUpdateRequest;
+import org.yeolmae.challenge.domain.dto.profile.ProfileUpdateResponse;
 import org.yeolmae.challenge.repository.MemberRepository;
-
-import java.util.Optional;
 
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Log4j2
 public class MemberService {
 
     private final MemberRepository memberRepository;
+    private final BCryptPasswordEncoder bCryptPasswordEncoder;
 
     public Member getMember() {
 
@@ -31,5 +37,55 @@ public class MemberService {
 
         return member;
     }
+
+    @Transactional
+    public ProfileUpdateResponse profileUpdate(ProfileUpdateRequest request){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        String username = userDetails.getUsername();
+
+        Member foundMember = memberRepository.findMemberByEmail(username)
+                .orElseThrow(() -> new EntityNotFoundException("사용자 정보를 찾을 수 없습니다."));
+
+        String encodedPassword = bCryptPasswordEncoder.encode(request.getPw());
+
+        foundMember.changePassword(encodedPassword);
+        foundMember.changeNickname(request.getNickname());
+
+        log.info(request.getPw(),request.getNickname());
+
+        return new ProfileUpdateResponse(foundMember.getEmail(), foundMember.getPw(), foundMember.getNickname());
+    }
+
+    @Transactional
+    public ProfileDeleteResponse profileDelete(String email){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        String username = userDetails.getUsername();
+
+        Member foundMember = memberRepository.findMemberByEmail(username)
+                .orElseThrow(() -> new EntityNotFoundException("사용자 정보를 찾을 수 없습니다."));
+
+        memberRepository.delete(foundMember);
+
+        return new ProfileDeleteResponse(foundMember.getEmail());
+    }
+
+//    @Transactional
+//    public MemberUpdateResponse updateMember(String email, MemberUpdateRequest memberUpdateRequest) {
+//
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//
+//        String username = userDetails.getUsername();
+//
+//        Member member = memberRepository.findMemberByEmail(username)
+//                .orElseThrow(() -> new EntityNotFoundException("사용자 정보를 찾을 수 없습니다."));
+//
+//        member.update(memberUpdateRequest.getPw(),memberUpdateRequest.getNickname());
+//
+//    }
 
 }
