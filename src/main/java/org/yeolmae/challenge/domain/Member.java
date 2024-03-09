@@ -1,10 +1,14 @@
 package org.yeolmae.challenge.domain;
 
+import jakarta.annotation.Resource;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Entity
 @Getter
@@ -35,8 +39,10 @@ public class Member {
     public void changePassword(String pw) {
         this.pw = pw;
     }
+
     public void changeNickname(String nickname) {
         this.nickname = nickname;
     }
+
 
 }
