@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+      layout:decorate="~{layout/basic.html}">
+
+<head>
+  <title>Challenge Modify</title>
+</head>
+
+<div layout:fragment="content">
+  <div class="row mt-3 col-md-8 mx-auto">
+    <div class="col">
+      <div class="card">
+        <div class="card-header">
+          Challenge 수정하기
+        </div>
+        <div class="card-body">
+
+          <form th:action="@{/templates/user/admin/modify}" method="post" id="f1">
+            <input type="hidden" name="_method" value="put">
+            <div class="input-group mb-3">
+              <span class="input-group-text">Id</span>
+              <input type="text" class="form-control" name="id" th:value="${dto.id}" readonly>
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text">제목</span>
+              <input type="text" class="form-control" name="title" th:value="${dto.title}">
+            </div>
+
+            <div class="input-group mb-3">
+              <span class="input-group-text">챌린지 등록일자</span>
+              <input type="date" class="form-control" th:value="${#temporals.format(dto.registerDate, 'yyyy-MM-dd')}" readonly>
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text">챌린지 시작일자</span>
+              <input type="date" class="form-control" name="startDate" th:value="${#temporals.format(dto.startDate, 'yyyy-MM-dd')}" >
+            </div>
+            <div class="input-group mb-3">
+              <span class="input-group-text">챌린지 종료일자</span>
+              <input type="date" class="form-control" name="endDate" th:value="${#temporals.format(dto.endDate, 'yyyy-MM-dd')}" >
+            </div>
+
+
+            <div class="input-group mb-3">
+              <span class="input-group-text">Content</span>
+              <textarea class="form-control col-sm-5" rows="5" name="content">[[${dto.content}]]</textarea>
+            </div>
+
+            <div class="input-group mb-3">
+              <span class="input-group-text">Writer</span>
+              <input type="text" class="form-control" th:value="${dto.writer}" name="writer" readonly>
+            </div>
+
+            <div class="input-group mb-3">
+              <span class="input-group-text">Images</span>
+              <div class="float-end uploadHidden">
+                <button type="button" class="btn btn-primary uploadFileBtn">ADD Files</button>
+              </div>
+            </div>
+
+
+
+            <div class="my-4">
+              <div class="float-end">
+                <button type="button" class="btn btn-primary listBtn">목록으로</button>
+                <button type="button" class="btn btn-secondary modBtn" data-bs-toggle="modal" data-bs-target="#confirmModal">수정하기</button>
+                <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal" data-bs-target="#deleteModal">삭제하기</button>
+              </div>
+            </div>
+
+            <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Hustle Log</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p>수정하시겠습니까?</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" id="confirmModifyBtn">수정</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Hustle Log</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p>삭제하시겠습니까?</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" id="deleteModalBtn">삭제</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </form>
+
+        </div>
+      </div><!--end card-->
+    </div><!-- end col-->
+  </div><!-- end row-->
+
+</div>
+
+
+<script layout:fragment="script" th:inline="javascript">
+
+  const errors = [[${errors}]]
+  console.log(errors)
+
+  let errorMsg = ''
+
+  if(errors){
+    for (let i = 0; i < errors.length; i++) {
+      errorMsg += `${errors[i].field}은(는) ${errors[i].code} \n`
+    }
+    history.replaceState({}, null, null)
+    alert(errorMsg)
+  }
+
+  const link = [[${pageRequestDTO.getLink()}]]
+  const formObj = document.querySelector("#f1")
+
+  document.querySelector(".listBtn").addEventListener("click", function(e){
+    e.preventDefault()
+    e.stopPropagation()
+
+    formObj.reset()
+    self.location =`/challenge/admin/list?${link}`
+
+  }, false)
+
+  const modal = new bootstrap.Modal(document.querySelector("#confirmModal"));
+  const modaldelete = new bootstrap.Modal(document.querySelector("#deleteModal"));
+
+
+  document.querySelector(".modBtn").addEventListener("click", function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    formObj.action = `/challenge/admin/modify?${link}`;
+
+    modal.show();
+  }, false);
+
+  document.querySelector("#confirmModifyBtn").addEventListener("click", function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // 여기에 서버로 수정 요청을 보내는 코드를 추가
+    formObj.action = `/challenge/admin/modify?${link}`;
+    formObj.method = 'post';
+    formObj.submit();
+
+    // 임시로 alert을 사용하여 확인
+    alert("수정이 완료되었습니다.");
+
+    // 모달 닫기
+    modal.hide();
+  }, false);
+
+  document.querySelector(".deleteBtn").addEventListener("click", function(e){
+    e.preventDefault()
+    e.stopPropagation()
+
+    formObj.action = `/challenge/admin/delete`
+    modaldelete.show()
+  }, false)
+
+  document.querySelector("#deleteModalBtn").addEventListener("click", function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // 여기에 서버로 수정 요청을 보내는 코드를 추가
+    formObj.action = `/challenge/admin/delete`;
+    formObj.method = 'post';
+    formObj.submit();
+
+
+    // 모달 닫기
+    modaldelete.hide();
+  }, false);
+
+
+</script>
+
+</html>
