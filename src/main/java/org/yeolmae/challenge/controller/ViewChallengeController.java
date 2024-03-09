@@ -18,19 +18,19 @@ public class ViewChallengeController {
 
     private final ChallengeService challengeService;
 
-        @GetMapping("/main")
-        public void list(PageRequest1DTO pageRequest1DTO, Model model){
+    @GetMapping("/main")
+    public void list(PageRequest1DTO pageRequest1DTO, Model model){
 
-            PageResponse1DTO<ReadChallengeResponse> challengeDTO =
-                    challengeService.readAllChallenge1(pageRequest1DTO);
-            // 인기 챌린지 목록 가져오기 (페이지 크기: 4)
-            PageResponse1DTO<ReadChallengeResponse> popularChallengesDTO =
-                    challengeService.readPopularChallenges(PageRequest1DTO.builder().size(4).build());
+        PageResponse1DTO<ReadChallengeResponse> challengeDTO =
+                challengeService.readAllChallenge1(pageRequest1DTO);
+        // 인기 챌린지 목록 가져오기 (페이지 크기: 4)
+        PageResponse1DTO<ReadChallengeResponse> popularChallengesDTO =
+                challengeService.readPopularChallenges(PageRequest1DTO.builder().size(4).build());
 
-            model.addAttribute("challengeDTO", challengeDTO);
-            model.addAttribute("popularChallengesDTO", popularChallengesDTO);
+        model.addAttribute("challengeDTO", challengeDTO);
+        model.addAttribute("popularChallengesDTO", popularChallengesDTO);
 
-        }
+    }
 
     @GetMapping("/user/detail{id}")
     public String viewChallengeDetail(@PathVariable Integer id, Model model) {

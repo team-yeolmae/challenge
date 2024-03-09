@@ -3,9 +3,25 @@
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
       layout:decorate="~{layout/userbasic.html}">
 
+<head>
+    <style>
+
+        .btn-primary {
+            background-color:#2752E7;
+            color:#fff;
+            font-size:1rem;"
+        }
+
+        label {
+            font-weight: 400;
+        }
+
+    </style>
+</head>
 
 <div layout:fragment="content">
-    <section class="py-5">
+<div class="mb-5">
+    <section class="mt-3">
         <div class="container px-4 px-lg-5 my-5">
             <!-- Thymeleaf iteration to display product details -->
             <div class="row gx-4 gx-lg-5 align-items-center" th:each="dto : ${challengeDTO}">
@@ -13,7 +29,7 @@
                     <img class="card-img-top mb-5 mb-md-0" src="https://dummyimage.com/600x600/dee2e6/6c757d.jpg" alt="..." />
                 </div>
                 <div class="col-md-6">
-                    <div class="small mb-1" th:text="${'SKU: ' + dto.id}"></div>
+                    <div class="small mb-1" th:text="${'challenge id : ' + dto.id}"></div>
                     <h1 class="display-5 fw-bolder mb-5" th:text="${dto.title}"></h1>
 
                     <div class="fs-5 mb-5">
@@ -39,7 +55,7 @@
                         <h6>주의사항</h6>
                     </div>
 
-                    <span class="fw-bolder">꼭 화면으로 인증해주세요</span>
+                    <span class="fw-bolder">사진과 함께 인증해주세요</span>
                     </div>
 
                     <div class="d-flex">
@@ -55,8 +71,80 @@
     </section>
 
 
+    <div class="d-flex justify-content-center">
+        <button class="btn btn-primary" id="show-comment-section">챌린지 인증하기</button>
+    </div>
+
+    <!--댓글 등록 영역-->
+    <section class="mt-3" id="comment-section" style="display: none;">
+        <div class="container px-2 px-lg-5 my-5">
+            <!-- 댓글 등록 폼 -->
+            <form id="" action="#!">
+                <div class="row gy-4 gy-xl-5 p-4 p-xl-5">
+
+                    <div class="col-6 col-md-4">
+                        <label>작성자</label>
+                        <input type="text" class="form-control" value="" readonly>
+                    </div>
+
+                    <div class="col-6 col-md-4">
+                        <label>작성일</label>
+                        <input type="text" class="form-control" value="" readonly>
+                    </div>
+
+                    <div class="col-12">
+                        <label for="comment" class="form-label">Comment <span class="text-danger">*</span></label>
+                        <textarea class="form-control" id="comment" rows="3" required></textarea>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="formFileMultiple" class="form-label">사진 첨부</label>
+                        <input class="form-control" type="file" id="formFileMultiple" multiple>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="d-grid">
+                            <button class="btn btn-primary btn-lg">인증하기</button>
+                        </div>
+                    </div>
+
+                </div>
+            </form>
+        </div>
+    </section>
+
+
+    <script>
+        // 챌린지 인증하기 버튼 클릭 시 댓글 등록 영역 표시
+        document.getElementById('show-comment-section').addEventListener('click', function () {
+            document.getElementById('comment-section').style.display = 'block';
+        });
+    </script>
+
+
+    <div id="#repliesContainer"></div>
 
 </div>
+</div>
+
+
+<script layout:fragment="script" th:inline="javascript">
+    $(document).ready(function() {
+        var challengeId = dto.id;
+        var repliesHtml = "";
+
+        $.get("/challenge/" + challengeId + "/replies", function(data) {
+            var repliesHtml = "";
+            data.forEach(function(reply) {
+                repliesHtml += "<div>";
+                repliesHtml += "<p>" + reply.replyer + ": " + reply.replyText + "</p>";
+                repliesHtml += "<p>등록일: " + reply.registerDate + "</p>";
+                repliesHtml += "</div>";
+            });
+            $("#repliesContainer").html(repliesHtml);
+        });
+    });
+</script>
 
 
 <script layout:fragment="script" th:inline="javascript">
