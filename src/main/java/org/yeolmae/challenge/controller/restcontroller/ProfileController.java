@@ -37,6 +37,7 @@ public class ProfileController { // 회원 정보 수정
         ProfileUpdateResponse response = memberService.profileUpdate(request);
 
         return new ResponseEntity<>(response, HttpStatus.OK);
+
     }
 
 
