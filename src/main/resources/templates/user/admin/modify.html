@@ -16,7 +16,7 @@
         </div>
         <div class="card-body">
 
-          <form th:action="@{/challenge/admin/modify}" method="post" id="f1">
+          <form th:action="@{/templates/user/admin/modify}" method="post" id="f1">
             <input type="hidden" name="_method" value="put">
             <div class="input-group mb-3">
               <span class="input-group-text">Id</span>
@@ -63,10 +63,47 @@
             <div class="my-4">
               <div class="float-end">
                 <button type="button" class="btn btn-primary listBtn">목록으로</button>
-                <button type="button" class="btn btn-secondary modBtn">수정하기</button>
-                <button type="button" class="btn btn-danger deleteBtn">삭제하기</button>
+                <button type="button" class="btn btn-secondary modBtn" data-bs-toggle="modal" data-bs-target="#confirmModal">수정하기</button>
+                <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal" data-bs-target="#deleteModal">삭제하기</button>
               </div>
             </div>
+
+            <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Hustle Log</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p>수정하시겠습니까?</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" id="confirmModifyBtn">수정</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+              <div class="modal-dialog">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title" id="deleteModalLabel">Hustle Log</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                  </div>
+                  <div class="modal-body">
+                    <p>삭제하시겠습니까?</p>
+                  </div>
+                  <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                    <button type="button" class="btn btn-primary" id="deleteModalBtn">삭제</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+
           </form>
 
         </div>
@@ -103,28 +140,56 @@
 
   }, false)
 
-  document.querySelector(".modBtn").addEventListener("click", function(e){
-    e.preventDefault()
-    e.stopPropagation()
-
-    formObj.action = `/challenge/admin/modify?${link}`
+  const modal = new bootstrap.Modal(document.querySelector("#confirmModal"));
+  const modaldelete = new bootstrap.Modal(document.querySelector("#deleteModal"));
 
 
-    formObj.method ='post'
-    formObj.submit()
+  document.querySelector(".modBtn").addEventListener("click", function(e) {
+    e.preventDefault();
+    e.stopPropagation();
 
-  }, false)
+    formObj.action = `/challenge/admin/modify?${link}`;
+
+    modal.show();
+  }, false);
+
+  document.querySelector("#confirmModifyBtn").addEventListener("click", function(e) {
+    e.preventDefault();
+    e.stopPropagation();
+
+    // 여기에 서버로 수정 요청을 보내는 코드를 추가
+    formObj.action = `/challenge/admin/modify?${link}`;
+    formObj.method = 'post';
+    formObj.submit();
+
+    // 임시로 alert을 사용하여 확인
+    alert("수정이 완료되었습니다.");
+
+    // 모달 닫기
+    modal.hide();
+  }, false);
 
   document.querySelector(".deleteBtn").addEventListener("click", function(e){
     e.preventDefault()
     e.stopPropagation()
 
     formObj.action = `/challenge/admin/delete`
-    formObj.method ='post'
-    formObj.submit()
+    modaldelete.show()
   }, false)
 
+  document.querySelector("#deleteModalBtn").addEventListener("click", function(e) {
+    e.preventDefault();
+    e.stopPropagation();
 
+    // 여기에 서버로 수정 요청을 보내는 코드를 추가
+    formObj.action = `/challenge/admin/delete`;
+    formObj.method = 'post';
+    formObj.submit();
+
+
+    // 모달 닫기
+    modaldelete.hide();
+  }, false);
 
 
 </script>
