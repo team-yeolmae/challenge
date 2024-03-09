@@ -49,13 +49,14 @@ public class MypageController {
 
         Member member = memberService.getMember();
 
+        String email = member.getEmail();
         String nickname = member.getNickname();
         int level = member.getLevel();
 
         Page<HistoryResponse> historyPage = historyService.readAllHistoryById(pageable, member.getId());
         List<HistoryResponse> historyList = historyPage.getContent();
 
-        MypageResponse response = new MypageResponse(nickname, level, historyList);
+        MypageResponse response = new MypageResponse(email, nickname, level, historyList);
 
         log.info(response);
         System.out.println(response);

@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.yeolmae.challenge.domain.Member;
+import org.yeolmae.challenge.domain.dto.profile.ProfileDeleteResponse;
 import org.yeolmae.challenge.domain.dto.profile.ProfileResponse;
 import org.yeolmae.challenge.domain.dto.profile.ProfileUpdateRequest;
 import org.yeolmae.challenge.domain.dto.profile.ProfileUpdateResponse;
@@ -55,6 +56,21 @@ public class MemberService {
         log.info(request.getPw(),request.getNickname());
 
         return new ProfileUpdateResponse(foundMember.getEmail(), foundMember.getPw(), foundMember.getNickname());
+    }
+
+    @Transactional
+    public ProfileDeleteResponse profileDelete(String email){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+
+        String username = userDetails.getUsername();
+
+        Member foundMember = memberRepository.findMemberByEmail(username)
+                .orElseThrow(() -> new EntityNotFoundException("사용자 정보를 찾을 수 없습니다."));
+
+        memberRepository.delete(foundMember);
+
+        return new ProfileDeleteResponse(foundMember.getEmail());
     }
 
 //    @Transactional
