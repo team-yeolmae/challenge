@@ -30,7 +30,7 @@
                 <li class="nav-item"><a class="nav-link active" aria-current="page" href="main">홈</a></li>
                 <li class="nav-item"><a class="nav-link active" aria-current="page" href="/user/mypage">마이페이지</a></li>
             </ul>
-            <!-- 추가 사항 -->
+
             <!-- 로그인이 되어 있는 상태에서 로그아웃 버튼이 뜸. -->
             <div sec:authorize="isAuthenticated()">
                 <form class="d-flex" action="/logout" method="post">
