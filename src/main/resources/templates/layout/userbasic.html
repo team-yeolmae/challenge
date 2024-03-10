@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      xmlns:th="http://www.thymeleaf.org">
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 
 <head>
     <meta charset="utf-8" />
@@ -27,12 +28,21 @@
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item"><a class="nav-link active" aria-current="page" href="main">홈</a></li>
-                <li class="nav-item"><a class="nav-link active" aria-current="page" href="#">마이페이지</a></li>
+                <li class="nav-item"><a class="nav-link active" aria-current="page" href="/user/mypage">마이페이지</a></li>
             </ul>
-
-            <form class="d-flex" action="/loginForm" method="get">
-                <button class="btn btn-outline-primary" type="submit">로그인</button>
-            </form>
+            <!-- 추가 사항 -->
+            <!-- 로그인이 되어 있는 상태에서 로그아웃 버튼이 뜸. -->
+            <div sec:authorize="isAuthenticated()">
+                <form class="d-flex" action="/logout" method="post">
+                    <button class="btn btn-outline-primary" type="submit">로그아웃</button>
+                </form>
+            </div>
+            <!-- 로그아웃이 되어 있는 상태에서 로그인 버튼이 뜸. -->
+            <div sec:authorize="isAnonymous()">
+                <form class="d-flex" action="/loginForm" method="get">
+                    <button class="btn btn-outline-primary" type="submit">로그인</button>
+                </form>
+            </div>
 
         </div>
     </div>
