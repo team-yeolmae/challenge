@@ -121,7 +121,7 @@
     <tr th:each="dto:${challengeDTO.challengeList}"  >
         <td>[[${dto.id}]]</td>
         <td>
-            <a th:href="|@{/templates/admin/read(id =${dto.id})}&${link}|" class="text-decoration-none"> [[${dto.title}]] </a>
+            <a th:href="|@{/admin/read(id =${dto.id})}&${link}|" class="text-decoration-none"> [[${dto.title}]] </a>
         </td>
         <td>[[${dto.writer}]]</td>
         <td>[[${#temporals.format(dto.registerDate, 'yyyy-MM-dd')}]]</td>

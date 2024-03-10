@@ -111,6 +111,51 @@
     </div><!-- end col-->
   </div><!-- end row-->
 
+  <!—- 첨부 파일 섬네일을 보여줄 부분 -->
+  <div class="row mt-3">
+    <div class="col">
+      <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap; justify-content: center;">
+        <th:block th:each="fileName:${dto.fileNames}">
+          <div class="card col-4" th:with = "arr = ${fileName.split('_')}">
+            <div class="card-header d-flex justify-content-center">
+              [[${arr[1]}]]
+              <button class="btn-sm btn-danger"
+                      th:onclick="removeFile([[${arr[0]}]], [[${arr[1]}]], this)">X</button>
+            </div>
+            <div class="card-body">
+              <img th:src="|/view/${fileName}|" th:data-src="${fileName}" >
+            </div>
+          </div><!-- card -->
+        </th:block>
+      </div>
+    </div>
+  </div>
+
+  <!—- 첨부파일 추가를 위한 모달창 -->
+  <div class="modal uploadModal" tabindex="-1">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Upload File</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body">
+          <div class="input-group mb-3">
+            <input type="file" name="files" class="form-control" multiple >
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-primary uploadBtn">Upload</button>
+          <button type="button" class="btn btn-outline-dark closeUploadBtn" >Close</button>
+        </div>
+      </div>
+    </div>
+  </div><!-- register modal -->
+
+  <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+
+  <script src="/js/upload.js"></script>
+
 </div>
 
 
@@ -137,7 +182,7 @@
     e.stopPropagation()
 
     formObj.reset()
-    self.location =`/challenge/admin/list?${link}`
+    self.location =`/admin/list?${link}`
 
   }, false)
 
@@ -149,17 +194,68 @@
     e.preventDefault();
     e.stopPropagation();
 
-    formObj.action = `/challenge/admin/modify?${link}`;
+    formObj.action = `/admin/modify?${link}`;
+
+    //첨부파일 추가
+    appendFileData()
+
+    //삭제대상 파일들의 삭제
+    callRemoveFiles()
 
     modal.show();
   }, false);
+
+  function appendFileData(){
+
+    const target = document.querySelector(".uploadHidden")
+    const uploadFiles = uploadResult.querySelectorAll("img")
+
+    let str = ''
+
+    for (let i = 0; i < uploadFiles.length ; i++) {
+      const uploadFile = uploadFiles[i]
+      const imgLink = uploadFile.getAttribute("data-src")
+
+      str += `<input type='hidden' name='fileNames' value="${imgLink}">`
+    }
+
+    target.innerHTML = str;
+
+  }
+
+  //최종적으로 삭제될 파일들의 목록
+  const removeFileList = []
+  function removeFile(image_detail,fileName, obj){
+
+    if(!confirm("파일을 삭제하시겠습니까?")){
+      return
+    }
+
+    console.log(image_detail)
+    console.log(fileName)
+
+    console.log(obj)
+
+    removeFileList.push({image_detail,fileName})
+
+    const targetDiv = obj.closest(".card")
+    targetDiv.remove()
+  }
+  function callRemoveFiles(){
+
+    removeFileList.forEach( ({image_detail,fileName}) => {
+      removeFileToServer({image_detail, fileName})
+    })
+  }
+
+
 
   document.querySelector("#confirmModifyBtn").addEventListener("click", function(e) {
     e.preventDefault();
     e.stopPropagation();
 
     // 여기에 서버로 수정 요청을 보내는 코드를 추가
-    formObj.action = `/challenge/admin/modify?${link}`;
+    formObj.action = `/admin/modify?${link}`;
     formObj.method = 'post';
     formObj.submit();
 
@@ -174,7 +270,7 @@
     e.preventDefault()
     e.stopPropagation()
 
-    formObj.action = `/challenge/admin/delete`
+    formObj.action = `/admin/delete`
     modaldelete.show()
   }, false)
 
@@ -183,7 +279,7 @@
     e.stopPropagation();
 
     // 여기에 서버로 수정 요청을 보내는 코드를 추가
-    formObj.action = `/challenge/admin/delete`;
+    formObj.action = `/admin/delete`;
     formObj.method = 'post';
     formObj.submit();
 
@@ -191,6 +287,51 @@
     // 모달 닫기
     modaldelete.hide();
   }, false);
+
+  document.querySelector(".uploadBtn").addEventListener("click", function(e){
+
+    const formObj = new FormData();
+
+    const fileInput = document.querySelector("input[name='files']")
+
+    console.log(fileInput.files)
+
+    const files = fileInput.files
+
+    for (let i = 0; i < files.length; i++) {
+      formObj.append("files", files[i]);
+    }
+
+
+    uploadToServer(formObj).then(result => {
+      console.log(result)
+      //console.log(result)
+      for (const uploadResult of result) {
+        showUploadFile(uploadResult)
+      }
+      uploadModal.hide()
+    }).catch(e => {
+      uploadModal.hide()
+    })
+
+  },false)
+
+  const uploadResult = document.querySelector(".uploadResult")
+
+  function showUploadFile({image_detail, fileName, link}){
+
+    const str =`<div class="card col-4">
+            <div class="card-header d-flex justify-content-center">
+                ${fileName}
+                <button class="btn-sm btn-danger" onclick="javascript:removeFile('${image_detail}', '${fileName}', this)" >X</button>
+            </div>
+            <div class="card-body">
+                 <img src="/view/${link}" data-src="${image_detail+"_"+fileName}" >
+            </div>
+        </div><!-- card -->`
+
+    uploadResult.innerHTML += str
+  }
 
 
 </script>

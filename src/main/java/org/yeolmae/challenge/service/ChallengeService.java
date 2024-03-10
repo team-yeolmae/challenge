@@ -2,6 +2,7 @@ package org.yeolmae.challenge.service;
 
 import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
+@Log4j2
 public class ChallengeService {
 
     private final ChallengeRepository challengeRepository;
@@ -112,34 +114,36 @@ public class ChallengeService {
     }
 
     //view
-    public PageResponseDTO<ReadChallengeResponse> readAllChallenge(PageRequestDTO pageRequestDTO) {
-        String[] types = pageRequestDTO.getTypes();
-        String keyword = pageRequestDTO.getKeyword();
-        Pageable pageable = pageRequestDTO.getPageable("id");
-
-        Page<Challenge> result = challengeRepository.findAll(pageable);
-
-        List<ReadChallengeResponse> challengeList = new ArrayList<>();
-        for (Challenge challenge : result.getContent()) {
-            ReadChallengeResponse response = new ReadChallengeResponse();
-            response.setId(challenge.getId());
-            response.setTitle(challenge.getTitle());
-            response.setWriter(challenge.getWriter());
-            response.setContent(challenge.getContent());
-            response.setRegisterDate(challenge.getRegisterDate());
-            response.setStartDate(challenge.getStartDate());
-            response.setEndDate(challenge.getEndDate());
-
-            challengeList.add(response);
-        }
-
-        return PageResponseDTO.<ReadChallengeResponse>withAll()
-                .pageRequestDTO(pageRequestDTO)
-                .challengeList(challengeList)
-                .total((int)result.getTotalElements())
-                .build();
-
-    }
+//    public PageResponseDTO<ReadChallengeResponse> readAllChallenge(PageRequestDTO pageRequestDTO) {
+//        String[] types = pageRequestDTO.getTypes();
+//        String keyword = pageRequestDTO.getKeyword();
+//        Pageable pageable = pageRequestDTO.getPageable("id");
+//
+//        Page<Challenge> result = challengeRepository.findAll(pageable);
+//
+//
+//        List<ReadChallengeResponse> challengeList = new ArrayList<>();
+//        for (Challenge challenge : result.getContent()) {
+//            ReadChallengeResponse response = new ReadChallengeResponse();
+//            response.setId(challenge.getId());
+//            response.setTitle(challenge.getTitle());
+//            response.setWriter(challenge.getWriter());
+//            response.setContent(challenge.getContent());
+//            response.setRegisterDate(challenge.getRegisterDate());
+//            response.setStartDate(challenge.getStartDate());
+//            response.setEndDate(challenge.getEndDate());
+//
+//            challengeList.add(response);
+//        }
+//
+//
+//        return PageResponseDTO.<ReadChallengeResponse>withAll()
+//                .pageRequestDTO(pageRequestDTO)
+//                .challengeList(challengeList)
+//                .total((int)result.getTotalElements())
+//                .build();
+//
+//    }
 
     public PageResponse1DTO<ReadChallengeResponse> readAllChallenge1(PageRequest1DTO pageRequest1DTO) {
         String[] types = pageRequest1DTO.getTypes();
@@ -148,6 +152,7 @@ public class ChallengeService {
 
         Page<Challenge> result = challengeRepository.findAll(pageable);
 
+
         List<ReadChallengeResponse> challengeList = new ArrayList<>();
         for (Challenge challenge : result.getContent()) {
             ReadChallengeResponse response = new ReadChallengeResponse();
@@ -159,7 +164,17 @@ public class ChallengeService {
             response.setStartDate(challenge.getStartDate());
             response.setEndDate(challenge.getEndDate());
 
+            // 이미지 정보 읽어와서 fileNames 필드 설정
+            List<String> fileNames = challenge.getImageSet().stream()
+                    .sorted()
+                    .map(challengeImage -> challengeImage.getImage_detail() + "_" + challengeImage.getImage_thumb())
+                    .collect(Collectors.toList());
+
+            response.setFileNames(fileNames);
+
             challengeList.add(response);
+            log.info(response);
+
         }
 
         return PageResponse1DTO.<ReadChallengeResponse>withAll()  // 수정
@@ -168,6 +183,7 @@ public class ChallengeService {
                 .total((int) result.getTotalElements())  // 수정
                 .build();
     }
+
     public PageResponse1DTO<ReadChallengeResponse> readPopularChallenges(PageRequest1DTO pageRequest1DTO) {
         String[] types = pageRequest1DTO.getTypes();
         String keyword = pageRequest1DTO.getKeyword();
@@ -186,7 +202,16 @@ public class ChallengeService {
             response.setStartDate(challenge.getStartDate());
             response.setEndDate(challenge.getEndDate());
 
+            // 이미지 정보 읽어와서 fileNames 필드 설정
+            List<String> fileNames = challenge.getImageSet().stream()
+                    .sorted()
+                    .map(challengeImage -> challengeImage.getImage_detail() + "_" + challengeImage.getImage_thumb())
+                    .collect(Collectors.toList());
+
+            response.setFileNames(fileNames);
+
             challengeList.add(response);
+            log.info(response);
         }
 
         return PageResponse1DTO.<ReadChallengeResponse>withAll()  // 수정

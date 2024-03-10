@@ -31,4 +31,7 @@ public class ReadChallengeResponse {
 
     private List<String> fileNames;
 
+    private List<ChallengeImageDTO> challengeImages;
+
+
 }

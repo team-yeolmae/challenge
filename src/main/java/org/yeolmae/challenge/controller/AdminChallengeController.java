@@ -33,7 +33,7 @@ public class AdminChallengeController {
             log.info("has errors.......");
             log.info("Errors: {}", bindingResult.getAllErrors());
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-            return "redirect:/challenge/register";
+            return "redirect:/register";
         }
 
         log.info(createChallengeRequest);
@@ -42,7 +42,7 @@ public class AdminChallengeController {
 
         redirectAttributes.addFlashAttribute("result", id);
 
-        return "redirect:/challenge/admin/list";
+        return "redirect:/admin/list";
     }
 
     @GetMapping({"/read", "/modify"})
@@ -72,7 +72,7 @@ public class AdminChallengeController {
 
             redirectAttributes.addAttribute("id", id);
 
-            return "redirect:/challenge/admin/modify?"+link;
+            return "redirect:/admin/modify?"+link;
         }
 
         challengeService.updateChallenge(id, request);
@@ -85,7 +85,7 @@ public class AdminChallengeController {
 
         redirectAttributes.addAttribute("id", id);
 
-        return "redirect:/challenge/admin/read";
+        return "redirect:/admin/read";
     }
 
     @PostMapping("/delete")
@@ -100,7 +100,7 @@ public class AdminChallengeController {
         redirectAttributes.addFlashAttribute("delete", "deleted");
 
 
-        return "redirect:/challenge/admin/list";
+        return "redirect:/admin/list";
 
     }
 
