@@ -12,7 +12,7 @@
 
 </head>
 <body>
-    <div layout:fragment="content" th:fragment="content" class="container">
+    <div layout:fragment="content" class="container">
 
         <form class="profileList">
 
@@ -57,15 +57,14 @@
 
     </div>
 
-    <script th:src="@{/js/scripts.js}"></script>
-
-<script layout:fragment="script" th:inline="javascript">
+<script layout:fragment="javascript">
 
         $(document).ready(function () {
             $.get("/user/api/mypage/profile", function (data) {
                 $('#email').val(data.email);
                 $('#pw').val(data.pw);
                 $('#nickname').val(data.nickname);
+                console.log("데이터 가져오기 성공");
             });
         });
 
@@ -107,8 +106,10 @@
                 });
             });
         });
+
 </script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script th:src="@{/js/scripts.js}"></script>
 </body>
 </html>
