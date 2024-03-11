@@ -55,64 +55,61 @@
 
         </form>
 
-    </div>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+        <script th:src="@{/js/scripts.js}"></script>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
-    <script th:src="@{/js/scripts.js}"></script>
-
-    <script layout:fragment="script">
-
-        $(document).ready(function () {
-            $.get("/user/api/mypage/profile", function (data) {
-                $('#email').val(data.email);
-                $('#pw').val(data.pw);
-                $('#nickname').val(data.nickname);
-                console.log("데이터 가져오기 성공");
-            });
-        });
-
-        $(document).ready(function () {
-
-            const emailText = $(".emailText")
-            const pwText = $(".pwText")
-            const nicknameText = $(".nicknameText")
-            const btnUpdate = $(".btnUpdate")
-
-            btnUpdate.on("click", function (e) {
-                e.preventDefault();
-                $('#updateConfirmationModal').modal('show');
-            });
-
-            $('#confirmUpdate').on("click", function () {
-
-                const profileObj = {
-                    email: emailText.val(),
-                    pw: pwText.val(),
-                    nickname: nicknameText.val()
-                };
-
-                $.ajax({
-                    type: "PUT",
-                    url: "/user/api/mypage/profile",
-                    data: JSON.stringify(profileObj),
-                    contentType: "application/json; charset=utf-8",
-                    dataType: "json",
-                    success: function (response) {
-                        console.log("성공:", response);
-                        alert("이메일 " + response.email + " 님의 회원 정보가 수정되었습니다.");
-                        window.history.back();
-                    },
-                    error: function (error) {
-                        alert("회원 정보 수정에 실패했습니다.");
-                        console.error(error);
-                    }
+        <script type="text/javascript">
+            $(document).ready(function () {
+                $.get("/user/api/mypage/profile", function (data) {
+                    $('#email').val(data.email);
+                    $('#pw').val(data.pw);
+                    $('#nickname').val(data.nickname);
+                    console.log("데이터 가져오기 성공");
                 });
             });
-        });
 
-</script>
+            $(document).ready(function () {
 
+                const emailText = $(".emailText")
+                const pwText = $(".pwText")
+                const nicknameText = $(".nicknameText")
+                const btnUpdate = $(".btnUpdate")
 
+                btnUpdate.on("click", function (e) {
+                    e.preventDefault();
+                    $('#updateConfirmationModal').modal('show');
+                });
+
+                $('#confirmUpdate').on("click", function () {
+
+                    const profileObj = {
+                        email: emailText.val(),
+                        pw: pwText.val(),
+                        nickname: nicknameText.val()
+                    };
+
+                    $.ajax({
+                        type: "PUT",
+                        url: "/user/api/mypage/profile",
+                        data: JSON.stringify(profileObj),
+                        contentType: "application/json; charset=utf-8",
+                        dataType: "json",
+                        success: function (response) {
+                            console.log("성공:", response);
+                            alert("이메일 " + response.email + " 님의 회원 정보가 수정되었습니다.");
+                            window.history.back();
+                        },
+                        error: function (error) {
+                            alert("회원 정보 수정에 실패했습니다.");
+                            console.error(error);
+                        }
+                    });
+                });
+            });
+
+        </script>
+
+    </div>
 </body>
 </html>
