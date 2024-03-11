@@ -80,4 +80,4 @@ public class ChallengeController {
 //    public ResponseEntity<ParticipateChallengeResponse> challengeParticipate(@PathVariable )
 //
 //
-//}
+}
