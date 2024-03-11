@@ -85,7 +85,6 @@ public class ChallengeController {
 
     @PostMapping("/participate")
     public ResponseEntity<?> participateInChallenge(@RequestBody ChallengeParticipateRequest request){
-
         log.info("🐱‍👤 method 요청됨.");
         int memberID = memberService.getMember().getId();
 
@@ -96,6 +95,23 @@ public class ChallengeController {
         } else {
             return ResponseEntity.badRequest().body(Map.of("success", false, "message","참가에 실패하였습니다."));
         }
+    }
+
+    @GetMapping("/checkParticipation")
+    public ResponseEntity<?> checkParticipation(@RequestParam int challengeId) {
+        log.info("🌹 method 요청됨.");
+        int memberId = memberService.getMember().getId();
+
+        boolean participated = challengeService.checkParticipation(memberId, challengeId);
+
+        if (participated) {
+            // 참여 하지 않은 경우
+            return ResponseEntity.ok(Map.of("success", true, "message", "참여 가능한 챌린지입니다."));
+        } else {
+            // 이미 참여 중인 경우,,?
+            return ResponseEntity.badRequest().body(Map.of("success", false, "message","이미 참여 중이거나 참여했던 챌린지입니다."));
+        }
+
     }
 
 }
