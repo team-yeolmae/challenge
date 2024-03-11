@@ -12,13 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import org.yeolmae.challenge.domain.dto.DeleteChallengeResponse;
-import org.yeolmae.challenge.domain.dto.ReadChallengeResponse;
-import org.yeolmae.challenge.domain.dto.UpdateChallengeRequest;
-import org.yeolmae.challenge.domain.dto.UpdateChallengeResponse;
-import org.yeolmae.challenge.domain.dto.CreateChallengeRequest;
-import org.yeolmae.challenge.domain.dto.CreateChallengeResponse;
-import org.yeolmae.challenge.service.AdminChallengeService;
+import org.yeolmae.challenge.domain.dto.*;
 import org.yeolmae.challenge.service.ChallengeService;
 
 @RestController
@@ -82,8 +76,8 @@ public class ChallengeController {
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
-    @PostMapping("/participate")
-    public ResponseEntity<ParticipateChallengeResponse> challengeParticipate(@PathVariable )
-
-
-}
+//    @PostMapping("/participate")
+//    public ResponseEntity<ParticipateChallengeResponse> challengeParticipate(@PathVariable )
+//
+//
+//}
