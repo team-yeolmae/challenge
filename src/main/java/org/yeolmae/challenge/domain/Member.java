@@ -1,5 +1,6 @@
 package org.yeolmae.challenge.domain;
 
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -43,7 +44,8 @@ public class Member {
         this.nickname = nickname;
     }
 
-    @OneToMany(mappedBy = "member")
-    private Set<History> histories = new HashSet<>();
+//    @JsonManagedReference
+//    @OneToMany(mappedBy = "member", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY, orphanRemoval = true)
+//    private Set<History> histories = new HashSet<>();
 
 }
