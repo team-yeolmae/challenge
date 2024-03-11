@@ -1,6 +1,7 @@
 package org.yeolmae.challenge.controller.restcontroller;
 
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,12 +18,15 @@ import org.yeolmae.challenge.service.MemberService;
 @RestController
 @RequestMapping("/user/api")
 @RequiredArgsConstructor
+@Log4j2
 public class ProfileController { // 회원 정보 수정
 
     private final MemberService memberService;
 
     @GetMapping("/mypage/profile")
     public ResponseEntity<ProfileResponse> getProfile(){
+
+        log.info("dddd");
 
         Member member = memberService.getMember();
 
@@ -34,6 +38,8 @@ public class ProfileController { // 회원 정보 수정
 
     @PutMapping("/mypage/profile")
     public ResponseEntity<ProfileUpdateResponse> updateProfile(@RequestBody ProfileUpdateRequest request) {
+
+        log.info("sssss");
 
         ProfileUpdateResponse response = memberService.profileUpdate(request);
 
