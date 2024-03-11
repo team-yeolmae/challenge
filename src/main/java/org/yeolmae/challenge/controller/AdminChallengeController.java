@@ -75,6 +75,12 @@ public class AdminChallengeController {
             return "redirect:/admin/modify?"+link;
         }
 
+//        // 기존 파일 목록을 가져와서 새로운 파일 목록으로 업데이트
+//        List<String> newFileNames = request.getFileNames();
+//
+//        // 이 부분은 실제 데이터 모델에 맞게 업데이트가 필요한 부분입니다.
+//        request.setFileNames(newFileNames);
+
         challengeService.updateChallenge(id, request);
 
         log.info("challenge modify post......." + id);

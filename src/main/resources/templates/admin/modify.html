@@ -63,16 +63,19 @@
             <div class="my-4">
               <div class="float-end">
                 <button type="button" class="btn btn-primary listBtn">목록으로</button>
-                <button type="button" class="btn btn-secondary modBtn" data-bs-toggle="modal" data-bs-target="#confirmModal">수정하기</button>
-                <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal" data-bs-target="#deleteModal">삭제하기</button>
+<!--                <button type="button" class="btn btn-secondary modBtn" data-bs-toggle="modal" data-bs-target="#confirmModal">수정하기</button>-->
+<!--                <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal" data-bs-target="#deleteModal">삭제하기</button>-->
+                <button type="button" class="btn btn-secondary modBtn" data-bs-toggle="modal" data-bs-target="#confirmModifyModal">수정하기</button>
+                <button type="button" class="btn btn-danger deleteBtn" data-bs-toggle="modal" data-bs-target="#confirmDeleteModal">삭제하기</button>
               </div>
             </div>
 
-            <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <!-- 수정하기 버튼 모달 -->
+            <div class="modal fade" id="confirmModifyModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLabel">Hustle Log</h5>
+                    <h5 class="modal-title" id="exampleModalLabel">Challenge 수정 확인</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
@@ -86,11 +89,12 @@
               </div>
             </div>
 
-            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+            <!-- 삭제하기 버튼 모달 -->
+            <div class="modal fade" id="confirmDeleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
               <div class="modal-dialog">
                 <div class="modal-content">
                   <div class="modal-header">
-                    <h5 class="modal-title" id="deleteModalLabel">Hustle Log</h5>
+                    <h5 class="modal-title" id="deleteModalLabel">Challenge 삭제 확인</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                   </div>
                   <div class="modal-body">
@@ -98,7 +102,7 @@
                   </div>
                   <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
-                    <button type="button" class="btn btn-primary" id="deleteModalBtn">삭제</button>
+                    <button type="button" class="btn btn-primary" id="confirmDeleteBtn">삭제</button>
                   </div>
                 </div>
               </div>
@@ -116,14 +120,14 @@
     <div class="col">
       <div class="container-fluid d-flex uploadResult" style="flex-wrap: wrap; justify-content: center;">
         <th:block th:each="fileName:${dto.fileNames}">
-          <div class="card col-4" th:with = "arr = ${fileName.split('_')}">
+          <div class="card col-4 mb-3" th:with = "arr = ${fileName.split('_')}">
             <div class="card-header d-flex justify-content-center">
               [[${arr[1]}]]
               <button class="btn-sm btn-danger"
                       th:onclick="removeFile([[${arr[0]}]], [[${arr[1]}]], this)">X</button>
             </div>
-            <div class="card-body">
-              <img th:src="|/view/${fileName}|" th:data-src="${fileName}" >
+            <div class="card-body d-flex justify-content-center align-items-center" style="height: 150px;">
+              <img class="img-fluid" th:src="|/view/${fileName}|" th:data-src="${fileName}" style="max-height: 100%; max-width: 100%;">
             </div>
           </div><!-- card -->
         </th:block>
@@ -177,33 +181,33 @@
   const link = [[${pageRequestDTO.getLink()}]]
   const formObj = document.querySelector("#f1")
 
-  document.querySelector(".listBtn").addEventListener("click", function(e){
-    e.preventDefault()
-    e.stopPropagation()
-
-    formObj.reset()
-    self.location =`/admin/list?${link}`
-
-  }, false)
-
-  const modal = new bootstrap.Modal(document.querySelector("#confirmModal"));
-  const modaldelete = new bootstrap.Modal(document.querySelector("#deleteModal"));
-
+  const modal = new bootstrap.Modal(document.querySelector("#confirmModifyModal"));
+  const modaldelete = new bootstrap.Modal(document.querySelector("#confirmDeleteModal"));
 
   document.querySelector(".modBtn").addEventListener("click", function(e) {
     e.preventDefault();
     e.stopPropagation();
 
-    formObj.action = `/admin/modify?${link}`;
-
-    //첨부파일 추가
-    appendFileData()
-
-    //삭제대상 파일들의 삭제
-    callRemoveFiles()
-
-    modal.show();
+    // 수정하기 버튼을 누를 때 해당 모달을 띄웁니다.
+    $("#confirmModifyModal").modal("show");
   }, false);
+
+  // 수정하기 버튼 모달에서 확인 버튼을 누를 때의 동작을 정의합니다.
+  document.querySelector("#confirmModifyBtn").addEventListener("click", function(e) {
+    // 수정 로직 수행
+    formObj.action = `/admin/modify?${link}`;
+    appendFileData();
+    callRemoveFiles();
+    formObj.method = 'post';
+    formObj.submit();
+
+    // 임시로 alert을 사용하여 확인
+    alert("수정이 완료되었습니다.");
+
+    // 모달 닫기
+    modal.hide();
+  }, false);
+
 
   function appendFileData(){
 
@@ -223,62 +227,44 @@
 
   }
 
-  //최종적으로 삭제될 파일들의 목록
-  const removeFileList = []
-  function removeFile(image_detail,fileName, obj){
+  function appendNotShownData(){
 
-    if(!confirm("파일을 삭제하시겠습니까?")){
+    if(removeFileList.length == 0){
       return
     }
 
-    console.log(image_detail)
-    console.log(fileName)
+    const target = document.querySelector(".uploadHidden")
+    let str = ''
 
-    console.log(obj)
+    for (let i = 0; i < removeFileList.length ; i++) {
 
-    removeFileList.push({image_detail,fileName})
+      const {uuid, fileName} = removeFileList[i];
 
-    const targetDiv = obj.closest(".card")
-    targetDiv.remove()
+      str += `<input type='hidden' name='fileNames' value="${uuid}_${fileName}">`
+    }
+    target.innerHTML += str;
   }
+
   function callRemoveFiles(){
 
-    removeFileList.forEach( ({image_detail,fileName}) => {
-      removeFileToServer({image_detail, fileName})
+    removeFileList.forEach( ({uuid,fileName}) => {
+      removeFileToServer({uuid, fileName})
     })
   }
 
-
-
-  document.querySelector("#confirmModifyBtn").addEventListener("click", function(e) {
+  document.querySelector(".deleteBtn").addEventListener("click", function(e) {
     e.preventDefault();
     e.stopPropagation();
 
-    // 여기에 서버로 수정 요청을 보내는 코드를 추가
-    formObj.action = `/admin/modify?${link}`;
-    formObj.method = 'post';
-    formObj.submit();
-
-    // 임시로 alert을 사용하여 확인
-    alert("수정이 완료되었습니다.");
-
-    // 모달 닫기
-    modal.hide();
+    // 삭제하기 버튼을 누를 때 해당 모달을 띄웁니다.
+    $("#confirmDeleteModal").modal("show");
   }, false);
 
-  document.querySelector(".deleteBtn").addEventListener("click", function(e){
-    e.preventDefault()
-    e.stopPropagation()
-
-    formObj.action = `/admin/delete`
-    modaldelete.show()
-  }, false)
-
-  document.querySelector("#deleteModalBtn").addEventListener("click", function(e) {
-    e.preventDefault();
-    e.stopPropagation();
-
-    // 여기에 서버로 수정 요청을 보내는 코드를 추가
+  // 삭제하기 버튼 모달에서 확인 버튼을 누를 때의 동작을 정의합니다.
+  document.querySelector("#confirmDeleteBtn").addEventListener("click", function(e) {
+    // 삭제 로직 수행
+    appendFileData();
+    appendNotShownData();
     formObj.action = `/admin/delete`;
     formObj.method = 'post';
     formObj.submit();
@@ -287,6 +273,47 @@
     // 모달 닫기
     modaldelete.hide();
   }, false);
+
+
+  document.querySelector(".listBtn").addEventListener("click", function(e){
+    e.preventDefault()
+    e.stopPropagation()
+
+    formObj.reset()
+    self.location =`/admin/list?${link}`
+
+  }, false)
+
+
+  //최종적으로 삭제될 파일들의 목록
+  const removeFileList = []
+  function removeFile(uuid,fileName, obj){
+
+    if(!confirm("파일을 삭제하시겠습니까?")){
+      return
+    }
+
+    console.log(uuid)
+    console.log(fileName)
+
+    console.log(obj)
+
+    removeFileList.push({uuid,fileName})
+
+    const targetDiv = obj.closest(".card")
+    targetDiv.remove()
+  }
+
+  //업로드 모달
+  const uploadModal = new bootstrap.Modal(document.querySelector(".uploadModal"))
+
+  document.querySelector(".uploadFileBtn").addEventListener("click", function(e){
+
+    e.stopPropagation()
+    e.preventDefault()
+    uploadModal.show()
+
+  }, false)
 
   document.querySelector(".uploadBtn").addEventListener("click", function(e){
 
@@ -318,20 +345,22 @@
 
   const uploadResult = document.querySelector(".uploadResult")
 
-  function showUploadFile({image_detail, fileName, link}){
+  function showUploadFile({uuid, fileName, link}){
 
     const str =`<div class="card col-4">
             <div class="card-header d-flex justify-content-center">
                 ${fileName}
-                <button class="btn-sm btn-danger" onclick="javascript:removeFile('${image_detail}', '${fileName}', this)" >X</button>
+                <button class="btn-sm btn-danger" onclick="javascript:removeFile('${uuid}', '${fileName}', this)" >X</button>
             </div>
-            <div class="card-body">
-                 <img src="/view/${link}" data-src="${image_detail+"_"+fileName}" >
+            <div class="card-body d-flex justify-content-center align-items-center" style="height: 150px;">
+                 <img class="img-fluid" src="/view/${link}" data-src="${uuid+"_"+fileName}" style="max-height: 100%; max-width: 100%;">>
             </div>
         </div><!-- card -->`
 
     uploadResult.innerHTML += str
   }
+
+
 
 
 </script>

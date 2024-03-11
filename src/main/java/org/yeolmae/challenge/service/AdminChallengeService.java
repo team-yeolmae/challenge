@@ -94,7 +94,9 @@ public class AdminChallengeService {
     @Transactional
     public void updateChallenge(Integer id, UpdateChallengeRequest request) {
 
-        Challenge foundChallenge = challengeRepository.findById(id)
+        Optional<Challenge> result = challengeRepository.findById(id);
+
+        Challenge foundChallenge = result
                 .orElseThrow(() -> new EntityNotFoundException("해당 id로 조회된 게시물이 없습니다."));
 
 //        Challenge challenge = foundChallenge.orElseThrow(() -> new EntityNotFoundException("해당 id로 조회된 게시글이 없습니다."));
@@ -106,6 +108,15 @@ public class AdminChallengeService {
                 request.getStartDate(),
                 request.getEndDate()
         );
+
+        foundChallenge.clearChallengeImage();
+
+        if(request.getFileNames() != null){
+            for (String fileName : request.getFileNames()) {
+                String[] arr = fileName.split("_");
+                foundChallenge.addChallengeImage(arr[0], arr[1]);
+            }
+        }
 
         log.info("Request received: {}", request);
 
