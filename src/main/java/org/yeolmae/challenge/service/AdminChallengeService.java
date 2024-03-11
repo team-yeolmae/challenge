@@ -46,6 +46,10 @@ public class AdminChallengeService {
 
         Challenge savedChallenge = challengeRepository.save(challenge);
 
+        List<String> fileNames = savedChallenge.getImageSet().stream()
+                .sorted()
+                .map(challengeImage -> challengeImage.getImage_detail() + "_" + challengeImage.getImage_thumb())
+                .collect(Collectors.toList());
 
         return new CreateChallengeResponse(
                 savedChallenge.getId(),
@@ -55,7 +59,7 @@ public class AdminChallengeService {
                 savedChallenge.getRegisterDate(),
                 savedChallenge.getStartDate(),
                 savedChallenge.getEndDate(),
-                savedChallenge.getImageSet()
+                fileNames
         );
     }
 
@@ -66,25 +70,33 @@ public class AdminChallengeService {
 
         Challenge challenge =result.orElseThrow();
 
-//        Challenge challenge = challengeRepository.findById(id)
-//                .orElseThrow(() -> new EntityNotFoundException("해당 challengeId로 조회된 게시글이 없습니다."));
-//        List<String> fileNames =
-//                challenge.getImageSet().stream().sorted().map(challengeImage ->
-//                        challengeImage.get()+"_"+challengeImage.getFileName()).collect(Collectors.toList());
-//
-//        boardDTO.setFileNames(fileNames);
+        ReadChallengeResponse response = ReadChallengeResponse.builder()
+                .id(challenge.getId())
+                .title(challenge.getTitle())
+                .content(challenge.getContent())
+                .writer(challenge.getWriter())
+                .registerDate(challenge.getRegisterDate())
+                .startDate(challenge.getStartDate())
+                .endDate(challenge.getEndDate())
+                .build();
 
+        List<String> fileNames = challenge.getImageSet().stream()
+                .sorted()
+                .map(challengeImage -> challengeImage.getImage_detail() + "_" + challengeImage.getImage_thumb())
+                .collect(Collectors.toList());
 
-        return new ReadChallengeResponse(challenge.getId(), challenge.getTitle(), challenge.getContent(), challenge.getWriter(),
-                challenge.getRegisterDate(), challenge.getStartDate(), challenge.getEndDate()
-        );
+        response.setFileNames(fileNames);
+
+        return response;
 
     }
 
     @Transactional
     public void updateChallenge(Integer id, UpdateChallengeRequest request) {
 
-        Challenge foundChallenge = challengeRepository.findById(id)
+        Optional<Challenge> result = challengeRepository.findById(id);
+
+        Challenge foundChallenge = result
                 .orElseThrow(() -> new EntityNotFoundException("해당 id로 조회된 게시물이 없습니다."));
 
 //        Challenge challenge = foundChallenge.orElseThrow(() -> new EntityNotFoundException("해당 id로 조회된 게시글이 없습니다."));
@@ -96,6 +108,15 @@ public class AdminChallengeService {
                 request.getStartDate(),
                 request.getEndDate()
         );
+
+        foundChallenge.clearChallengeImage();
+
+        if(request.getFileNames() != null){
+            for (String fileName : request.getFileNames()) {
+                String[] arr = fileName.split("_");
+                foundChallenge.addChallengeImage(arr[0], arr[1]);
+            }
+        }
 
         log.info("Request received: {}", request);
 

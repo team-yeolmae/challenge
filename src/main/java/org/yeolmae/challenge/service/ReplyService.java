@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.yeolmae.challenge.domain.Challenge;
 import org.yeolmae.challenge.domain.Reply;
 import org.yeolmae.challenge.domain.dto.*;
+import org.yeolmae.challenge.domain.dto.CreateReplyResponse;
 import org.yeolmae.challenge.repository.ChallengeRepository;
 import org.yeolmae.challenge.repository.ReplyRepository;
 

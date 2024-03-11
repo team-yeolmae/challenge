@@ -10,7 +10,9 @@
             <!-- Thymeleaf iteration to display product details -->
             <div class="row gx-4 gx-lg-5 align-items-center" th:each="dto : ${challengeDTO}">
                 <div class="col-md-6">
-                    <img class="card-img-top mb-5 mb-md-0" src="https://dummyimage.com/600x600/dee2e6/6c757d.jpg" alt="..." />
+                    <div th:each="fileName: ${dto.fileNames}">
+                        <img class="card-img-top" th:src="|/view/${fileName}| " alt="..." style="width: 100%; max-width: 660px; height: auto;" />
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <div class="small mb-1" th:text="${'SKU: ' + dto.id}"></div>

@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Getter
 @AllArgsConstructor
@@ -18,5 +19,8 @@ public class DeleteChallengeResponse {
     private LocalDate registerDate;
     private LocalDate startDate;
     private LocalDate endDate;
+
+    private List<String> fileNames;
+
 
 }

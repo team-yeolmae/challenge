@@ -27,60 +27,60 @@ import org.yeolmae.challenge.service.ChallengeService;
 @Log4j2
 public class ChallengeController {
 
-    private final ChallengeService challengeService;
-
-    @GetMapping("/{challenge_id}")
-    public ResponseEntity<ReadChallengeResponse> challengeRead(@PathVariable Integer challenge_id) {
-
-        ReadChallengeResponse response = challengeService.readChallengeById(challenge_id);
-
-        return  new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @PostMapping("/register")
-    public ResponseEntity<CreateChallengeResponse> challengeCreate(@RequestBody CreateChallengeRequest request) {
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        if (authentication != null && authentication.getPrincipal() instanceof UserDetails){
-            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-            String username = userDetails.getUsername();
-
-            System.out.println(username);
-        } else {
-            System.out.println("No authenticated user");
-        }
-
-        CreateChallengeResponse response = challengeService.createChallenge(request);
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @PutMapping("/{challenge_id}")
-    public ResponseEntity<UpdateChallengeResponse> challengeUpdate(@PathVariable Integer challenge_id,
-                                                                   @RequestBody UpdateChallengeRequest request){
-
-        UpdateChallengeResponse response = challengeService.updateChallenge(challenge_id, request);
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @GetMapping
-    public ResponseEntity<Page<ReadChallengeResponse>> challengeReadAll(@PageableDefault(
-            size = 5, sort = "title", direction = Sort.Direction.DESC) Pageable pageable) {
-
-        Page<ReadChallengeResponse> response = challengeService.readAllChallenge(pageable);
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{challenge_id}")
-    public ResponseEntity<DeleteChallengeResponse> challengeDelete(@PathVariable Integer challenge_id) {
-
-        DeleteChallengeResponse response = challengeService.deleteChallenge(challenge_id);
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+//    private final ChallengeService challengeService;
+//
+//    @GetMapping("/{challenge_id}")
+//    public ResponseEntity<ReadChallengeResponse> challengeRead(@PathVariable Integer challenge_id) {
+//
+//        ReadChallengeResponse response = challengeService.readChallengeById(challenge_id);
+//
+//        return  new ResponseEntity<>(response, HttpStatus.OK);
+//    }
+//
+//    @PostMapping("/register")
+//    public ResponseEntity<CreateChallengeResponse> challengeCreate(@RequestBody CreateChallengeRequest request) {
+//
+//        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+//
+//        if (authentication != null && authentication.getPrincipal() instanceof UserDetails){
+//            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+//            String username = userDetails.getUsername();
+//
+//            System.out.println(username);
+//        } else {
+//            System.out.println("No authenticated user");
+//        }
+//
+//        CreateChallengeResponse response = challengeService.createChallenge(request);
+//
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
+//
+//    @PutMapping("/{challenge_id}")
+//    public ResponseEntity<UpdateChallengeResponse> challengeUpdate(@PathVariable Integer challenge_id,
+//                                                                   @RequestBody UpdateChallengeRequest request){
+//
+//        UpdateChallengeResponse response = challengeService.updateChallenge(challenge_id, request);
+//
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
+//
+//    @GetMapping
+//    public ResponseEntity<Page<ReadChallengeResponse>> challengeReadAll(@PageableDefault(
+//            size = 5, sort = "title", direction = Sort.Direction.DESC) Pageable pageable) {
+//
+//        Page<ReadChallengeResponse> response = challengeService.readAllChallenge(pageable);
+//
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
+//
+//    @DeleteMapping("/{challenge_id}")
+//    public ResponseEntity<DeleteChallengeResponse> challengeDelete(@PathVariable Integer challenge_id) {
+//
+//        DeleteChallengeResponse response = challengeService.deleteChallenge(challenge_id);
+//
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 
 
 }

@@ -14,7 +14,7 @@ import org.yeolmae.challenge.service.AdminChallengeService;
 import java.util.List;
 
 @Controller
-@RequestMapping("/challenge/admin")
+@RequestMapping("/admin")
 @RequiredArgsConstructor
 @Log4j2
 public class AdminChallengeController {
@@ -33,7 +33,7 @@ public class AdminChallengeController {
             log.info("has errors.......");
             log.info("Errors: {}", bindingResult.getAllErrors());
             redirectAttributes.addFlashAttribute("errors", bindingResult.getAllErrors());
-            return "redirect:/challenge/register";
+            return "redirect:/register";
         }
 
         log.info(createChallengeRequest);
@@ -42,7 +42,7 @@ public class AdminChallengeController {
 
         redirectAttributes.addFlashAttribute("result", id);
 
-        return "redirect:/challenge/admin/list";
+        return "redirect:/admin/list";
     }
 
     @GetMapping({"/read", "/modify"})
@@ -72,8 +72,14 @@ public class AdminChallengeController {
 
             redirectAttributes.addAttribute("id", id);
 
-            return "redirect:/challenge/admin/modify?"+link;
+            return "redirect:/admin/modify?"+link;
         }
+
+//        // 기존 파일 목록을 가져와서 새로운 파일 목록으로 업데이트
+//        List<String> newFileNames = request.getFileNames();
+//
+//        // 이 부분은 실제 데이터 모델에 맞게 업데이트가 필요한 부분입니다.
+//        request.setFileNames(newFileNames);
 
         challengeService.updateChallenge(id, request);
 
@@ -85,7 +91,7 @@ public class AdminChallengeController {
 
         redirectAttributes.addAttribute("id", id);
 
-        return "redirect:/challenge/admin/read";
+        return "redirect:/admin/read";
     }
 
     @PostMapping("/delete")
@@ -100,7 +106,7 @@ public class AdminChallengeController {
         redirectAttributes.addFlashAttribute("delete", "deleted");
 
 
-        return "redirect:/challenge/admin/list";
+        return "redirect:/admin/list";
 
     }
 

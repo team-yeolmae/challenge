@@ -1,16 +1,14 @@
 package org.yeolmae.challenge.domain;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 @Entity
-@Setter
+@Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@ToString(exclude = "challenge")
 public class ChallengeImage {
 
     @Id
