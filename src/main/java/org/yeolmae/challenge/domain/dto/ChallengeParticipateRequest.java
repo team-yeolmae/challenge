@@ -7,9 +7,11 @@ import lombok.NoArgsConstructor;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class ParticipateRequest {
+public class ChallengeParticipateRequest {
 
     private int challengeId;
+
+
 
 
 }

@@ -10,7 +10,9 @@
             <!-- Thymeleaf iteration to display product details -->
             <div class="row gx-4 gx-lg-5 align-items-center" th:each="dto : ${challengeDTO}">
                 <div class="col-md-6">
-                    <img class="card-img-top mb-5 mb-md-0" src="https://dummyimage.com/600x600/dee2e6/6c757d.jpg" alt="..." />
+                    <div th:each="fileName: ${dto.fileNames}">
+                        <img class="card-img-top" th:src="|/view/${fileName}| " alt="..." style="width: 100%; max-width: 660px; height: auto;" />
+                    </div>
                 </div>
                 <div class="col-md-6">
                     <div class="small mb-1" th:text="${'SKU: ' + dto.id}"></div>
@@ -44,21 +46,81 @@
 
                     <div class="d-flex">
 
-                        <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                        <button id= "btn-participate" class="btn btnParticipate btn-outline-dark flex-shrink-0" type="button" data-bs-toggle="modal" data-bs-target="#participateConfirmationModal">
                             참가하기
                         </button>
                     </div>
+
+                    <!-- 참가 확인 모달창 -->
+                    <div class="modal fade" id="participateConfirmationModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="exampleModalLabel">챌린지 참여</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    챌린지에 참여 하시겠습니까?
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">취소</button>
+                                    <button type="button" class="btn btn-primary" id="confirmParticipate" th:data-challenge-id="${dto.id}" onclick="participate(this)">확인</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
 
                 </div>
             </div>
         </div>
     </section>
 
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+    <script layout:fragment="script" th:inline="javascript">
+
+        $(document).ready(function (){
+
+            const btnParticipate = $('.btnParticipate')
+
+            btnParticipate.on("click", function (e){
+                e.preventDefault();
+                $('#participateConfirmationModal').modal('show');
+            });
+
+            function participate(challengeId) {
+                $.ajax({
+                    url: 'api/challenge/participate',
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({challengeId: challengeId}),
+                    success: function (data){
+                        if (data.success){
+                            alert('참가가 완료되었습니다.');
+                            btnParticipate.prop('disabled', true);
+                            $('#participateConfirmationModal').modal('hide'); // 모달 숨기기
+                            window.location.reload(); // 현재 페이지 리로드
+                        } else {
+                            alert('참가에 실패하였습니다.'+data.message);
+                        }
+                    },
+                    error: function (error){
+                        console.error('Error:', error);
+                        alert('참가 처리 중 오류가 발생했습니다.');
+                    }
+                });
+            }
+
+            $('#confirmParticipate').on("click", function (){
+                const challengeId = $(this).data('challenge-id');
+                participate(challengeId);
+            });
+
+
+        });
+    </script>
 
 
 </div>
-
-
-<script layout:fragment="script" th:inline="javascript">
-</script>
 </html>

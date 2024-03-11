@@ -32,6 +32,8 @@ public class ViewChallengeController {
             model.addAttribute("challengeDTO", challengeDTO);
             model.addAttribute("popularChallengesDTO", popularChallengesDTO);
 
+            log.info(challengeDTO);
+
         }
 
     @GetMapping("/user/detail{id}")
