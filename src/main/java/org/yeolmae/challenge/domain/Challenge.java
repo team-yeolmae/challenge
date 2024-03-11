@@ -69,7 +69,6 @@ public class Challenge {
         this.endDate = endDate;
     }
 
-    @OneToOne
-    private History history;
-
+    @OneToMany(mappedBy = "challenge")
+    private Set<History> histories = new HashSet<>();
 }

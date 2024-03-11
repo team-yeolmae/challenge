@@ -7,8 +7,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.yeolmae.challenge.domain.Challenge;
+import org.yeolmae.challenge.domain.History;
+import org.yeolmae.challenge.domain.Member;
 import org.yeolmae.challenge.domain.dto.*;
 import org.yeolmae.challenge.repository.ChallengeRepository;
+import org.yeolmae.challenge.repository.HistoryRepository;
+import org.yeolmae.challenge.repository.MemberRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,6 +23,8 @@ import java.util.List;
 public class ChallengeService {
 
     private final ChallengeRepository challengeRepository;
+    private final MemberRepository memberRepository;
+    private final HistoryRepository historyRepository;
 
     @Transactional
     public CreateChallengeResponse createChallenge(CreateChallengeRequest request) {
@@ -174,6 +180,31 @@ public class ChallengeService {
                 .challengeList(challengeList)  // 수정
                 .total((int) result.getTotalElements())  // 수정
                 .build();
+    }
+
+    @Transactional
+    public boolean participateInChallenge(int memberId, int challengeId){
+        // 사용자와 챌린지 정보 가져오기
+        Member member = memberRepository.findById(memberId)
+                .orElseThrow(()->new IllegalArgumentException("Invalid member ID"));
+        Challenge challenge = challengeRepository.findById(challengeId)
+                .orElseThrow(()->new IllegalArgumentException("Invalid challenge ID"));
+
+        // 이미 참여했는지 확인
+        boolean alreadyParticipated = historyRepository.existsByMemberAndChallenge(member, challenge);
+        if (alreadyParticipated){
+            return false; //이미 참여한 경우, 참여 불가 처리
+        }
+
+        // 새로운 참여 기록 생성
+        History history = new History();
+        history.setMember(member);
+        history.setChallenge(challenge);
+        history.setSuccess(false); // 성공여부 초기값 설정, 참여 후 성공 여부 별도로 업데이트 로직
+        historyRepository.save(history);
+
+        // 참여 성공
+        return true;
     }
 }
 

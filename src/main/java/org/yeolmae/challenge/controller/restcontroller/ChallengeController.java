@@ -22,7 +22,7 @@ import org.yeolmae.challenge.service.AdminChallengeService;
 import org.yeolmae.challenge.service.ChallengeService;
 
 @RestController
-@RequestMapping("/challenge")
+@RequestMapping("/api/challenge")
 @RequiredArgsConstructor
 @Log4j2
 public class ChallengeController {
@@ -81,6 +81,9 @@ public class ChallengeController {
 
         return new ResponseEntity<>(response, HttpStatus.OK);
     }
+
+    @PostMapping("/participate")
+    public ResponseEntity<ParticipateChallengeResponse> challengeParticipate(@PathVariable )
 
 
 }

@@ -10,6 +10,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.HashSet;
+import java.util.Set;
+
 @Entity
 @Getter
 @Setter
@@ -44,5 +47,7 @@ public class Member {
         this.nickname = nickname;
     }
 
+    @OneToMany(mappedBy = "member")
+    private Set<History> histories = new HashSet<>();
 
 }
