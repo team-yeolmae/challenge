@@ -109,7 +109,7 @@ public class WebSecurityConfig {
     }
 
 
-    //     UserDetailsService 및 PasswordEncoder를 사용하여 사용자 아이디와 암호를 인증하는 AuthenticationProvider 구현
+    // UserDetailsService 및 PasswordEncoder를 사용하여 사용자 아이디와 암호를 인증하는 AuthenticationProvider 구현
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() throws Exception {
 
