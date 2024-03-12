@@ -1,19 +1,18 @@
 package org.yeolmae.challenge.domain.dto;
 
 import jakarta.validation.constraints.NotEmpty;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Setter
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class ReadChallengeResponse {
 
     private int id;
@@ -29,5 +28,10 @@ public class ReadChallengeResponse {
     private LocalDate startDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
+
+    private List<String> fileNames;
+
+    private List<ChallengeImageDTO> challengeImages;
+
 
 }

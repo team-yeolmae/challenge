@@ -31,6 +31,6 @@ public class CreateChallengeResponse {
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
 
-    private Set<ChallengeImage> fileNames;
+    private List<String> fileNames;
 
 }

@@ -5,6 +5,8 @@ import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.time.LocalDate;
+import java.util.List;
+
 @Data
 @Getter
 @AllArgsConstructor
@@ -25,5 +27,8 @@ public class UpdateChallengeRequest {
     private LocalDate startDate;
     @DateTimeFormat(pattern = "yyyy-MM-dd")
     private LocalDate endDate;
+
+    private List<String> fileNames;
+
 
 }
