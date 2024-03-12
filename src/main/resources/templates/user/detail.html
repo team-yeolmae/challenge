@@ -48,15 +48,15 @@
 
 <div layout:fragment="content">
     <section class="py-5">
-        <div class="container px-4 px-lg-5 my-5">
+        <div class="container px-4 px-lg-5 my-5 align-items-center">
             <!-- Thymeleaf iteration to display product details -->
             <div class="row gx-4 gx-lg-5" th:each="dto : ${challengeDTO}">
-                <div class="col-md-7 align-items-start">
+                <div class="col-md-7">
                     <div th:each="fileName: ${dto.fileNames}">
                         <img class="card-img-top" th:src="|/view/${fileName}| " alt="..." style="width: 100%; max-width: 660px; height: auto;" />
                     </div>
                 </div>
-                <div class="col-md-5 align-items-center">
+                <div class="col-md-5">
                     <div class="small mb-1" th:text="${'SKU: ' + dto.id}"></div>
                     <h1 class="display-5 fw-bolder mb-5" th:text="${dto.title}"></h1>
 
