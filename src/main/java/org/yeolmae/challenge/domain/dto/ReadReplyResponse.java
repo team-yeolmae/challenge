@@ -6,7 +6,6 @@ import lombok.NoArgsConstructor;
 import org.yeolmae.challenge.domain.ReplyImage;
 
 import java.time.LocalDate;
-import java.util.Set;
 
 @Getter
 @AllArgsConstructor
@@ -14,7 +13,7 @@ import java.util.Set;
 public class ReadReplyResponse {
 
     // challenge_id 추가
-    private int challengeId;
+//    private int challengeId;
 
     private Integer rno;
 
@@ -25,6 +24,6 @@ public class ReadReplyResponse {
     // registerDate 추가
     private LocalDate registerDate;
 
-    private Set<ReplyImage> images;
+//    private ReplyImage image;
 
 }

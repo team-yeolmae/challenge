@@ -4,8 +4,10 @@
       layout:decorate="~{layout/userbasic.html}">
 
 <head>
-    <style>
 
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
+    <style>
         .reply-container{
             margin: 0;
             padding: 0rem 2rem;
@@ -14,7 +16,7 @@
         .btn-primary {
             background-color:#2752E7;
             color:#fff;
-            font-size:1rem;"
+            font-size:1rem;
         }
 
         label {
@@ -26,6 +28,7 @@
         }
 
     </style>
+
 </head>
 
 <div layout:fragment="content">
@@ -38,7 +41,7 @@
                     <img class="card-img-top mb-5 mb-md-0" src="https://dummyimage.com/600x600/dee2e6/6c757d.jpg" alt="..." />
                 </div>
                 <div class="col-md-6">
-                    <div class="small mb-1" th:text="${'challenge id : ' + dto.id}"></div>
+                    <div class="small mb-1" th:text="${dto.id}" id="challengeIdElement"></div>
                     <h1 class="display-5 fw-bolder mb-5" th:text="${dto.title}"></h1>
 
                     <div class="fs-5 mb-5">
@@ -80,98 +83,186 @@
     </section>
 
 
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-right mb-1">
         <button class="btn btn-primary" id="show-comment-section">챌린지 인증하기</button>
     </div>
 
     <!--댓글 등록 영역-->
-    <section class="mt-2" id="comment-section" style="display: none; background-color:#FAFBFE">
-        <div class="reply-container my-5">
-            <!-- 댓글 등록 폼 -->
-            <form id="post-reply">
-                <div class="row">
-
-                    <div class="col-6 mb-2">
-                        <label>작성자</label>
-                        <input id="replyer" type="text" class="form-control" readonly>
-                    </div>
-
-                    <div  class="col-6 mb-2">
-                        <label>작성일</label>
-                        <input id="registerDate" type="text" class="form-control" readonly>
-                    </div>
-
-                    <div class="col-12 mb-2">
-                        <label for="comment" class="form-label">
-                            오늘의 챌린지는 어떠셨나요?
-                        </label>
-                        <textarea class="form-control" id="comment" rows="3" name="comment" required></textarea>
-                    </div>
-
-                    <div class="col-12 mb-3">
-                        <label for="formFileMultiple" class="form-label">사진 첨부</label>
-                        <input class="form-control" type="file" id="formFileMultiple" name="images" multiple>
-                    </div>
-
-                    <div class="col-12">
-                        <div class="d-grid">
-                            <button class="btn btn-primary btn-lg">인증하기</button>
-                        </div>
-                    </div>
-
+    <section class="mt-1 py-2" id="comment-section" style="display:none; background-color:#EEE;">
+    <div class="container my-5">
+        <!-- 댓글 등록 폼 -->
+        <form id="post-reply" method="POST" th:action="@{/api/user/reply/register}">
+            <div class="row">
+                <div class="col-6 mb-2">
+                    <label>작성자</label>
+                    <p id="replyer" th:text="${replyer}" />
                 </div>
-            </form>
-        </div>
-    </section>
+
+                <div  class="col-6 mb-2">
+                    <label>작성일</label>
+                    <p id="registerDate" th:text="${registerDate}" />
+                </div>
+            </div>
+
+            <div class="col-12 mb-2">
+                <textarea class="form-control mb-1" id="replyText" rows="3" name="replyText" placeholder="오늘의 챌린지는 어떠셨나요?"></textarea>
+            </div>
+
+            <div class="row mb-1">
+                <label for="formFileMultiple" class="form-label">사진 첨부</label>
+                <input class="form-control" type="file" id="formFileMultiple" name="images" multiple>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6">
+                    <button class="btn btn-primary w-100" id="reply-post-btn">인증하기</button>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-secondary w-100" id="cancel-btn">취소</button>
+                </div>
+            </div>
+
+
+        </form>
+    </div>
+</section>
+
+
+    <div id="#repliesContainer"></div>
+
+    <script>
+        $(document).ready(function () {
+            console.log("리스트 출력 시작");
+            // challengeId 가져오기
+            var challengeIdElement = document.getElementById('challengeIdElement');
+            if (challengeIdElement) {
+                var challengeIdString = challengeIdElement.innerText.trim();
+                var challengeId = parseInt(challengeIdString);
+
+                $.get(`/api/user/reply/list/${challengeId}`, function(data) {
+                    // replies 출력
+                    var replies = data.content;
+                    var repliesHtml = '';
+
+                    replies.forEach(function(reply) {
+                        console.log(reply.replyText);
+                        console.log(reply.replyer);
+
+                        repliesHtml += '<div class="card mb-3">' +
+                            '<div class="card-body">' +
+                            '<div class="d-flex flex-start">' +
+                            '<img class="rounded-circle shadow-1-strong me-3" src="https://mdbcdn.b-cdn.net/img/Photos/Avatars/img%20(21).webp" alt="avatar" width="100" height="100" />' +
+                            '<div class="w-100">' +
+                            '<div class="d-flex justify-content-between align-items-center mb-3">' +
+                            '<h6 class="text-primary fw-bold mb-0">' + reply.replyer + '<span class="text-dark ms-2">' + reply.replyText + '</span></h6>' +
+                            '<p class="mb-0">' + reply.registerDate + '</p>' +
+                            '</div>' +
+                            '<div class="d-flex justify-content-between align-items-center">' +
+                            '<p class="small mb-0" style="color: #aaa;">' +
+                            '<a href="#!" class="link-grey">Modify</a>' +
+                            '<a href="#!" class="link-grey">Remove</a>' +
+                            '</p>' +
+                            '<div class="d-flex flex-row">' +
+                            '<i class="far fa-check-circle text-primary"></i>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>' +
+                            '</div>';
+                    });
+                    $("#repliesContainer").append(repliesHtml);
+                })
+                .fail(function() {
+                    console.error('댓글 목록을 가져오는데 실패했습니다.');
+                });
+            }
+            console.log()
+        });
+    </script>
+<!--    <tbody>-->
+<!--        <tr th:each="reply :${replyList}">-->
+<!--            <td th:text="${reply.replyer}"></td>-->
+<!--            <td th:text="${reply.replyText}"></td>-->
+<!--            <td th:text="${#temporals.format(reply.registerDate, 'yyyy-MM-dd')}"></td>-->
+<!--        </tr>-->
+<!--    </tbody>-->
 
 
     <script>
+
         // 챌린지 인증하기 버튼 클릭 시 댓글 등록 영역 표시
         document.getElementById('show-comment-section').addEventListener('click', function () {
             document.getElementById('comment-section').style.display = 'block';
         });
+
+
+        // 인증하기 버튼 클릭 시 POST 요청 보내기
+        document.getElementById('reply-post-btn').addEventListener('click', function () {
+            console.log("댓글 등록 시작");
+
+            var replyText = document.getElementById('replyText').value;
+
+            // 현재 날짜를 가져오기
+            var currentDate = new Date();
+            var registerDate = currentDate.toISOString().split('T')[0];
+
+            // challengeId 가져오기
+            var challengeIdElement = document.getElementById('challengeIdElement');
+            if (challengeIdElement) {
+                var challengeIdString = challengeIdElement.innerText.trim();
+            } else {
+                console.error('challengeIdElement 요소를 찾을 수 없습니다.');
+                return;
+            }
+            var challengeId = parseInt(challengeIdString);
+
+            // replyer 가져오기
+            var replyer = document.getElementById('replyer').innerText.trim();
+
+            // 요청 본문 구성
+            var requestBody = {
+                replyer: replyer,
+                replyText: replyText,
+                registerDate: registerDate
+            };
+
+            fetch('/api/user/reply/register?challengeId=' + challengeId, {
+                method: 'POST',
+                headers: {
+                    'Content-Type' : 'application/json'
+                },
+                body: JSON.stringify(requestBody)
+            })
+                .then(response => {
+                    if(response.ok) {
+                        fetchReplies(challengeId)
+                    } else {
+                        throw new Error('댓글 등록에 실패했습니다.')
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert(error.message);
+                });
+
+            console.log("댓글 등록 종료");
+        });
+
+        // 취소 버튼 클릭 시 댓글 등록 영역 숨김
+        document.getElementById('cancel-btn').addEventListener('click', function () {
+            document.getElementById('comment-section').style.display = 'none';
+        });
+
+
     </script>
 
-
-    <div id="#repliesContainer"></div>
 
 </div>
 </div>
 
 
 <script layout:fragment="script" th:inline="javascript">
-
-    $(document).ready(function() {
-        var challengeId = dto.id;
-    });
-
-
-    $(document).ready(function () {
-        // 작성자, 등록일
-        $("#show-comment-section").click(function () {
-            const replyer = replyer;
-            const registerDate = registerDate;
-
-            $("#replyer").val(replyer);
-            $("#registerDate").val(registerDate);
-        })
-    });
-
-
-    $(document).ready(function() {
-
-        $.get("/api/user/detail?id=" + dto.id + "/reply/list", function(data) {
-            var repliesHtml = "";
-            data.forEach(function(reply) {
-                repliesHtml += "<div>";
-                repliesHtml += "<span>" + reply.replyer + "</span>";
-                repliesHtml += "<span>" + reply.registerDate + "</span>";
-                repliesHtml += "<p>" + reply.replyText + "</p>";
-                repliesHtml += "</div>";
-            });
-            $("#repliesContainer").html(repliesHtml);
-        });
-    });
 
 </script>
 

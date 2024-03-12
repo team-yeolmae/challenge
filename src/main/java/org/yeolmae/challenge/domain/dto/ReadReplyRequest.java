@@ -12,7 +12,7 @@ import java.time.LocalDate;
 public class ReadReplyRequest {
 
 //     challenge_id 추가
-    private int challengeId;
+//    private int challengeId;
 
     private Integer rno;
 

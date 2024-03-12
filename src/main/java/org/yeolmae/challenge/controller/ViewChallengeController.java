@@ -7,8 +7,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.yeolmae.challenge.domain.Member;
 import org.yeolmae.challenge.domain.dto.*;
 import org.yeolmae.challenge.service.ChallengeService;
+import org.yeolmae.challenge.service.MemberService;
+
+import java.time.LocalDate;
 
 @Controller
 @RequestMapping
@@ -17,6 +21,7 @@ import org.yeolmae.challenge.service.ChallengeService;
 public class ViewChallengeController {
 
     private final ChallengeService challengeService;
+    private final MemberService memberService;
 
     @GetMapping("/main")
     public void list(PageRequest1DTO pageRequest1DTO, Model model){
@@ -38,8 +43,14 @@ public class ViewChallengeController {
         // id에 해당하는 도전과제 정보를 가져옴
         ReadChallengeResponse challengeDTO = challengeService.readChallengeById(id);
 
+        Member member = memberService.getMember();
+        String replyer = member.getNickname();
+        LocalDate registerDate = LocalDate.now();
+
         // 모델에 도전과제 정보를 추가하여 Thymeleaf에서 사용할 수 있도록 함
         model.addAttribute("challengeDTO", challengeDTO);
+        model.addAttribute("replyer", replyer);
+        model.addAttribute("registerDate", registerDate);
 
         // 상세 페이지 템플릿의 경로를 반환
         return "user/detail"; // 이 경로는 상황에 따라 변경될 수 있습니다.

@@ -16,7 +16,7 @@ import java.util.List;
 public class CreateReplyRequest {
 
     // challenge_id 추가
-    private int challengeId;
+//    private int challengeId;
 
     private String replyer;
 
@@ -25,6 +25,6 @@ public class CreateReplyRequest {
     // registerDate 추가
     private LocalDate registerDate = LocalDate.now();
 
-//    private List<MultipartFile> images;
+//    private MultipartFile image;
 
 }
