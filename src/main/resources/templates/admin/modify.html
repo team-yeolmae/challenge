@@ -5,6 +5,39 @@
 
 <head>
   <title>Challenge Modify</title>
+
+  <style>
+    /* 스타일 추가 시작 */
+    .card-header {
+      background-color: #007bff; /* 파란색 */
+      color: #fff; /* 흰색 텍스트 */
+      text-align: center; /* 텍스트 중앙 정렬 */
+      padding: 10px; /* 내부 여백 조절 */
+      font-size: 1.3em; /* 글자 크기 조절 */
+      font-weight: bold; /* 글자 굵게 설정 */
+
+    }
+
+    .input-group-text {
+      background-color: #f8f9fa; /* 다른 색상으로 변경 */
+      font-weight: bold; /* 글자 굵게 설정 */
+    }
+
+    textarea[readonly] {
+      background-color: #fff; /* 다른 색상으로 변경 */
+    }
+
+    .form-control {
+      border-radius: 0; /* 테두리 각 굴절 조절 */
+    }
+
+
+    .float-end a {
+      margin-right: 10px; /* 버튼 사이 여백 */
+    }
+
+    /* 스타일 추가 끝 */
+  </style>
 </head>
 
 <div layout:fragment="content">
@@ -42,12 +75,12 @@
 
 
             <div class="input-group mb-3">
-              <span class="input-group-text">Content</span>
+              <span class="input-group-text">챌린지 내용</span>
               <textarea class="form-control col-sm-5" rows="5" name="content">[[${dto.content}]]</textarea>
             </div>
 
             <div class="input-group mb-3">
-              <span class="input-group-text">Writer</span>
+              <span class="input-group-text">작성자</span>
               <input type="text" class="form-control" th:value="${dto.writer}" name="writer" readonly>
             </div>
 
@@ -342,6 +375,12 @@
     })
 
   },false)
+
+  document.querySelector(".closeUploadBtn").addEventListener("click", function(e) {
+    // Close 버튼 클릭 시 모달 닫기
+    uploadModal.hide();
+  }, false);
+
 
   const uploadResult = document.querySelector(".uploadResult")
 

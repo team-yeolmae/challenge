@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org"
       xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
-      layout:decorate="~{layout/userbasic.html}">
+      layout:decorate="~{layout/userbasic2.html}">
 
 
 
@@ -10,7 +10,7 @@
     <section class="py-5">
         <div class="container px-4 px-lg-5 mt-5">
             <h2 class="fw-bolder mb-4">신규 챌린지</h2>
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-start">
                 <!-- 여기에 데이터베이스에서 가져온 내용을 반복적으로 채워넣을 것입니다. -->
                 <div class="col mb-5" th:each="populardto : ${popularChallengesDTO.challengeList}">
                     <div class="card h-100">
@@ -27,7 +27,7 @@
                                 <h5 class="fw-bolder" th:text="${populardto.title}"></h5>
                                 <!-- Product price -->
                                 <span th:text="${#temporals.format(populardto.startDate, 'yyyy-MM-dd')
-                                 + ' ~ ' + #temporals.format(populardto.endDate, 'yyyy-MM-dd')}"></span>
+                                 + ' ~ ' + #temporals.format(populardto.endDate, 'yyyy-MM-dd')}" ></span>
                             </div>
                         </div>
                         <!-- Product actions -->
@@ -43,7 +43,7 @@
 
         <div class="container px-4 px-lg-5 mt-5">
             <h2 class="fw-bolder mb-4">진행중인 챌린지</h2>
-            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-center">
+            <div class="row gx-4 gx-lg-5 row-cols-2 row-cols-md-3 row-cols-xl-4 justify-content-start">
                 <!-- 여기에 데이터베이스에서 가져온 내용을 반복적으로 채워넣을 것입니다. -->
                 <div class="col mb-5" th:each="dto : ${challengeDTO.challengeList}">
                     <div class="card h-100 d-flex flex-column">

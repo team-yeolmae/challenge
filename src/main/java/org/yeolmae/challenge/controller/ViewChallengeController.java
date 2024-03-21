@@ -27,7 +27,7 @@ public class ViewChallengeController {
                     challengeService.readAllChallenge1(pageRequest1DTO);
             // 인기 챌린지 목록 가져오기 (페이지 크기: 4)
             PageResponse1DTO<ReadChallengeResponse> popularChallengesDTO =
-                    challengeService.readPopularChallenges(PageRequest1DTO.builder().size(4).build());
+                    challengeService.readPopularChallenges(PageRequest1DTO.builder().size(3).build());
 
             model.addAttribute("challengeDTO", challengeDTO);
             model.addAttribute("popularChallengesDTO", popularChallengesDTO);
