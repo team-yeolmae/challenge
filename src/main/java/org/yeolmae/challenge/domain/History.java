@@ -20,7 +20,7 @@ public class History {
     private int id;
 
     @ManyToOne(cascade = CascadeType.REMOVE)
-    @JoinColumn(name = "memberId", referencedColumnName = "id", nullable = false)
+    @JoinColumn(name = "memberId", nullable = false)
     private Member member;
 
     @OneToOne
