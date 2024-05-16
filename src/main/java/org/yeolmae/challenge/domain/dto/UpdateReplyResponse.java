@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Getter
 @AllArgsConstructor
@@ -21,6 +22,8 @@ public class UpdateReplyResponse {
     private String replyText;
 
     // registerDate 추가
-    private LocalDate registerDate;
+    private LocalDateTime registerDateTime;
+
+    private LocalDateTime modifyDateTime;
 
 }
