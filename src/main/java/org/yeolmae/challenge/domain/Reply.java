@@ -7,7 +7,11 @@ import jakarta.validation.constraints.NotNull;
 import lombok.*;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+
 import jakarta.persistence.*;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 @Entity
 @Builder
@@ -20,23 +24,29 @@ public class Reply {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer rno;
 
-    @NotNull
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "challengeId")
     private Challenge challenge;
 
-    @NotEmpty
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "memberId")
+    private Member member;
+
     @Column(nullable = false)
     private String replyText;
 
-    @NotEmpty
     @Column(nullable = false)
     private String replyer;
 
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private LocalDate registerDate;
+    @CreationTimestamp
+    private LocalDateTime registerDateTime;
 
-    public void changeReply(String text) {
-        this.replyText = text;
+    @UpdateTimestamp
+    private LocalDateTime modifyDateTime;
+
+    public void changeReply(String replyText) {
+        this.replyText = replyText;
+        this.modifyDateTime = LocalDateTime.now();
     }
 
 }
