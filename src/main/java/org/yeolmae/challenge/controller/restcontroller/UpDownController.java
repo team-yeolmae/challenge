@@ -27,6 +27,7 @@ import java.nio.file.Paths;
 import java.util.*;
 
 @RestController
+@RequestMapping("/api/v1")
 @Log4j2
 public class UpDownController {
 
