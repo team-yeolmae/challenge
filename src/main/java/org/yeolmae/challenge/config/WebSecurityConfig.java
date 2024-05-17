@@ -1,17 +1,24 @@
 package org.yeolmae.challenge.config;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.servlet.PathRequest;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityCustomizer;
+import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenBasedRememberMeServices;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -19,6 +26,7 @@ import org.springframework.security.web.context.DelegatingSecurityContextReposit
 import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
 import org.springframework.security.web.context.RequestAttributeSecurityContextRepository;
 import org.yeolmae.challenge.config.auth.PrincipalDetailsService;
+import org.yeolmae.challenge.config.authfilter.LoginFilter;
 import org.yeolmae.challenge.repository.MemberRepository;
 
 import javax.sql.DataSource;
@@ -27,6 +35,7 @@ import javax.sql.DataSource;
 // @EnableWebSecurity : SpringSecurity FilterChain이 자동으로 포함
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, prePostEnabled = true)// secured, PreAuthorize/postAuthorize 어노테이션 활성화 //특정 경로에 접근할 수 있는 권한
+@RequiredArgsConstructor
 public class WebSecurityConfig {
 
     @Autowired
@@ -42,11 +51,36 @@ public class WebSecurityConfig {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
 
+        // 커스텀 인증 설정을 추가
+        AuthenticationManagerBuilder sharedObject = http.getSharedObject(AuthenticationManagerBuilder.class);
+        AuthenticationManager authenticationManager = sharedObject.build(); // 사용자 인증 처리
+        http.authenticationManager(authenticationManager);
+
         // 권한에 따른 허용하는 url
         http.authorizeHttpRequests((authorizeHttpRequests) -> authorizeHttpRequests
                 .requestMatchers("/user/**").authenticated()//인증(로그인) 해야함.
                 .requestMatchers("/admin/**").hasRole("ADMIN")//권한 있어야 함.
                 .anyRequest().permitAll());//나머지 페이지들은 모두 권한 허용
+
+        // 헤더 설정
+        http.headers(httpSecurityHeadersConfigurer ->
+                httpSecurityHeadersConfigurer
+                        .frameOptions(HeadersConfigurer.FrameOptionsConfig::sameOrigin) // 웹 페이지가 다른 사이트에서 프레임되는 것을 방지
+                        .contentSecurityPolicy(contentSecurityPolicyConfig -> // XSS(Cross-Site Scripting) 및 데이터 삽입 공격을 방지
+                                contentSecurityPolicyConfig.policyDirectives(
+                                        // 아래의 것들을 현재의 출처에서만 로드가 가능할 수 있도록 함.
+                                        "script-src 'self'; "
+                                        + "img-src 'self'; "
+                                        + "font-src 'self'; "
+                                        + "default-src 'self'; "
+                                        + "frame-src 'self'"))
+        );
+
+        // 사용자 정의 인증 필터 추가
+        http.addFilterAt(
+                this.abstractAuthenticationProcessingFilter(authenticationManager),
+                UsernamePasswordAuthenticationFilter.class
+        );
 
         // login 설정
         http.formLogin((formLogin) -> formLogin
@@ -69,7 +103,7 @@ public class WebSecurityConfig {
                 .logoutSuccessUrl("/loginForm"));
 
         //csrf 비활성화
-        http.csrf((csrf) -> csrf.disable());
+        http.csrf(AbstractHttpConfigurer::disable);
 
         http.securityContext((securityContext) -> securityContext
                 .securityContextRepository(new DelegatingSecurityContextRepository(
@@ -78,6 +112,14 @@ public class WebSecurityConfig {
                 )));
 
         return http.build();
+    }
+
+    // 사용자 정의 인증 필터 생성 방법
+    public AbstractAuthenticationProcessingFilter abstractAuthenticationProcessingFilter(final AuthenticationManager authenticationManager) {
+        return new LoginFilter(
+                "/api/login", // 특정 경로에 대한 인증 처리
+                authenticationManager
+        );
     }
 
     @Bean
