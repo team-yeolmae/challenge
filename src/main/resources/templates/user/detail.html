@@ -87,8 +87,7 @@
                     </div>
 
                     <div class="d-flex">
-
-                        <button class="btn btn-outline-dark flex-shrink-0" type="button">
+                        <button class="btn btn-outline-dark flex-shrink-0" type="button" onclick="joinChallenge([[${dto.id}]])">
                             참가하기
                         </button>
                     </div>
@@ -98,11 +97,33 @@
         </div>
     </section>
 
-
-
 </div>
 
 
 <script layout:fragment="script" th:inline="javascript">
+    function joinChallenge(challengeId) {
+        if(confirm("챌린지에 참가하시겠습니까?")) {
+            fetch('/api/v1/history/joinChallenge', {
+                method: 'POST',
+                headers: {
+                    'Content-Type' : 'application/json',
+                    'X-CSRF-TOKEN' : [[${_csrf.token}]]
+                },
+                body: JSON.stringify({ challengeId: challengeId})
+            })
+                .then(response => response.json())
+                .then(data => {
+                    if(data.success) {
+                        alert("챌린지에 참가하셨습니다.");
+                        window.location.reload();
+                    } else {
+                        alert("챌린지 참가에 실패했습니다.")
+                    }
+                })
+                .catch(error => {
+                    alert("챌린지 참가 중 오류가 발생했습니다.");
+                });
+        }
+    }
 </script>
 </html>
