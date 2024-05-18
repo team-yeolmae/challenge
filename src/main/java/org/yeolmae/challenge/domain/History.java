@@ -2,15 +2,14 @@ package org.yeolmae.challenge.domain;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
 
 @Entity
-@Table(name = "history")
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor
 public class History {
 
@@ -28,5 +27,12 @@ public class History {
 
     @Column(name = "success")
     private boolean success;
+
+    @Builder
+    public History(Member member, Challenge challenge, boolean success) {
+        this.member = member;
+        this.challenge = challenge;
+        this.success = success;
+    }
 
 }

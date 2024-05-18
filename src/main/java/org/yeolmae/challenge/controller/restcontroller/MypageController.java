@@ -30,10 +30,10 @@ import java.util.List;
 public class MypageController {
 
     @Autowired
-    private final HistoryService historyService;
+    private HistoryService historyService;
 
     @Autowired
-    private final MemberService memberService;
+    private MemberService memberService;
 
     private void saveContext(String username) {
         Token token = new Token(username);
